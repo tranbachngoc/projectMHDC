@@ -1,0 +1,74 @@
+.wordcolor{
+    color: red
+
+}
+hr {
+    color: #006C99;
+    background: #006C99;
+    border: 0;
+    height: 0.5px;
+}
+.table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
+    text-align: center;
+
+}
+
+
+.text-center {
+    text-align: center;
+}
+.text-right {
+    text-align: right;
+}
+hr {
+    color: #006C99;
+    background: #006C99;
+    border: 0;
+    height: 0.5px;
+}
+.table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
+    text-align: center;
+
+}
+.table {
+    border-collapse: collapse !important;
+    width:100%;
+    height:auto;
+}
+.table td,
+.table th {
+    background-color: #fff !important;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border:1px solid #ddd;
+}
+.table-bordered {
+    border: 1px solid #ddd;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+
+    border: 1px solid #ddd;
+}
+.leftspace{
+    padding-left: 4px;
+}
+input[type="text"]{
+    width: 100%;
+}
+.row {
+    margin-top: 14px;
+}
+.title{
+    padding:5px 5px; color: black; font-weight:bold; font-style: italic;
+    text-transform: uppercase;
+}
+.border-title{
+    background-color: red;
+}

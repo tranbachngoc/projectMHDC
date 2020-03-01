@@ -1,0 +1,27 @@
+/**
+ * Orange Color Scheme
+ * color orange = #f26c6d
+ */
+body.orange-color a,
+body.orange-color a:hover,
+body.orange-color section .feature-items .feature-item i,
+body.orange-color section .team-members .team-member img {
+    color: #f26c6d;
+}
+
+body.orange-color .btn-primary,
+body.orange-color header .learn-more a:hover,
+body.orange-color header .subscribe button,
+body.orange-color header .social a {
+    color: white;
+    background: #f26c6d;
+}
+
+body.orange-color .form-control:focus,
+body.orange-color .btn-primary {
+    border-color: #f26c6d;
+}
+
+body.orange-color .btn-primary:hover {
+    opacity: .8;
+}

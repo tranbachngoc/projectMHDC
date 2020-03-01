@@ -1,0 +1,4 @@
+#simplegallery1{position:relative;visibility:hidden;border:10px solid darkred;}
+#simplegallery1 .gallerydesctext{text-align:left;padding:2px 5px;}
+#simplegallery2{position:relative;visibility:hidden;border:3px solid #CCC;margin-top:8px;}
+#simplegallery2 .gallerydesctext{text-align:left;padding:2px 5px;}

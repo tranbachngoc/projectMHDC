@@ -1,0 +1,18 @@
+<div class="item border-bottom" ng-if="type=='text'">
+    <div class="item-head">
+        <div class="item-details">
+            <img class="item-pic" src="{{avatarUrl}}">
+            <a href="" class="item-name primary-link">{{ownerName}}</a>
+            <span class="item-label">{{createdAt}}</span>
+        </div>
+    </div>
+    <div class="item-body"> {{message}}</div>
+</div>
+
+<div class="item border-bottom ticket-action" ng-if="type=='closed'">
+    <div class="item-body"><span class="label label-sm label-danger btn-circle" ><i class="fa fa-ban"> Closed </i></span> {{message}}. <span class="item-label">{{createdAt}}</span></div>
+</div>
+
+<div class="item border-bottom ticket-action" ng-if="type=='reopen'">
+    <div class="item-body"><span class="label label-sm label-success btn-circle" ><i class="fa fa-folder-open-o"> Reopen </i></span> {{message}}. <span class="item-label">{{createdAt}}</span></div>
+</div>

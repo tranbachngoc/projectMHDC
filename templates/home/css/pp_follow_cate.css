@@ -1,0 +1,114 @@
+.md-pp-fl-cate {
+	padding: 0; 
+	margin: 0;	
+	font-family: KoHo;
+	font-style: normal;
+	font-weight: bold;		
+  	position: fixed;
+  	top: 10%;
+  	left: 33.14%;  
+	background: #FEFEFE;	
+	border: 0.5px solid #737373;	
+	border-radius: 10px;
+	width: 500px;
+	height: auto;
+	transition: all 9s;
+	height: fit-content;
+}
+
+.md-pp-fl-cate .md-header {	
+	height: 46px;
+	background: #F2F2F2;
+	border-radius: 10px;	
+}
+.md-pp-fl-cate .md-header h2 {	
+	font-size: 18px;	
+	line-height: 30px;
+	padding-top: 9px;
+	padding-left: 12px;
+}
+.md-pp-fl-cate .md-header button {
+	width: 24px;
+	height: 24px;
+	position: absolute;	
+	top: 0;
+	right: 0;			
+	background: #EFEFEF;
+	border: 0.5px solid #000000;	
+	border-radius: 5px;
+}
+
+.md-pp-fl-cate .md-list-item {
+	width: 100%;	
+	margin: 20px 0;	
+}
+.md-pp-fl-cate .md-list-item .item {
+	width: 100%;
+	margin-top: 7px;	
+	padding-right: 23px;
+	display: grid;
+  	grid-template-columns: 2fr 6fr 2.5fr; 
+  	align-content: center;
+  	justify-content: right;
+  	align-items: center;
+}
+.md-pp-fl-cate .md-list-item .item .icon {	
+	width: 48px;
+	height: 48px;
+	border: 1px solid #737373;
+	border-radius: 5px;
+	margin-left: 23px;
+	display: flex;
+	justify-content: center;
+	align-items: center;	
+}
+
+.md-pp-fl-cate .md-list-item .item .icon img {	
+	width: 32px;
+	height: 32px;	
+}
+.md-pp-fl-cate .md-list-item .item span {	
+	line-height: 27px;
+	font-size: 14px;	
+	display: flex;	
+	align-items: center;	      
+}
+
+.md-pp-fl-cate .md-list-item .item .btn-fl-ing {	
+	height: 30px;	
+	background-color: #737373;
+	border: 1px solid #737373;
+	border-radius: 5px;
+	color: #fff;
+	font-weight: normal;
+	line-height: normal;
+	cursor: pointer;	
+}
+
+.md-pp-fl-cate .md-list-item .item .btn-fl {	
+	height: 30px;
+	width: 80px;	
+	background-color: #FEFEFE;
+	border: 1px solid #737373;
+	border-radius: 5px;
+	color: #454545;	
+	cursor: pointer;
+}
+
+@media (max-width: 920px) {
+	.md-pp-fl-cate {
+		position: fixed;
+  		top: 15%;
+  		left: 10%;
+  		width: 80%;
+	}
+}
+
+@media (max-width: 480px) {
+	.md-pp-fl-cate {
+		position: fixed;
+  		top: 15%;
+  		left: 0;
+  		width: 100%;
+	}
+}

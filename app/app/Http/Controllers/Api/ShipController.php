@@ -1,0 +1,153 @@
+<?php
+namespace App\Http\Controllers\Api;
+
+use Validator;
+use Illuminate\Http\Request;
+use App\Http\Controllers\ApiController;
+use App\Models\Category;
+use App\Models\Shop;
+use App\Models\Order;
+use App\Components\ShipService;
+use Lang;
+use App\Models\Product;
+use DB;
+
+class ShipController extends ApiController {
+
+    /**
+     * @SWG\Post(
+     *     path="/api/v1/shipping/fee",
+     *     operationId="getShippingFee",
+     *     description="Lấy giá dịch vụ",
+     *     produces={"application/json"},
+     *     tags={"Shipping"},
+     *     summary="Lấy giá dịch vụ",
+     *  @SWG\Parameter(
+     *         name="use_district",
+     *         in="body",
+     *         description="Quận người dùng muốn ship đến",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *  @SWG\Parameter(
+     *         name="shipping_method",
+     *         in="body",
+     *         description="shipping_method: GHN: Giao hàng nhanh , SHO: Shop giao , VTP: Viettel Giao",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *  @SWG\Parameter(
+     *         name="use_id",
+     *         in="body",
+     *         description="ID của chủ shop",
+     *         required=true,
+     *         type="integer",
+     *     ),
+     *  @SWG\Parameter(
+     *         name="products",
+     *         in="body",
+     *         description="Danh sách sản phẩm mua bao gồm các object pro_id và qty ( qty là số lượng )",
+     *         required=true,
+     *         type="array",
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="public trips"
+     *     )
+     * )
+     */
+    public function fee(Request $req) {
+        $validator = Validator::make($req->all(), [
+                'use_district' => 'required',
+                'shipping_method' => 'required',
+                'use_id' => 'required|integer',
+                'products' => 'required|array',
+                'products.*.pro_id' => 'required',
+                'products.*.qty' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'msg' => $validator->errors()->first(),
+                'errors' => $validator->errors()
+                ], 422);
+        }
+
+        //Query Shop
+        $shop = Shop::where(['sho_user' => $req->use_id])->
+                select(DB::raw('sho_name,sho_link,sho_id, sho_user, sho_shipping, IF(sho_kho_district <> \'\', sho_kho_district, sho_district) AS district'))->first();
+
+        if (empty($shop)) {
+            return response([
+                'msg' => Lang::get('response.shop_not_found')
+                ], 404);
+        }
+        // Count num, totalWeight
+        $num = 0;
+        $totalWeight = 0;
+        foreach ($req->products as $pItem) {
+            $productInfo = Product::where([
+                    //'pro_status' => Product::STATUS_ACTIVE,
+                    'pro_id' => (int) $pItem['pro_id']])
+                ->select(DB::raw('pro_category,pro_minsale, pro_id, pro_user, pro_buy, af_amt,af_amt as af_amt_ori, af_rate, dc_amt, dc_rate,  pro_cost, is_product_affiliate,' . Product::queryDiscountProduct()))
+                ->first();
+            if (empty($productInfo)) {
+                continue;
+            }
+            $num += $pItem['qty'];
+            $totalWeight += $productInfo->pro_weight * $pItem['qty'];
+        }
+
+        $shipfee = ShipService::getFee($req->shipping_method, $shop->district, $req->use_district, $totalWeight);
+
+        if (!isset($shipfee) && !isset($shipfee['ServiceFee'])) {
+            return response([
+                'msg' => Lang::get('response.ship_services_not_found')
+            ], 400);
+        }
+
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $shipfee
+        ]);
+    }
+    
+    /**
+     * @SWG\Post(
+     *     path="/api/v1/shipping/shop/{sho_user}",
+     *     operationId="getShippingList",
+     *     description="Danh sách loại hình giao hàng",
+     *     produces={"application/json"},
+     *     tags={"Shipping"},
+     *     summary="Danh sách loại hình giao hàng",
+     *     @SWG\Response(
+     *         response=200,
+     *         description="public trips"
+     *     )
+     * )
+     */
+    public function getListShipping($id) {
+        $shop = Shop::where(['sho_user' => $id])->first();
+        $shippings = [];
+        if (!empty($shop)) {
+            $shippings[] = [
+                'value'=>'SHO',
+                'name'=>'Shop giao'];
+        }
+        $shippings[] = [
+            'value' => 'GHTK',
+            'name' => 'Giao hàng tiết kiệm'];
+        $shippings[] = [
+            'value' => 'GHN',
+            'name' => 'Giao hàng nhanh'];
+        $shippings[] = [
+            'value' => 'VTP',
+            'name' => 'Viettel Post'];
+
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $shippings
+        ]);
+    }
+
+}

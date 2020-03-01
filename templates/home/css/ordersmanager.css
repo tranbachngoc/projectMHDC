@@ -1,0 +1,405 @@
+/* vietnamese */
+@font-face {
+  font-family: 'KoHo';
+  src: url("../font/KoHo-Medium.ttf") format("truetype"); }
+
+.ordersmanager-content .search .search-date {
+  margin-left: 0; }
+  .ordersmanager-content .search .search-date .from, .ordersmanager-content .search .search-date .to {
+    width: 45%; }
+
+.ordersmanager-content .search .btn-search {
+  background: #f2f2f2;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  color: #000000;
+  min-width: 100px;
+  margin-right: 20px;
+  font-weight: bold;
+  font-size: 16px; }
+  .ordersmanager-content .search .btn-search:hover {
+    color: #000000; }
+
+.ordersmanager-content .search .search-input {
+  margin-right: 0; }
+
+.ordersmanager-content-statistic .item {
+  background: #F2F2F2;
+  border-radius: 6px;
+  padding: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  display: -webkit-flex;
+  /* Safari */
+  display: -moz-flex;
+  /* Firefox */
+  display: -ms-flex;
+  /* IE */
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  margin-bottom: 30px;
+  color: #454545; }
+  .ordersmanager-content-statistic .item .img {
+    width: 56px;
+    min-width: 56px;
+    height: 56px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -ms-justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    margin-right: 20px;
+    background: #FF1678;
+    border-radius: 50%; }
+  .ordersmanager-content-statistic .item .txt h4 {
+    font-size: 24px;
+    margin-bottom: 5px; }
+  .ordersmanager-content-statistic .item-trangphu {
+    display: block; }
+    .ordersmanager-content-statistic .item-trangphu .product {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      margin-bottom: 10px; }
+      .ordersmanager-content-statistic .item-trangphu .product .avata {
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
+        border-radius: 6px;
+        margin-right: 10px;
+        border-radius: 6px;
+        overflow: hidden; }
+        .ordersmanager-content-statistic .item-trangphu .product .avata img {
+          width: 100%;
+          height: 100%;
+          -o-object-fit: cover;
+          object-fit: cover; }
+    .ordersmanager-content-statistic .item-trangphu .small-txt {
+      min-width: 80px;
+      display: inline-block;
+      color: #737373; }
+
+.ordersmanager-content .ordersmanager-table {
+  border: 1px solid rgba(0, 0, 0, 0.07); }
+  .ordersmanager-content .ordersmanager-table th {
+    background: #f2f2f2;
+    padding: 10px;
+    white-space: nowrap;
+    font-size: 16px; }
+  .ordersmanager-content .ordersmanager-table td {
+    padding: 10px;
+    color: #454545;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-left: none;
+    border-right: none; }
+    .ordersmanager-content .ordersmanager-table td .product {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center; }
+      .ordersmanager-content .ordersmanager-table td .product .avata {
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
+        border-radius: 6px;
+        margin-right: 10px; }
+    .ordersmanager-content .ordersmanager-table td.title {
+      width: 30%; }
+    .ordersmanager-content .ordersmanager-table td .new-order {
+      color: #000000; }
+    .ordersmanager-content .ordersmanager-table td .no-success-order {
+      color: #A1A1A1; }
+  .ordersmanager-content .ordersmanager-table.detail {
+    border: none; }
+    .ordersmanager-content .ordersmanager-table.detail td.title {
+      width: 40%; }
+    .ordersmanager-content .ordersmanager-table.detail .info {
+      margin-top: 10px; }
+      .ordersmanager-content .ordersmanager-table.detail .info p {
+        margin: 5px 0; }
+      .ordersmanager-content .ordersmanager-table.detail .info .tit {
+        min-width: 100px;
+        display: inline-block; }
+      .ordersmanager-content .ordersmanager-table.detail .info .size {
+        padding: 2px 5px;
+        background: #F2F2F2;
+        border-radius: 5px;
+        display: inline-block;
+        margin-right: 5px; }
+    .ordersmanager-content .ordersmanager-table.detail .ordersmanager-sumprice {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      -webkit-justify-content: space-between;
+      -moz-justify-content: space-between;
+      -ms-justify-content: space-between;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      margin: 30px 0; }
+      .ordersmanager-content .ordersmanager-table.detail .ordersmanager-sumprice .sum {
+        font-weight: bold;
+        display: inline-block;
+        margin-left: 20px; }
+    .ordersmanager-content .ordersmanager-table.detail .ordersmanager-buttons {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: end;
+      -ms-flex-pack: end;
+      justify-content: flex-end;
+      -webkit-justify-content: flex-end;
+      -moz-justify-content: flex-end;
+      -ms-justify-content: flex-end;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center; }
+      .ordersmanager-content .ordersmanager-table.detail .ordersmanager-buttons .btn-cancle {
+        min-width: 100px;
+        padding: 3px 10px;
+        white-space: nowrap;
+        margin-right: 20px;
+        border-radius: 6px;
+        background: none;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        cursor: pointer; }
+      .ordersmanager-content .ordersmanager-table.detail .ordersmanager-buttons .btn-agree {
+        min-width: 100px;
+        padding: 3px 10px;
+        white-space: nowrap;
+        border-radius: 6px;
+        background: #FF1678;
+        color: #fff;
+        border: none;
+        cursor: pointer; }
+
+.ordersmanager-content-detail .tt {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  display: -webkit-flex;
+  /* Safari */
+  display: -moz-flex;
+  /* Firefox */
+  display: -ms-flex;
+  /* IE */
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  font-style: italic; }
+  .ordersmanager-content-detail .tt .code {
+    color: #42A5F5;
+    font-style: normal;
+    margin-right: 20px; }
+  .ordersmanager-content-detail .tt .status {
+    margin-left: 10%; }
+
+.ordersmanager-content-detail .info {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  border-radius: 6px;
+  margin: 20px 0; }
+  .ordersmanager-content-detail .info td {
+    padding: 5px; }
+
+@media screen and (max-width: 767px) {
+  .ordersmanager-content .ordersmanager-table {
+    border: none; }
+    .ordersmanager-content .ordersmanager-table .sm-none {
+      display: none; }
+    .ordersmanager-content .ordersmanager-table td.title {
+      background: #F2F2F2;
+      border-radius: 10%;
+      border: none;
+      padding: 15px;
+      border-bottom: 20px solid #fff;
+      width: 100%; }
+      .ordersmanager-content .ordersmanager-table td.title .info {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        -moz-justify-content: space-between;
+        -ms-justify-content: space-between;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        font-style: italic; }
+        .ordersmanager-content .ordersmanager-table td.title .info .left {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          display: -webkit-flex;
+          /* Safari */
+          display: -moz-flex;
+          /* Firefox */
+          display: -ms-flex;
+          /* IE */
+          -webkit-box-pack: start;
+          -ms-flex-pack: start;
+          justify-content: flex-start;
+          -webkit-justify-content: flex-start;
+          -moz-justify-content: flex-start;
+          -ms-justify-content: flex-start;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-align-items: center;
+          -moz-align-items: center;
+          -ms-align-items: center;
+          -ms-flex-wrap: wrap;
+          flex-wrap: wrap; }
+          .ordersmanager-content .ordersmanager-table td.title .info .left .code {
+            color: #42A5F5;
+            margin-right: 10px;
+            font-style: normal; }
+      .ordersmanager-content .ordersmanager-table td.title .product {
+        margin: 10px 0; }
+      .ordersmanager-content .ordersmanager-table td.title .text span {
+        min-width: 70px;
+        display: inline-block;
+        color: #A1A1A1; }
+    .ordersmanager-content .ordersmanager-table.detail td.title {
+      background: none;
+      border-radius: 0;
+      padding: 0;
+      border: none; }
+      .ordersmanager-content .ordersmanager-table.detail td.title .info {
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        font-style: normal; }
+        .ordersmanager-content .ordersmanager-table.detail td.title .info p {
+          width: 100%; }
+    .ordersmanager-content .ordersmanager-table.detail .ordersmanager-sumprice {
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap; }
+      .ordersmanager-content .ordersmanager-table.detail .ordersmanager-sumprice p {
+        width: 100%;
+        margin: 5px 0; }
+  .ordersmanager-content-detail .info {
+    padding: 10px; }
+    .ordersmanager-content-detail .info td {
+      word-break: break-word; }
+  .ordersmanager-content .search .search-input {
+    -webkit-box-ordinal-group: 2;
+    -ms-flex-order: 1;
+    order: 1; }
+  .ordersmanager-content .search .search-date {
+    -webkit-box-ordinal-group: 3;
+    -ms-flex-order: 2;
+    order: 2; }
+  .ordersmanager-content .search .search-category {
+    -webkit-box-ordinal-group: 4;
+    -ms-flex-order: 3;
+    order: 3;
+    width: 100%;
+    margin: 5px 0; }
+  .ordersmanager-content .search .btn-search {
+    -webkit-box-ordinal-group: 5;
+    -ms-flex-order: 4;
+    order: 4; } }

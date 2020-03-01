@@ -1,0 +1,2483 @@
+/* vietnamese */
+@font-face {
+  font-family: 'KoHo';
+  src: url("../font/KoHo-Medium.ttf") format("truetype"); }
+
+.rating {
+  display: inline-block;
+  position: relative;
+  height: 20px;
+  line-height: 1;
+  font-size: 22px;
+  margin-left: 10px; }
+
+.rating-box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  display: -webkit-flex;
+  /* Safari */
+  display: -moz-flex;
+  /* Firefox */
+  display: -ms-flex;
+  /* IE */
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  margin-bottom: 10px; }
+
+.rating label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  cursor: pointer; }
+
+.rating label:last-child {
+  position: static; }
+
+.rating label:nth-child(1) {
+  z-index: 5; }
+
+.rating label:nth-child(2) {
+  z-index: 4; }
+
+.rating label:nth-child(3) {
+  z-index: 3; }
+
+.rating label:nth-child(4) {
+  z-index: 2; }
+
+.rating label:nth-child(5) {
+  z-index: 1; }
+
+.rating label input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0; }
+
+.rating label .icon {
+  float: left;
+  color: transparent;
+  margin-right: 5px; }
+
+.rating label:last-child .icon {
+  color: #A1A1A1; }
+
+.rating:not(:hover) label input:checked ~ .icon,
+.rating:hover label:hover input ~ .icon {
+  color: #FF2462; }
+
+.rating label input:focus:not(:checked) ~ .icon:last-child {
+  color: #A1A1A1;
+  text-shadow: 0 0 5px #FF2462; }
+
+.breadcrumb {
+  background: #000000;
+  padding: 20px 0 15px; }
+  .breadcrumb li {
+    display: inline-block;
+    color: #fff;
+    padding-left: 5px;
+    line-height: 1; }
+    .breadcrumb li:first-child {
+      background: none;
+      background: none; }
+    .breadcrumb li a {
+      color: #fff; }
+
+.sanphamchitiet .style-no-value {
+  position: relative; }
+  .sanphamchitiet .style-no-value:before {
+    content: "";
+    background: #FEFEFE;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    position: absolute;
+    z-index: 9; }
+  .sanphamchitiet .style-no-value:after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    top: 50%;
+    margin-top: -5px;
+    height: 6px;
+    left: 0;
+    background: #e8e8e8;
+    border-radius: 20px;
+    z-index: 10; }
+
+.sanphamchitiet .info-shop {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  display: -webkit-flex;
+  /* Safari */
+  display: -moz-flex;
+  /* Firefox */
+  display: -ms-flex;
+  /* IE */
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  border: 0.5px solid #c4c4c4;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 30px 0; }
+  .sanphamchitiet .info-shop .left {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+    -moz-justify-content: flex-start;
+    -ms-justify-content: flex-start;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    width: calc(100% - 170px); }
+    .sanphamchitiet .info-shop .left .logo {
+      width: 100px;
+      height: 100px;
+      margin-right: 20px;
+      border-radius: 50%;
+      overflow: hidden; }
+      .sanphamchitiet .info-shop .left .logo img {
+        width: 100%;
+        height: 100%;
+        -o-object-fit: cover;
+        object-fit: cover; }
+    .sanphamchitiet .info-shop .left .name {
+      width: 90%;
+      color: #737373; }
+      .sanphamchitiet .info-shop .left .name h3 {
+        font-size: 18px;
+        color: #000000;
+        margin-bottom: 20px;
+        font-family: "KoHo", sans-serif; }
+        .sanphamchitiet .info-shop .left .name h3 span {
+          font-size: 12px;
+          color: #737373; }
+      .sanphamchitiet .info-shop .left .name strong {
+        color: #000000; }
+  .sanphamchitiet .info-shop .right .theodoi {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: #F2F2F2;
+    display: inline-block;
+    margin-right: 20px; }
+  .sanphamchitiet .info-shop .right .sanpham-danhgia {
+    margin-top: 10px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    -webkit-justify-content: flex-end;
+    -moz-justify-content: flex-end;
+    -ms-justify-content: flex-end;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -webkit-align-items: flex-start;
+    -moz-align-items: flex-start;
+    -ms-align-items: flex-start; }
+    .sanphamchitiet .info-shop .right .sanpham-danhgia li {
+      text-align: center;
+      color: #737373; }
+      .sanphamchitiet .info-shop .right .sanpham-danhgia li span {
+        color: #ff2462;
+        font-size: 18px; }
+      .sanphamchitiet .info-shop .right .sanpham-danhgia li:first-child {
+        padding-right: 20px;
+        margin-right: 20px;
+        border-right: 1px solid #c4c4c4; }
+
+.sanphamchitiet-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  display: -webkit-flex;
+  /* Safari */
+  display: -moz-flex;
+  /* Firefox */
+  display: -ms-flex;
+  /* IE */
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -webkit-align-items: flex-start;
+  -moz-align-items: flex-start;
+  -ms-align-items: flex-start; }
+  .sanphamchitiet-content-gallery .show-photo {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    -ms-justify-content: space-between;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -webkit-align-items: flex-start;
+    -moz-align-items: flex-start;
+    -ms-align-items: flex-start; }
+    .sanphamchitiet-content-gallery .show-photo-nav {
+      width: 60px; }
+      .sanphamchitiet-content-gallery .show-photo-nav li {
+        height: 60px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        overflow: hidden; }
+        .sanphamchitiet-content-gallery .show-photo-nav li img {
+          width: 100%;
+          height: 100%;
+          -o-object-fit: cover;
+          object-fit: cover;
+          border-radius: 5px; }
+        .sanphamchitiet-content-gallery .show-photo-nav li a {
+          display: block;
+          width: 100%;
+          height: 100%;
+          border: 2px solid transparent;
+          border-radius: 5px; }
+          .sanphamchitiet-content-gallery .show-photo-nav li a.is-active {
+            border: 1px solid #000000; }
+      .sanphamchitiet-content-gallery .show-photo-nav .video {
+        text-align: center;
+        font-weight: bold;
+        font-size: 13px;
+        color: #000000;
+        padding-top: 10px;
+        height: 40px;
+        margin-bottom: 0px;
+        border-radius: 5px;
+        overflow: hidden; }
+        .sanphamchitiet-content-gallery .show-photo-nav .video img {
+          width: 24px;
+          height: 24px; }
+      .sanphamchitiet-content-gallery .show-photo-nav .sizeguide {
+        font-weight: bold;
+        color: #454545;
+        border: 1px solid #c4c4c4;
+        padding: 10px;
+        height: 60px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        overflow: hidden; }
+      .sanphamchitiet-content-gallery .show-photo-nav .slider .slick-dots-container {
+        display: none; }
+    .sanphamchitiet-content-gallery .show-photo-main {
+      height: 310px;
+      width: calc(100% - 65px);
+      border: 1px solid #c4c4c4;
+      border-radius: 5px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-justify-content: center;
+      -moz-justify-content: center;
+      -ms-justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      position: relative;
+      overflow: hidden; }
+      .sanphamchitiet-content-gallery .show-photo-main .hover-add {
+        opacity: 0;
+        position: absolute;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0; }
+        .sanphamchitiet-content-gallery .show-photo-main .hover-add img {
+          width: 48px !important;
+          height: 48px !important; }
+      .sanphamchitiet-content-gallery .show-photo-main:hover .hover-add {
+        opacity: 1; }
+      .sanphamchitiet-content-gallery .show-photo-main img {
+        border-radius: 5px;
+        width: 100% !important;
+        height: 100% !important;
+        -o-object-fit: contain;
+        object-fit: contain; }
+  .sanphamchitiet-content .show-info-product {
+    margin-left: 70px;
+    position: relative;
+    margin-top: 10px; }
+    .sanphamchitiet-content .show-info-product .action {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      -webkit-justify-content: space-between;
+      -moz-justify-content: space-between;
+      -ms-justify-content: space-between;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center; }
+      .sanphamchitiet-content .show-info-product .action .share-click-info {
+        border-bottom: none;
+        border: 1px solid #F2F2F2; }
+      .sanphamchitiet-content .show-info-product .action-left-listaction li {
+        display: inline-block;
+        margin-right: 10px; }
+    .sanphamchitiet-content .show-info-product .bg-gray-blue {
+      margin: 10px 0; }
+    .sanphamchitiet-content .show-info-product .show-number-action {
+      margin: 0; }
+      .sanphamchitiet-content .show-info-product .show-number-action li {
+        display: inline-block;
+        margin-right: 20px; }
+      .sanphamchitiet-content .show-info-product .show-number-action img {
+        width: 24px;
+        margin-top: -3px; }
+      .sanphamchitiet-content .show-info-product .show-number-action.version02 {
+        border-bottom: 1px solid rgba(80, 76, 76, 0.1);
+        padding: 5px; }
+    .sanphamchitiet-content .show-info-product .action {
+      padding: 5px; }
+    .sanphamchitiet-content .show-info-product .add-minus-product {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      -webkit-justify-content: space-between;
+      -moz-justify-content: space-between;
+      -ms-justify-content: space-between;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      margin: auto; }
+      .sanphamchitiet-content .show-info-product .add-minus-product .add-form {
+        margin: 0 10px;
+        text-align: center;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center; }
+        .sanphamchitiet-content .show-info-product .add-minus-product .add-form input {
+          height: 35px;
+          min-width: 40px;
+          text-align: center;
+          border: none;
+          padding-left: 10px;
+          color: #ff2462; }
+          .sanphamchitiet-content .show-info-product .add-minus-product .add-form input[type=number] {
+            -moz-appearance: textfield; }
+            .sanphamchitiet-content .show-info-product .add-minus-product .add-form input[type=number]::-webkit-outer-spin-button, .sanphamchitiet-content .show-info-product .add-minus-product .add-form input[type=number]::-webkit-inner-spin-button {
+              -webkit-appearance: none;
+              margin: 0; }
+        .sanphamchitiet-content .show-info-product .add-minus-product .add-form button {
+          height: 25px;
+          min-width: 25px;
+          border: 1px solid #c4c4c4;
+          background: none;
+          width: 25px;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          display: -webkit-flex;
+          /* Safari */
+          display: -moz-flex;
+          /* Firefox */
+          display: -ms-flex;
+          /* IE */
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          justify-content: center;
+          -webkit-justify-content: center;
+          -moz-justify-content: center;
+          -ms-justify-content: center;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-align-items: center;
+          -moz-align-items: center;
+          -ms-align-items: center; }
+    .sanphamchitiet-content .show-info-product .button-buy-product {
+      color: #454545; }
+      .sanphamchitiet-content .show-info-product .button-buy-product .sum-price {
+        font-weight: bold;
+        font-size: 18px; }
+        .sanphamchitiet-content .show-info-product .button-buy-product .sum-price span {
+          font-size: 30px;
+          color: #ff2462;
+          display: inline-block;
+          margin-left: 5px; }
+          .sanphamchitiet-content .show-info-product .button-buy-product .sum-price span.dong {
+            text-decoration: underline; }
+      .sanphamchitiet-content .show-info-product .button-buy-product .buttons-group {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        -moz-justify-content: space-between;
+        -ms-justify-content: space-between;
+        -webkit-box-align: start;
+        -ms-flex-align: start;
+        align-items: flex-start;
+        -webkit-align-items: flex-start;
+        -moz-align-items: flex-start;
+        -ms-align-items: flex-start;
+        margin-top: 10px; }
+        .sanphamchitiet-content .show-info-product .button-buy-product .buttons-group button {
+          height: 40px;
+          width: 48%;
+          margin-left: 0;
+          cursor: pointer; }
+          .sanphamchitiet-content .show-info-product .button-buy-product .buttons-group button.btn-bg-white {
+            color: #737373; }
+  .sanphamchitiet-content-detail {
+    color: #454545; }
+    .sanphamchitiet-content-detail .button-chinh-sua {
+      padding: 5px;
+      top: 5px;
+      right: 5px;
+      z-index: 101; }
+    .sanphamchitiet-content-detail .thong-tin-chung {
+      position: relative; }
+    .sanphamchitiet-content-detail .flash-sale {
+      font-size: 24px;
+      margin: 0; }
+      .sanphamchitiet-content-detail .flash-sale.product-detail {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        -moz-justify-content: space-between;
+        -ms-justify-content: space-between;
+        -webkit-box-align: start;
+        -ms-flex-align: start;
+        align-items: flex-start;
+        -webkit-align-items: flex-start;
+        -moz-align-items: flex-start;
+        -ms-align-items: flex-start;
+        width: 60%;
+        position: relative; }
+      .sanphamchitiet-content-detail .flash-sale img {
+        height: 30px;
+        margin-top: 0; }
+      .sanphamchitiet-content-detail .flash-sale span {
+        font-size: 18px;
+        padding: 0px 10px;
+        display: inline-block;
+        font-weight: bold; }
+        .sanphamchitiet-content-detail .flash-sale span.time-flash-sale {
+          margin-left: 20px;
+          border: 1px solid #F2F2F2;
+          position: absolute;
+          top: 3px;
+          bottom: -1px;
+          z-index: -1;
+          border-top-right-radius: 20px;
+          border-bottom-right-radius: 20px;
+          margin-top: 0px;
+          width: calc(100% - 20%);
+          right: 3%;
+          padding-right: calc(100% - 96%);
+          text-align: right; }
+    .sanphamchitiet-content-detail .tit {
+      font-size: 24px;
+      margin-bottom: 10px;
+      margin-top: 10px;
+      font-family: "KoHo"; }
+    .sanphamchitiet-content-detail .small-text {
+      font-size: 13px; }
+      .sanphamchitiet-content-detail .small-text span {
+        display: inline-block;
+        margin-right: 20px; }
+    .sanphamchitiet-content-detail .list-number {
+      margin: 20px 0;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center; }
+      .sanphamchitiet-content-detail .list-number li {
+        display: inline-block;
+        margin-right: 20px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: start;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+        -webkit-justify-content: flex-start;
+        -moz-justify-content: flex-start;
+        -ms-justify-content: flex-start;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center; }
+        .sanphamchitiet-content-detail .list-number li img {
+          margin-right: 5px; }
+        .sanphamchitiet-content-detail .list-number li a.report {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          display: -webkit-flex;
+          /* Safari */
+          display: -moz-flex;
+          /* Firefox */
+          display: -ms-flex;
+          /* IE */
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          justify-content: center;
+          -webkit-justify-content: center;
+          -moz-justify-content: center;
+          -ms-justify-content: center;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-align-items: center;
+          -moz-align-items: center;
+          -ms-align-items: center; }
+          .sanphamchitiet-content-detail .list-number li a.report .baocao {
+            font-size: 9px;
+            display: inline-block;
+            border-radius: 5px;
+            background: #F2F2F2;
+            padding: 1px 10px; }
+    .sanphamchitiet-content-detail .price {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center; }
+      .sanphamchitiet-content-detail .price .no-sale {
+        font-size: 18px;
+        color: #737373;
+        margin-right: 20px; }
+        .sanphamchitiet-content-detail .price .no-sale span {
+          text-decoration: line-through; }
+      .sanphamchitiet-content-detail .price .sale {
+        font-size: 30px;
+        color: #ff2462;
+        font-weight: bold;
+        margin-right: 20px; }
+    .sanphamchitiet-content-detail .gia-uu-dai {
+      border: 1px solid #c4c4c4;
+      padding: 5px 20px;
+      border-radius: 5px;
+      margin: 10px 0;
+      font-weight: bold;
+      text-transform: uppercase;
+      display: -webkit-inline-box;
+      display: -ms-inline-flexbox;
+      display: inline-flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      color: #454545; }
+    .sanphamchitiet-content-detail .thongso {
+      background: url(/templates/home/styles/images/svg/line.svg) repeat-x left top;
+      padding-top: 30px;
+      margin: 20px 0;
+      position: relative; }
+      .sanphamchitiet-content-detail .thongso dl {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: start;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+        -webkit-justify-content: flex-start;
+        -moz-justify-content: flex-start;
+        -ms-justify-content: flex-start;
+        -webkit-box-align: start;
+        -ms-flex-align: start;
+        align-items: flex-start;
+        -webkit-align-items: flex-start;
+        -moz-align-items: flex-start;
+        -ms-align-items: flex-start;
+        margin-bottom: 10px; }
+        .sanphamchitiet-content-detail .thongso dl dt {
+          font-weight: normal;
+          width: 100px;
+          padding-top: 10px; }
+          .sanphamchitiet-content-detail .thongso dl dt div .dot {
+            display: -webkit-inline-box;
+            display: -ms-inline-flexbox;
+            display: inline-flex; }
+        .sanphamchitiet-content-detail .thongso dl .buttons li {
+          display: inline-block;
+          padding: 8px 15px;
+          border: 1px solid #c4c4c4;
+          background: #F9F9F9;
+          border-radius: 5px;
+          margin-right: 5px;
+          margin-bottom: 5px;
+          cursor: pointer; }
+          .sanphamchitiet-content-detail .thongso dl .buttons li.is-active {
+            border: 1px solid #ff2462;
+            color: #ff2462; }
+          .sanphamchitiet-content-detail .thongso dl .buttons li.no-value {
+            color: #A1A1A1;
+            border: 1px solid #F2F2F2;
+            background: #FEFEFE;
+            cursor: not-allowed; }
+    .sanphamchitiet-content-detail .thong-tin-cua-hang {
+      border: 1px solid #c4c4c4;
+      border-radius: 5px; }
+      .sanphamchitiet-content-detail .thong-tin-cua-hang .title {
+        padding: 20px;
+        border-bottom: 1px solid #c4c4c4;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        -moz-justify-content: space-between;
+        -ms-justify-content: space-between;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center; }
+        .sanphamchitiet-content-detail .thong-tin-cua-hang .title h3 {
+          font-size: 18px; }
+        .sanphamchitiet-content-detail .thong-tin-cua-hang .title .right {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          display: -webkit-flex;
+          /* Safari */
+          display: -moz-flex;
+          /* Firefox */
+          display: -ms-flex;
+          /* IE */
+          -webkit-box-pack: end;
+          -ms-flex-pack: end;
+          justify-content: flex-end;
+          -webkit-justify-content: flex-end;
+          -moz-justify-content: flex-end;
+          -ms-justify-content: flex-end;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-align-items: center;
+          -moz-align-items: center;
+          -ms-align-items: center; }
+          .sanphamchitiet-content-detail .thong-tin-cua-hang .title .right li {
+            background: #F2F2F2;
+            height: 35px;
+            width: 35px;
+            border-radius: 50%;
+            margin-right: 5px;
+            line-height: 1;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            display: -webkit-flex;
+            /* Safari */
+            display: -moz-flex;
+            /* Firefox */
+            display: -ms-flex;
+            /* IE */
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -webkit-justify-content: center;
+            -moz-justify-content: center;
+            -ms-justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-align-items: center;
+            -moz-align-items: center;
+            -ms-align-items: center; }
+            .sanphamchitiet-content-detail .thong-tin-cua-hang .title .right li img {
+              width: 18px;
+              height: 18px; }
+      .sanphamchitiet-content-detail .thong-tin-cua-hang .info {
+        overflow: hidden; }
+        .sanphamchitiet-content-detail .thong-tin-cua-hang .info h4 {
+          font-size: 16px;
+          margin-bottom: 10px; }
+        .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item {
+          background: url(/templates/home/styles/images/svg/line.svg) repeat-x left bottom;
+          padding: 30px 20px;
+          position: relative; }
+          .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .content-pro {
+            overflow: hidden; }
+            .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .content-pro img {
+              max-width: 100%;
+              height: auto; }
+          .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .divxemthem a.xemthem {
+            border-bottom: 1px solid #c4c4c4;
+            float: right;
+            margin-bottom: 10px; }
+          .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item:last-child {
+            background: none; }
+          .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .table01 {
+            width: 100%; }
+            .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .table01 th {
+              font-weight: normal;
+              width: 30%;
+              color: #737373; }
+            .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .table01 th, .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .table01 td {
+              padding: 5px 0;
+              word-break: break-word; }
+          .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .table02 tr:nth-child(even) {
+            background: #EFEFEF;
+            border-radius: 5px; }
+          .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .table02 tr:nth-child(odd) {
+            background: #fff;
+            border-radius: 5px; }
+          .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .table02 th, .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .table02 td {
+            padding: 5px 10px; }
+          .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .mo-ta-chi-tiet {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            display: -webkit-flex;
+            /* Safari */
+            display: -moz-flex;
+            /* Firefox */
+            display: -ms-flex;
+            /* IE */
+            -webkit-box-pack: start;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
+            -webkit-justify-content: flex-start;
+            -moz-justify-content: flex-start;
+            -ms-justify-content: flex-start;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-align-items: center;
+            -moz-align-items: center;
+            -ms-align-items: center;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap; }
+            .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .mo-ta-chi-tiet li {
+              width: 50%;
+              margin-bottom: 5px; }
+              .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .mo-ta-chi-tiet li .dot {
+                color: #737373;
+                margin-right: 5px;
+                display: inline-block; }
+    .sanphamchitiet-content-detail .dong {
+      margin-right: 5px;
+      text-decoration: underline; }
+    .sanphamchitiet-content-detail .san-pham-mua-kem {
+      overflow: hidden;
+      padding: 20px;
+      position: relative; }
+      .sanphamchitiet-content-detail .san-pham-mua-kem h3 {
+        font-size: 16px;
+        margin-bottom: 20px;
+        text-transform: capitalize; }
+      .sanphamchitiet-content-detail .san-pham-mua-kem .item {
+        border-radius: 5px;
+        width: 160px; }
+        .sanphamchitiet-content-detail .san-pham-mua-kem .item:last-child .image:after {
+          content: none; }
+        .sanphamchitiet-content-detail .san-pham-mua-kem .item .image {
+          width: 100px;
+          height: 100px;
+          margin-bottom: 10px;
+          position: relative; }
+          .sanphamchitiet-content-detail .san-pham-mua-kem .item .image img {
+            border-radius: 5px; }
+          .sanphamchitiet-content-detail .san-pham-mua-kem .item .image:after {
+            position: absolute;
+            top: 50%;
+            margin-top: -12px;
+            right: -40px;
+            content: "";
+            background: url(/templates/home/styles/images/svg/add.svg);
+            background-size: 24px;
+            width: 24px;
+            height: 24px; }
+          .sanphamchitiet-content-detail .san-pham-mua-kem .item .image .check {
+            position: absolute;
+            right: 2px;
+            bottom: 2px;
+            line-height: 0; }
+            .sanphamchitiet-content-detail .san-pham-mua-kem .item .image .check .checkbox-style span {
+              min-height: 25px;
+              background-size: 25px;
+              padding-left: 26px; }
+          .sanphamchitiet-content-detail .san-pham-mua-kem .item .image img {
+            width: 100%;
+            height: 100%;
+            -o-object-fit: cover;
+            object-fit: cover; }
+          .sanphamchitiet-content-detail .san-pham-mua-kem .item .image .mess-them-vao-gio {
+            position: absolute;
+            right: 2px;
+            bottom: 30px;
+            background: #FEFEFE;
+            border: 0.5px solid #c4c4c4;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px; }
+        .sanphamchitiet-content-detail .san-pham-mua-kem .item .text {
+          width: 150px; }
+          .sanphamchitiet-content-detail .san-pham-mua-kem .item .text .tit {
+            font-size: 14px;
+            color: #000000;
+            font-weight: normal;
+            margin: 0; }
+          .sanphamchitiet-content-detail .san-pham-mua-kem .item .text .price {
+            color: #ff2462;
+            margin: 0; }
+            .sanphamchitiet-content-detail .san-pham-mua-kem .item .text .price .dong {
+              color: #272727;
+              font-size: 10px; }
+    .sanphamchitiet-content-detail .comment-customer .product-customer {
+      background: url(/templates/home/styles/images/svg/line.svg) repeat-x left top;
+      padding: 20px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      -webkit-justify-content: space-between;
+      -moz-justify-content: space-between;
+      -ms-justify-content: space-between;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start;
+      -webkit-align-items: flex-start;
+      -moz-align-items: flex-start;
+      -ms-align-items: flex-start;
+      margin-bottom: 30px; }
+      .sanphamchitiet-content-detail .comment-customer .product-customer-title h3 {
+        color: #000000;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        font-size: 16px; }
+      .sanphamchitiet-content-detail .comment-customer .product-customer-title .show-number {
+        font-size: 18px;
+        color: #737373; }
+        .sanphamchitiet-content-detail .comment-customer .product-customer-title .show-number span {
+          font-size: 36px;
+          color: #ff2462; }
+      .sanphamchitiet-content-detail .comment-customer .product-customer-rating .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0; }
+      .sanphamchitiet-content-detail .comment-customer .product-customer-rating .item {
+        margin-bottom: 15px;
+        text-align: left;
+        font-size: 0; }
+        .sanphamchitiet-content-detail .comment-customer .product-customer-rating .item .rating-num {
+          display: inline-block;
+          font-size: 15px;
+          font-weight: 400;
+          width: 50px;
+          line-height: 15px;
+          vertical-align: middle;
+          position: relative;
+          color: #ff2462; }
+        .sanphamchitiet-content-detail .comment-customer .product-customer-rating .item .progress {
+          -webkit-box-shadow: none;
+          box-shadow: none;
+          background: #efefef;
+          display: inline-block;
+          height: 5px;
+          margin: 0;
+          vertical-align: middle;
+          width: 150px;
+          border-radius: 10px; }
+          .sanphamchitiet-content-detail .comment-customer .product-customer-rating .item .progress-bar {
+            float: left;
+            width: 0%;
+            height: 100%;
+            line-height: 20px;
+            border-radius: 20px;
+            color: #fff;
+            background-color: #337ab7;
+            -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+            box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+            -webkit-transition: width .6s ease;
+            -o-transition: width .6s ease;
+            transition: width .6s ease; }
+            .sanphamchitiet-content-detail .comment-customer .product-customer-rating .item .progress-bar-success {
+              background-color: #454545; }
+      .sanphamchitiet-content-detail .comment-customer .product-customer-comment button {
+        border: none;
+        background: #A1A1A1;
+        height: 30px;
+        padding: 0 15px;
+        color: #fff;
+        border-radius: 5px; }
+    .sanphamchitiet-content-detail .comment-customer .product-review-content .review-filter {
+      background: #F2F2F2;
+      padding: 5px 10px;
+      border-radius: 5px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center; }
+      .sanphamchitiet-content-detail .comment-customer .product-review-content .review-filter .select-by {
+        margin-left: 30px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: start;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+        -webkit-justify-content: flex-start;
+        -moz-justify-content: flex-start;
+        -ms-justify-content: flex-start;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center;
+        font-weight: bold; }
+        .sanphamchitiet-content-detail .comment-customer .product-review-content .review-filter .select-by select {
+          height: 30px;
+          border-radius: 5px;
+          border: 0.5px solid #c4c4c4;
+          padding: 0 10px;
+          color: #737373;
+          background: #FEFEFE;
+          margin-left: 10px;
+          min-width: 150px; }
+    .sanphamchitiet-content-detail .comment-customer .product-review-content .review-list .item {
+      border-bottom: 1px solid #c4c4c4;
+      padding: 20px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start;
+      -webkit-align-items: flex-start;
+      -moz-align-items: flex-start;
+      -ms-align-items: flex-start; }
+      .sanphamchitiet-content-detail .comment-customer .product-review-content .review-list .item:last-child {
+        border-bottom: none; }
+      .sanphamchitiet-content-detail .comment-customer .product-review-content .review-list .item .avata {
+        min-width: 50px;
+        width: 50px;
+        height: 50px;
+        margin-right: 20px;
+        margin-right: 20px; }
+        .sanphamchitiet-content-detail .comment-customer .product-review-content .review-list .item .avata img {
+          width: 100%;
+          max-width: 100%;
+          height: 100%;
+          -o-object-fit: cover;
+          object-fit: cover; }
+      .sanphamchitiet-content-detail .comment-customer .product-review-content .review-list .item .info {
+        color: #000000; }
+        .sanphamchitiet-content-detail .comment-customer .product-review-content .review-list .item .info .name {
+          font-weight: bold; }
+        .sanphamchitiet-content-detail .comment-customer .product-review-content .review-list .item .info .rating {
+          color: #ff2462;
+          line-height: 1;
+          margin: 5px 0; }
+        .sanphamchitiet-content-detail .comment-customer .product-review-content .review-list .item .info .time {
+          margin-top: 10px;
+          color: #737373; }
+          .sanphamchitiet-content-detail .comment-customer .product-review-content .review-list .item .info .time .border-left {
+            margin-left: 20px;
+            padding-left: 20px;
+            border: 1px;
+            display: inline-block; }
+          .sanphamchitiet-content-detail .comment-customer .product-review-content .review-list .item .info .time .like {
+            margin-left: 20px;
+            font-size: 10px; }
+            .sanphamchitiet-content-detail .comment-customer .product-review-content .review-list .item .info .time .like img {
+              margin-left: 5px; }
+    .sanphamchitiet-content-detail .nav-pagination {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-justify-content: center;
+      -moz-justify-content: center;
+      -ms-justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center; }
+      .sanphamchitiet-content-detail .nav-pagination .page-item {
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center; }
+        .sanphamchitiet-content-detail .nav-pagination .page-item.active .page-link {
+          background: #ff2462;
+          font-weight: bold;
+          color: #fff;
+          border-radius: 5px;
+          line-height: 1; }
+      .sanphamchitiet-content-detail .nav-pagination .page-link {
+        border: none;
+        color: #000000; }
+
+.sanphamchitiet-recent {
+  margin: 30px 0; }
+  .sanphamchitiet-recent-title {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    -ms-justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    padding: 10px;
+    margin-bottom: 10px; }
+    .sanphamchitiet-recent-title h3 {
+      color: #000000;
+      font-size: 16px;
+      position: relative; }
+      .sanphamchitiet-recent-title h3::after {
+        position: absolute;
+        content: '';
+        left: 0px;
+        bottom: -5px;
+        width: 80px;
+        height: 3px;
+        background: #ff2462;
+        border-radius: 100px; }
+  .sanphamchitiet-recent-slider .slick-next:before, .sanphamchitiet-recent-slider .slick-prev:before {
+    content: ""; }
+  .sanphamchitiet-recent-slider .slick-prev {
+    background: url(/templates/home/styles/images/svg/prev.svg) no-repeat left;
+    width: 32px;
+    height: 32px; }
+  .sanphamchitiet-recent-slider .slick-next {
+    background: url(/templates/home/styles/images/svg/next.svg) no-repeat right;
+    width: 32px;
+    height: 32px; }
+  .sanphamchitiet-recent-slider li.item-li {
+    margin: 0 10px; }
+    .sanphamchitiet-recent-slider li.item-li .image {
+      position: relative;
+      margin-bottom: 10px;
+      overflow: hidden;
+      border-radius: 5px; }
+      .sanphamchitiet-recent-slider li.item-li .image a {
+        padding: 0; }
+      .sanphamchitiet-recent-slider li.item-li .image img.sp {
+        width: 100%;
+        -webkit-transition: all .4s linear;
+        -o-transition: all .4s linear;
+        transition: all .4s linear; }
+      .sanphamchitiet-recent-slider li.item-li .image .ctv-flash {
+        left: 0;
+        right: 0;
+        z-index: 1;
+        top: 0;
+        bottom: 0; }
+        .sanphamchitiet-recent-slider li.item-li .image .ctv-flash .ctv {
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          width: 55px;
+          padding: 5px;
+          z-index: 2; }
+        .sanphamchitiet-recent-slider li.item-li .image .ctv-flash .flash {
+          position: absolute;
+          z-index: 2;
+          left: 0;
+          top: 0;
+          padding: 10px 5px;
+          width: 100%;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          display: -webkit-flex;
+          /* Safari */
+          display: -moz-flex;
+          /* Firefox */
+          display: -ms-flex;
+          /* IE */
+          -webkit-box-pack: justify;
+          -ms-flex-pack: justify;
+          justify-content: space-between;
+          -webkit-justify-content: space-between;
+          -moz-justify-content: space-between;
+          -ms-justify-content: space-between;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-align-items: center;
+          -moz-align-items: center;
+          -ms-align-items: center; }
+          .sanphamchitiet-recent-slider li.item-li .image .ctv-flash .flash img {
+            z-index: 1; }
+          .sanphamchitiet-recent-slider li.item-li .image .ctv-flash .flash .time {
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 0 5px;
+            position: absolute;
+            left: 23px;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            padding-left: 10px; }
+      .sanphamchitiet-recent-slider li.item-li .image .action {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 1;
+        overflow: hidden;
+        opacity: 0;
+        top: 0;
+        left: 0;
+        -webkit-transition: all .4s ease-in-out;
+        -o-transition: all .4s ease-in-out;
+        transition: all .4s ease-in-out;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center; }
+        .sanphamchitiet-recent-slider li.item-li .image .action p {
+          width: 30px;
+          height: 30px;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          display: -webkit-flex;
+          /* Safari */
+          display: -moz-flex;
+          /* Firefox */
+          display: -ms-flex;
+          /* IE */
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          justify-content: center;
+          -webkit-justify-content: center;
+          -moz-justify-content: center;
+          -ms-justify-content: center;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-align-items: center;
+          -moz-align-items: center;
+          -ms-align-items: center;
+          margin-right: 5px;
+          background: #737373;
+          border-radius: 50%; }
+          .sanphamchitiet-recent-slider li.item-li .image .action p img {
+            width: 20px; }
+      .sanphamchitiet-recent-slider li.item-li .image:hover img.sp {
+        -webkit-transform: scale(1.2);
+        -ms-transform: scale(1.2);
+        transform: scale(1.2);
+        opacity: .5; }
+      .sanphamchitiet-recent-slider li.item-li .image:hover .action {
+        opacity: 1;
+        z-index: 2; }
+        .sanphamchitiet-recent-slider li.item-li .image:hover .action img {
+          cursor: pointer; }
+    .sanphamchitiet-recent-slider li.item-li .text {
+      position: relative;
+      width: 100%;
+      height: 70px; }
+      .sanphamchitiet-recent-slider li.item-li .text .pro-name {
+        white-space: nowrap;
+        width: 100%;
+        overflow: hidden;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis; }
+      .sanphamchitiet-recent-slider li.item-li .text .price {
+        margin: 0 0 20px;
+        color: #ff2462; }
+        .sanphamchitiet-recent-slider li.item-li .text .price .dong {
+          font-size: 12px;
+          display: inline-block;
+          text-decoration: underline;
+          margin-right: 5px; }
+        .sanphamchitiet-recent-slider li.item-li .text .price span.sale-price {
+          text-decoration: line-through;
+          color: #737373;
+          font-size: 13px; }
+      .sanphamchitiet-recent-slider li.item-li .text .sm-btn-show {
+        position: absolute;
+        right: 0;
+        bottom: 10px; }
+        .sanphamchitiet-recent-slider li.item-li .text .sm-btn-show img {
+          width: 24px; }
+    .sanphamchitiet-recent-slider li.item-li.show-action img.sp {
+      -webkit-transform: scale(1.2);
+      -ms-transform: scale(1.2);
+      transform: scale(1.2); }
+    .sanphamchitiet-recent-slider li.item-li.show-action .action {
+      opacity: 1; }
+    .sanphamchitiet-recent-slider li.item-li button {
+      border: 1px solid #c4c4c4;
+      height: 35px;
+      padding: 0 10px;
+      color: #737373;
+      background: none;
+      border-radius: 5px; }
+
+.sanphamchitiet #myModal_ctv {
+  z-index: 1111; }
+  .sanphamchitiet #myModal_ctv .tien-share {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    -ms-justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center; }
+    .sanphamchitiet #myModal_ctv .tien-share .btn-share {
+      background: #737373;
+      border-radius: 5px;
+      float: right;
+      padding: 5px 10px; }
+      .sanphamchitiet #myModal_ctv .tien-share .btn-share a {
+        color: #fff; }
+
+.sanphamchitiet #videopopup #iframevideo {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  display: -webkit-flex;
+  /* Safari */
+  display: -moz-flex;
+  /* Firefox */
+  display: -ms-flex;
+  /* IE */
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center; }
+  .sanphamchitiet #videopopup #iframevideo p {
+    position: absolute;
+    z-index: 0; }
+
+.sanphamchitiet #videopopup .modal-dialog {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  display: -webkit-flex;
+  /* Safari */
+  display: -moz-flex;
+  /* Firefox */
+  display: -ms-flex;
+  /* IE */
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  height: 100%;
+  margin: auto; }
+  .sanphamchitiet #videopopup .modal-dialog .modal-content {
+    width: auto; }
+
+.sanphamchitiet #videopopup iframe {
+  z-index: 1;
+  width: 100%; }
+
+.sanphamchitiet #reportpopup .title, .sanphamchitiet #nhanxetpopup .title {
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: 1px solid #c4c4c4;
+  padding-bottom: 10px; }
+
+.sanphamchitiet #reportpopup .close-popup, .sanphamchitiet #nhanxetpopup .close-popup {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+  .sanphamchitiet #reportpopup .close-popup img, .sanphamchitiet #nhanxetpopup .close-popup img {
+    max-width: 15px;
+    max-height: 15px; }
+    .sanphamchitiet #reportpopup .close-popup img:hover, .sanphamchitiet #nhanxetpopup .close-popup img:hover {
+      cursor: pointer; }
+
+.sanphamchitiet #reportpopup form.report, .sanphamchitiet #nhanxetpopup form.report {
+  margin-top: 20px; }
+  .sanphamchitiet #reportpopup form.report label, .sanphamchitiet #nhanxetpopup form.report label {
+    margin: 10px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+    -moz-justify-content: flex-start;
+    -ms-justify-content: flex-start;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center; }
+    .sanphamchitiet #reportpopup form.report label input[type="radio"], .sanphamchitiet #nhanxetpopup form.report label input[type="radio"] {
+      margin-right: 10px;
+      border: 1px solid #737373;
+      border-radius: 3px;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -ms-appearance: none;
+      padding: 6px; }
+      .sanphamchitiet #reportpopup form.report label input[type="radio"]:checked, .sanphamchitiet #nhanxetpopup form.report label input[type="radio"]:checked {
+        background: url(../../styles/images/svg/checked.svg) center;
+        background-size: contain;
+        border-color: #ff1678; }
+  .sanphamchitiet #reportpopup form.report .noidungnx, .sanphamchitiet #nhanxetpopup form.report .noidungnx {
+    width: 100%;
+    height: 100px; }
+  .sanphamchitiet #reportpopup form.report .button-report, .sanphamchitiet #nhanxetpopup form.report .button-report {
+    text-align: right; }
+    .sanphamchitiet #reportpopup form.report .button-report button.btn-report, .sanphamchitiet #nhanxetpopup form.report .button-report button.btn-report {
+      border: 1px solid #737373;
+      border-radius: 5px;
+      padding: 5px 10px;
+      background: #fff;
+      /* font-weight: normal; */ }
+      .sanphamchitiet #reportpopup form.report .button-report button.btn-report button.btn-report.btn-close, .sanphamchitiet #nhanxetpopup form.report .button-report button.btn-report button.btn-report.btn-close {
+        color: #737373; }
+      .sanphamchitiet #reportpopup form.report .button-report button.btn-report.btn-send, .sanphamchitiet #nhanxetpopup form.report .button-report button.btn-report.btn-send {
+        background: #737373;
+        color: #fff; }
+      .sanphamchitiet #reportpopup form.report .button-report button.btn-report:hover, .sanphamchitiet #nhanxetpopup form.report .button-report button.btn-report:hover {
+        cursor: pointer; }
+  .sanphamchitiet #reportpopup form.report p.note, .sanphamchitiet #nhanxetpopup form.report p.note {
+    color: #737373;
+    clear: both;
+    margin: 15px 0; }
+    .sanphamchitiet #reportpopup form.report p.note a, .sanphamchitiet #nhanxetpopup form.report p.note a {
+      color: #007bff; }
+
+.sanphamchitiet #muasi .modal-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  display: -webkit-flex;
+  /* Safari */
+  display: -moz-flex;
+  /* Firefox */
+  display: -ms-flex;
+  /* IE */
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center; }
+  .sanphamchitiet #muasi .modal-header .title {
+    text-transform: uppercase; }
+
+.sanphamchitiet #muasi thead {
+  border: 1px solid #ccc; }
+
+.sanphamchitiet #muasi th, .sanphamchitiet #muasi td {
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  padding: 5px; }
+
+.sanphamchitiet #muasi tbody {
+  border-bottom: 1px solid #ccc; }
+
+.sanphamchitiet.add_product .add-product-detail {
+  overflow: hidden; }
+  .sanphamchitiet.add_product .add-product-detail img {
+    max-width: 100%;
+    width: 100%;
+    height: auto; }
+
+.sanphamchitiet.add_product .flash-sale {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: left;
+  -ms-flex-pack: left;
+  justify-content: left;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center; }
+
+.product-comment {
+  font-size: 14px;
+  color: #000000;
+  padding: 20px 10px; }
+  .product-comment p {
+    margin-bottom: 10px; }
+  .product-comment h3 {
+    font-size: 16px;
+    margin-bottom: 10px; }
+  .product-comment li {
+    margin-bottom: 5px; }
+  .product-comment textarea {
+    width: 100%; }
+  .product-comment button {
+    min-height: 30px;
+    text-align: center;
+    background: #737373;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    margin: 10px 0 20px;
+    padding: 0 20px; }
+  .product-comment a {
+    color: #0B5AF6;
+    font-weight: bold; }
+
+@media screen and (max-width: 1024px) {
+  .sanphamchitiet .info-shop .left .name {
+    width: calc(100% - 160px); }
+    .sanphamchitiet .info-shop .left .name h3 {
+      white-space: nowrap;
+      width: 100%;
+      overflow: hidden;
+      -o-text-overflow: ellipsis;
+      text-overflow: ellipsis; }
+  .sanphamchitiet-content-gallery .show-photo-nav {
+    width: 40px; }
+    .sanphamchitiet-content-gallery .show-photo-nav li {
+      height: 40px; }
+      .sanphamchitiet-content-gallery .show-photo-nav li a {
+        border: 1px solid transparent; }
+        .sanphamchitiet-content-gallery .show-photo-nav li a.is-active {
+          border: 1px solid #000000; }
+      .sanphamchitiet-content-gallery .show-photo-nav li.sizeguide {
+        font-size: 12px;
+        padding: 0;
+        text-align: center; }
+  .sanphamchitiet-content-gallery .show-photo-main {
+    width: calc(100% - 45px);
+    height: 230px;
+    padding: 5px; }
+  .sanphamchitiet-content-gallery .show-info-product {
+    margin-left: 0; }
+    .sanphamchitiet-content-gallery .show-info-product .add-minus-product {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      margin: 20px 0;
+      font-size: 13px; }
+      .sanphamchitiet-content-gallery .show-info-product .add-minus-product .add-form {
+        margin: 0 5px;
+        font-size: 12px; }
+        .sanphamchitiet-content-gallery .show-info-product .add-minus-product .add-form input {
+          height: 30px;
+          padding-left: 0; }
+        .sanphamchitiet-content-gallery .show-info-product .add-minus-product .add-form button {
+          height: 30px;
+          width: 30px;
+          line-height: 0.5; }
+    .sanphamchitiet-content-gallery .show-info-product .button-buy-product {
+      color: #454545; }
+      .sanphamchitiet-content-gallery .show-info-product .button-buy-product .sum-price span {
+        font-size: 24px; }
+  .sanphamchitiet-content-detail .flash-sale.product-detail {
+    font-size: 16px;
+    width: 80%; }
+  .sanphamchitiet-content-detail .flash-sale span {
+    font-size: 16px; }
+  .sanphamchitiet-content-detail .tit {
+    font-size: 16px; }
+  .sanphamchitiet-content-detail .small-text {
+    font-size: 12px; }
+  .sanphamchitiet-content-detail .thong-tin-cua-hang .title {
+    padding: 15px; }
+    .sanphamchitiet-content-detail .thong-tin-cua-hang .title h3 {
+      font-size: 15px; }
+  .sanphamchitiet-recent-slider li .image {
+    text-align: center; }
+    .sanphamchitiet-recent-slider li .image img {
+      display: inline-block; }
+  .modal.add_product button.close {
+    padding: 5px 3px; }
+  .modal.add_product .tab-pane {
+    overflow: auto;
+    padding-bottom: 20px;
+    margin-top: 20px;
+    /* width */
+    /* Track */
+    /* Handle */
+    /* Handle on hover */ }
+    .modal.add_product .tab-pane .table {
+      width: 850px; }
+    .modal.add_product .tab-pane::-webkit-scrollbar {
+      height: 8px; }
+    .modal.add_product .tab-pane::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 20px; }
+    .modal.add_product .tab-pane::-webkit-scrollbar-thumb {
+      background: #525151;
+      border-radius: 20px; }
+    .modal.add_product .tab-pane::-webkit-scrollbar-thumb:hover {
+      background: #3c3e3c; } }
+
+@media screen and (max-width: 767px) {
+  .sanphamchitiet .main-content {
+    padding-top: 0; }
+  .sanphamchitiet .container {
+    padding: 0;
+    position: relative; }
+  .sanphamchitiet .info-shop {
+    margin: 0;
+    border: none;
+    padding: 5px;
+    z-index: 99;
+    width: 100%;
+    border-radius: 0;
+    background: rgba(245, 245, 245, 0.87);
+    margin-bottom: 10px; }
+    .sanphamchitiet .info-shop .left {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-justify-content: center;
+      -moz-justify-content: center;
+      -ms-justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      width: calc(100% - 30px); }
+      .sanphamchitiet .info-shop .left .back {
+        margin-right: 5px; }
+      .sanphamchitiet .info-shop .left .logo {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        margin-right: 10px; }
+      .sanphamchitiet .info-shop .left .name {
+        width: calc(100% - 70px); }
+        .sanphamchitiet .info-shop .left .name h3 {
+          margin-bottom: 0;
+          font-size: 14px;
+          color: #000; }
+          .sanphamchitiet .info-shop .left .name h3 span {
+            color: #000;
+            font-weight: normal; }
+    .sanphamchitiet .info-shop .right {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-justify-content: center;
+      -moz-justify-content: center;
+      -ms-justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      width: 30px; }
+      .sanphamchitiet .info-shop .right a.cart {
+        position: relative; }
+        .sanphamchitiet .info-shop .right a.cart span {
+          position: absolute;
+          right: -5px;
+          top: -5px;
+          background: #ff2462;
+          padding: 4px 6px;
+          border-radius: 50%;
+          font-size: 8px;
+          color: #fff;
+          /* width: 16px; */
+          text-shadow: 1px 0px 1px #f5f0f0; }
+  .sanphamchitiet-content {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap; }
+    .sanphamchitiet-content-gallery {
+      width: 100%; }
+      .sanphamchitiet-content-gallery .show-photo {
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap; }
+        .sanphamchitiet-content-gallery .show-photo-nav {
+          width: 100%;
+          position: relative; }
+          .sanphamchitiet-content-gallery .show-photo-nav .show-video {
+            opacity: 0;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1; }
+            .sanphamchitiet-content-gallery .show-photo-nav .show-video video {
+              width: 100%; }
+          .sanphamchitiet-content-gallery .show-photo-nav .sliderpro {
+            z-index: 2; }
+          .sanphamchitiet-content-gallery .show-photo-nav .btn-video-img {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            display: -webkit-flex;
+            /* Safari */
+            display: -moz-flex;
+            /* Firefox */
+            display: -ms-flex;
+            /* IE */
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            -webkit-justify-content: space-between;
+            -moz-justify-content: space-between;
+            -ms-justify-content: space-between;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-align-items: center;
+            -moz-align-items: center;
+            -ms-align-items: center;
+            margin-top: 10px; }
+            .sanphamchitiet-content-gallery .show-photo-nav .btn-video-img p.video-img {
+              padding: 5px 10px;
+              border: 1px solid #ccc;
+              -webkit-box-sizing: border-box;
+              box-sizing: border-box;
+              width: 100%;
+              margin: 0 5px;
+              height: 40px;
+              display: -webkit-box;
+              display: -ms-flexbox;
+              display: flex;
+              display: -webkit-flex;
+              /* Safari */
+              display: -moz-flex;
+              /* Firefox */
+              display: -ms-flex;
+              /* IE */
+              -webkit-box-pack: center;
+              -ms-flex-pack: center;
+              justify-content: center;
+              -webkit-justify-content: center;
+              -moz-justify-content: center;
+              -ms-justify-content: center;
+              -webkit-box-align: center;
+              -ms-flex-align: center;
+              align-items: center;
+              -webkit-align-items: center;
+              -moz-align-items: center;
+              -ms-align-items: center; }
+              .sanphamchitiet-content-gallery .show-photo-nav .btn-video-img p.video-img label {
+                text-transform: uppercase;
+                display: inline-block; }
+              .sanphamchitiet-content-gallery .show-photo-nav .btn-video-img p.video-img img {
+                width: 22px;
+                height: 22px; }
+            .sanphamchitiet-content-gallery .show-photo-nav .btn-video-img .video {
+              height: auto; }
+          .sanphamchitiet-content-gallery .show-photo-nav li {
+            margin-bottom: 0px;
+            height: 100%; }
+            .sanphamchitiet-content-gallery .show-photo-nav li a.is-active {
+              border: none; }
+          .sanphamchitiet-content-gallery .show-photo-nav .slick-dotted.slick-slider {
+            margin-bottom: 0; }
+            .sanphamchitiet-content-gallery .show-photo-nav .slick-dotted.slick-slider .slick-dots-container {
+              display: block;
+              top: unset;
+              bottom: 10px; }
+              .sanphamchitiet-content-gallery .show-photo-nav .slick-dotted.slick-slider .slick-dots-container .slick-dots {
+                bottom: 0; }
+                .sanphamchitiet-content-gallery .show-photo-nav .slick-dotted.slick-slider .slick-dots-container .slick-dots li {
+                  height: 8px;
+                  margin: 0 5px;
+                  border: none;
+                  border-radius: 50%;
+                  overflow: unset; }
+                  .sanphamchitiet-content-gallery .show-photo-nav .slick-dotted.slick-slider .slick-dots-container .slick-dots li button:before {
+                    font-size: 10px; }
+        .sanphamchitiet-content-gallery .show-photo-main {
+          display: none; }
+    .sanphamchitiet-content .show-info-product {
+      padding: 0;
+      margin-left: 0;
+      margin-top: 10px; }
+      .sanphamchitiet-content .show-info-product .add-minus-product {
+        width: 100%;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center; }
+        .sanphamchitiet-content .show-info-product .add-minus-product .add-form button#sub, .sanphamchitiet-content .show-info-product .add-minus-product .add-form button#add {
+          border-radius: 50%;
+          background: #c4c4c4;
+          padding-top: 0px;
+          -webkit-box-shadow: 0px 1px 4px #bfbebe;
+          box-shadow: 0px 1px 4px #bfbebe; }
+        .sanphamchitiet-content .show-info-product .add-minus-product .add-form input {
+          padding-left: 0;
+          padding: 0 5%; }
+    .sanphamchitiet-content-detail {
+      width: 100%; }
+      .sanphamchitiet-content-detail .flash-sale.product-detail {
+        width: 100%; }
+      .sanphamchitiet-content-detail .tit {
+        margin: 10px; }
+      .sanphamchitiet-content-detail .small-text, .sanphamchitiet-content-detail .list-number {
+        display: none; }
+      .sanphamchitiet-content-detail .price {
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        margin: 10px; }
+        .sanphamchitiet-content-detail .price .sale {
+          font-size: 24px; }
+        .sanphamchitiet-content-detail .price p.donvi {
+          border-left: 1px solid #737373;
+          padding-left: 10px; }
+        .sanphamchitiet-content-detail .price .note-uudai {
+          color: #ff2462;
+          font-size: 12px;
+          width: 100%; }
+        .sanphamchitiet-content-detail .price .no-sale {
+          width: 100%; }
+      .sanphamchitiet-content-detail .gia-uu-dai {
+        text-align: center;
+        margin: 10px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center; }
+      .sanphamchitiet-content-detail .thongso {
+        margin: 10px;
+        padding-top: 10px;
+        background: none; }
+        .sanphamchitiet-content-detail .thongso dl {
+          display: inline-block;
+          font-size: 14px;
+          margin-bottom: 10px;
+          width: 49%;
+          position: relative; }
+          .sanphamchitiet-content-detail .thongso dl:nth-child(3) {
+            width: 100%; }
+          .sanphamchitiet-content-detail .thongso dl dt {
+            width: 100%;
+            border: 1px solid #c4c4c4;
+            padding: 5px 10px;
+            margin-bottom: 0;
+            position: relative;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            display: -webkit-flex;
+            /* Safari */
+            display: -moz-flex;
+            /* Firefox */
+            display: -ms-flex;
+            /* IE */
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -webkit-justify-content: center;
+            -moz-justify-content: center;
+            -ms-justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-align-items: center;
+            -moz-align-items: center;
+            -ms-align-items: center;
+            text-transform: uppercase;
+            /* &:after {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                margin-top: -5px;
+                content: "";
+                background: url("/templates/home/styles/images/svg/up.svg");
+                width: 12px;
+                height: 12px;
+              } */ }
+            .sanphamchitiet-content-detail .thongso dl dt .dot {
+              display: -webkit-box;
+              display: -ms-flexbox;
+              display: flex;
+              margin-left: 20px; }
+          .sanphamchitiet-content-detail .thongso dl dd {
+            padding: 0 10px;
+            display: none; }
+            .sanphamchitiet-content-detail .thongso dl dd.opened {
+              display: block;
+              position: absolute;
+              background: #fff;
+              border: 1px solid #ccc;
+              left: 0;
+              right: 0;
+              z-index: 1; }
+              .sanphamchitiet-content-detail .thongso dl dd.opened:after {
+                background: url("/templates/home/styles/images/svg/down.svg"); }
+              .sanphamchitiet-content-detail .thongso dl dd.opened + dd {
+                display: block; }
+            .sanphamchitiet-content-detail .thongso dl dd .buttons li {
+              border: none;
+              width: 100%;
+              background: none;
+              padding: 5px; }
+              .sanphamchitiet-content-detail .thongso dl dd .buttons li.is-active {
+                border: none; }
+              .sanphamchitiet-content-detail .thongso dl dd .buttons li.no-value {
+                border: none; }
+      .sanphamchitiet-content-detail .thong-tin-cua-hang {
+        margin: 20px 0; }
+        .sanphamchitiet-content-detail .thong-tin-cua-hang .title {
+          padding: 10px;
+          border: none; }
+        .sanphamchitiet-content-detail .thong-tin-cua-hang .sanpham-danhgia {
+          border-bottom: 1px solid #c4c4c4;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          display: -webkit-flex;
+          /* Safari */
+          display: -moz-flex;
+          /* Firefox */
+          display: -ms-flex;
+          /* IE */
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          justify-content: center;
+          -webkit-justify-content: center;
+          -moz-justify-content: center;
+          -ms-justify-content: center;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-align-items: center;
+          -moz-align-items: center;
+          -ms-align-items: center;
+          padding-bottom: 10px; }
+          .sanphamchitiet-content-detail .thong-tin-cua-hang .sanpham-danhgia li {
+            text-align: center;
+            margin-right: 20px; }
+            .sanphamchitiet-content-detail .thong-tin-cua-hang .sanpham-danhgia li span {
+              color: #ff2462;
+              font-size: 16px; }
+        .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item {
+          padding: 10px; }
+          .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .table01 {
+            word-break: break-word;
+            display: block;
+            width: 100%; }
+            .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .table01 tbody {
+              width: 100%;
+              display: block; }
+            .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .table01 tr {
+              display: -webkit-box;
+              display: -ms-flexbox;
+              display: flex;
+              display: -webkit-flex;
+              /* Safari */
+              display: -moz-flex;
+              /* Firefox */
+              display: -ms-flex;
+              /* IE */
+              -webkit-box-pack: center;
+              -ms-flex-pack: center;
+              justify-content: center;
+              -webkit-justify-content: center;
+              -moz-justify-content: center;
+              -ms-justify-content: center;
+              -webkit-box-align: center;
+              -ms-flex-align: center;
+              align-items: center;
+              -webkit-align-items: center;
+              -moz-align-items: center;
+              -ms-align-items: center;
+              width: 100%;
+              margin-bottom: 10px; }
+            .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .table01 th {
+              width: 50%;
+              display: block;
+              color: #737373;
+              font-size: 16px;
+              text-transform: uppercase;
+              padding: 0; }
+            .sanphamchitiet-content-detail .thong-tin-cua-hang .info .item .table01 td {
+              width: 100%;
+              display: block;
+              color: #000000;
+              padding: 0; }
+      .sanphamchitiet-content-detail .san-pham-mua-kem {
+        padding: 0 10px; }
+      .sanphamchitiet-content-detail .product-customer-title {
+        width: 100%; }
+        .sanphamchitiet-content-detail .product-customer-title .show-number-sm {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          display: -webkit-flex;
+          /* Safari */
+          display: -moz-flex;
+          /* Firefox */
+          display: -ms-flex;
+          /* IE */
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          justify-content: center;
+          -webkit-justify-content: center;
+          -moz-justify-content: center;
+          -ms-justify-content: center;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-align-items: center;
+          -moz-align-items: center;
+          -ms-align-items: center;
+          text-align: center; }
+          .sanphamchitiet-content-detail .product-customer-title .show-number-sm p {
+            margin: 0 10px; }
+            .sanphamchitiet-content-detail .product-customer-title .show-number-sm p.rating span {
+              color: #ff2462;
+              font-size: 18px; }
+            .sanphamchitiet-content-detail .product-customer-title .show-number-sm p.rating img {
+              width: 15px;
+              margin-top: 5px; }
+            .sanphamchitiet-content-detail .product-customer-title .show-number-sm p span {
+              font-size: 18px;
+              color: #000000; }
+      .sanphamchitiet-content-detail .product-customer-comment button {
+        width: 100%; }
+      .sanphamchitiet-content-detail .comment-customer .product-review-content .review-filter {
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap; }
+        .sanphamchitiet-content-detail .comment-customer .product-review-content .review-filter .select-by {
+          margin-top: 10px;
+          margin-left: 0;
+          width: 100%; }
+      .sanphamchitiet-content-detail .comment-customer .product-review-content .review-list .item {
+        padding: 10px; }
+        .sanphamchitiet-content-detail .comment-customer .product-review-content .review-list .item .avata {
+          min-width: 40px;
+          height: 40px;
+          width: 40px;
+          margin-right: 10px; }
+  .sanphamchitiet-recent li {
+    margin: 0 5px;
+    padding: 5px; }
+    .sanphamchitiet-recent li.item-li .image:hover img.sp {
+      -webkit-transform: scale(1);
+      -ms-transform: scale(1);
+      transform: scale(1); }
+    .sanphamchitiet-recent li.item-li .image:hover .action {
+      opacity: 0; }
+  .sanphamchitiet .fix-gnav-sm {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 9;
+    background: #FFFFFF;
+    -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    padding: 10px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -ms-justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    width: 100%; }
+    .sanphamchitiet .fix-gnav-sm .buttons-group {
+      width: 80%; }
+      .sanphamchitiet .fix-gnav-sm .buttons-group button {
+        width: 100%;
+        margin-left: 0;
+        font-size: 16px;
+        height: auto;
+        text-transform: uppercase; }
+    .sanphamchitiet .fix-gnav-sm .icon {
+      border-radius: 50%;
+      min-width: 40px;
+      width: 40px;
+      height: 40px;
+      background: #F2F2F2;
+      margin: 0 10px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-justify-content: center;
+      -moz-justify-content: center;
+      -ms-justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center; }
+      .sanphamchitiet .fix-gnav-sm .icon.addCart {
+        background: #ff2462; }
+    .sanphamchitiet .fix-gnav-sm a {
+      position: relative; }
+    .sanphamchitiet .fix-gnav-sm .cartNum {
+      position: absolute;
+      top: -10px;
+      left: 15px;
+      background: #ccc;
+      border: 1px solid #ccc;
+      border-radius: 50%;
+      padding: 0 6px; }
+  .sanphamchitiet.add_product .sanphamchitiet-content-gallery .show-photo {
+    position: relative; }
+    .sanphamchitiet.add_product .sanphamchitiet-content-gallery .show-photo-main {
+      display: block;
+      position: absolute;
+      right: 0;
+      width: 25%;
+      height: 15%;
+      z-index: 2;
+      border: none; }
+      .sanphamchitiet.add_product .sanphamchitiet-content-gallery .show-photo-main #zoom_03 {
+        display: none; }
+      .sanphamchitiet.add_product .sanphamchitiet-content-gallery .show-photo-main .hover-add {
+        opacity: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%; }
+      .sanphamchitiet.add_product .sanphamchitiet-content-gallery .show-photo-main img {
+        width: 40% !important; }
+  .sanphamchitiet.add_product .flash-sale {
+    display: block; }
+    .sanphamchitiet.add_product .flash-sale span.time-flash-sale {
+      bottom: 5px;
+      top: unset; }
+  .sanphamchitiet.add_product .thongso dl {
+    width: 100%; }
+    .sanphamchitiet.add_product .thongso dl dt {
+      margin-bottom: 10px;
+      width: 150px;
+      display: inline-block;
+      margin-right: 10px;
+      border: none;
+      padding: 0; }
+      .sanphamchitiet.add_product .thongso dl dt .dot {
+        display: inline;
+        margin: 0; }
+    .sanphamchitiet.add_product .thongso dl dl dl {
+      width: auto;
+      display: inline-block; }
+  .footer-link li.tt-vc {
+    width: 100%; }
+    .footer-link li.tt-vc h3 {
+      width: 50%;
+      float: left; } }
+
+@media screen and (max-width: 320px) {
+  .sanphamchitiet-recent-slider li.item-li .image .ctv-flash .flash {
+    top: 10px; }
+    .sanphamchitiet-recent-slider li.item-li .image .ctv-flash .flash img {
+      width: 18px;
+      display: none; }
+    .sanphamchitiet-recent-slider li.item-li .image .ctv-flash .flash .time {
+      font-size: 11px;
+      right: 0;
+      left: unset;
+      background: url(/templates/home/styles/images/svg/flashsale_pink_sm.svg) no-repeat left rgba(255, 255, 255, 0.8);
+      background-size: contain;
+      width: 97%;
+      border-radius: 20px;
+      text-align: right; } }

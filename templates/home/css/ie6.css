@@ -1,0 +1,76 @@
+.image_showbox_1 {
+	border:0px;
+	height: expression(document.body.clientHeight < 20? "20px" : document.body.clientHeight > 90? "90px" : "auto");
+	width: expression(document.body.clientWidth < 20? "20px" : document.body.clientWidth > 125? "125px" : "auto");
+}
+
+.image_showbox_2 {
+	border:0px;
+	height: expression(document.body.clientHeight < 20? "20px" : document.body.clientHeight > 90? "90px" : "auto");
+	width: expression(document.body.clientWidth < 20? "20px" : document.body.clientWidth > 125? "125px" : "auto");
+}
+
+.image_bestvote {
+	border:0px;
+	height: expression(document.body.clientHeight < 20? "20px" : document.body.clientHeight > 70? "70px" : "auto");
+	width: expression(document.body.clientWidth < 20? "20px" : document.body.clientWidth > 90? "90px" : "auto");
+}
+
+.image_top_tip {
+	border:none;
+	height: expression(document.body.clientHeight < 20? "20px" : document.body.clientHeight > 60? "60px" : "auto");
+	width: expression(document.body.clientWidth < 20? "20px" : document.body.clientWidth > 45? "45px" : "auto");
+}
+
+.image_boxpro, .image_boxshop {
+	border:0px;
+	height: expression(document.body.clientHeight < 20? "20px" : document.body.clientHeight > 75? "75px" : "auto");
+	width: expression(document.body.clientWidth < 20? "20px" : document.body.clientWidth > 100? "100px" : "auto");
+}
+
+.image_top_productest_shop {
+	border:none;
+	height: expression(document.body.clientHeight < 20? "20px" : document.body.clientHeight > 48? "48px" : "auto");
+	width: expression(document.body.clientWidth < 20? "20px" : document.body.clientWidth > 57? "57px" : "auto");
+}
+
+#image_detail {
+	border:0px;
+	height: expression(document.body.clientHeight < 20? "20px" : document.body.clientHeight > 170? "170px" : "auto");
+	width: expression(document.body.clientWidth < 20? "20px" : document.body.clientWidth > 200? "200px" : "auto");
+}
+
+.loading_image {
+	text-align:center;
+	padding-top:210px;
+	padding-bottom:211px;
+	padding-left:275px;
+	border:none;
+}
+
+.taskbar {
+	width:expression(document.documentElement.clientWidth);
+	_position:absolute;
+	left:0px;
+	_top:expression(document.documentElement.scrollTop+document.documentElement.clientHeight-this.clientHeight);
+	_right:expression(document.documentElement.scrollLeft+document.documentElement.clientWidth-offsetWidth);
+}
+
+.border_content_taskbar_notify {
+	_position:absolute;
+	right:0px;
+	_top:expression(document.documentElement.scrollTop+document.documentElement.clientHeight-this.clientHeight);
+	_left:expression(document.documentElement.scrollLeft+document.documentElement.clientWidth-offsetWidth);
+}
+
+#fade {
+    background: #000; 
+	position: fixed; 
+	width:expression(document.documentElement.clientWidth);
+	height:expression(document.documentElement.clientHeight);
+	filter:alpha(opacity=50);
+	opacity: .50;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	left: 0;
+	z-index: 200;
+}

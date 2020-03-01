@@ -1,0 +1,169 @@
+@charset "UTF-8";
+/* ==================================================
+
+	※このファイルは基本的に編集しない。他のCSSで設定上書きでの対処を推奨。
+
+================================================== */
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp,
+small, strong, var, b, i, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, footer, header, main, menu, nav, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+div, p, ul, li { word-break: break-word; }
+html {
+  font-size: 62.5%;
+}
+
+body {
+  -webkit-text-size-adjust: 100%;
+  /* 画面回転時の自動文字サイズ調整機能OFF */
+}
+
+article, aside, details, figcaption, figure, footer, header, main, menu, nav, section {
+  display: block;
+}
+
+img {
+  vertical-align: top;
+  font-size: 0;
+  -ms-interpolation-mode: bicubic;
+  /* IE系での画像リサイズ時のリサンプリング設定 */
+}
+
+ol, ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote::before,
+blockquote::after,
+q::before,
+q::after {
+  content: "";
+  content: none;
+}
+
+a {
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  vertical-align: top;
+  background: transparent;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:focus {
+  outline: none;
+}
+
+ins {
+  background-color: #ff9;
+  color: #000;
+  text-decoration: none;
+}
+
+mark {
+  background-color: #ff9;
+  color: #000;
+  font-style: italic;
+  font-weight: bold;
+}
+
+del {
+  text-decoration: line-through;
+}
+
+abbr[title],
+dfn[title] {
+  border-bottom: 1px dotted;
+  cursor: help;
+}
+
+em {
+  font-style: normal;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #cccccc;
+  margin: 1em 0;
+  padding: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+table th,
+table td {
+  text-align: left;
+  vertical-align: middle;
+}
+
+input {
+  vertical-align: middle;
+}
+
+input[type="submit"] {
+  cursor: pointer;
+}
+
+select, optgroup {
+  vertical-align: middle;
+}
+
+select {
+  padding-right: 1px;
+}
+
+textarea {
+  font-size: 100%;
+}
+
+pre, code, kbd, samp, var {
+  font-family: Consolas, 'Courier New', Courier, Monaco, monospace;
+}
+
+sub, sup {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+}
+
+input, button, select, textarea {
+  font-family: "KoHo", sans-serif;
+}
+
+input:focus, button:focus, select:focus, textarea:focus {
+  outline: none;
+} 
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    /* 印刷時の背景印刷 */
+  }
+}

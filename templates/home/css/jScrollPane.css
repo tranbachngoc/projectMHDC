@@ -1,0 +1,89 @@
+.jScrollPaneContainer {
+	position: relative;
+	overflow: hidden;
+	z-index: 1;
+}
+
+.jScrollPaneTrack {
+	position: absolute;
+	cursor: pointer;
+	right: 0;
+	top: 0;
+	height: 100%;
+	background: #aaa;
+}
+.jScrollPaneDrag {
+	position: absolute;
+	background: #666;
+	cursor: pointer;
+	overflow: hidden;
+}
+.jScrollPaneDragTop {
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+}
+.jScrollPaneDragBottom {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	overflow: hidden;
+}
+a.jScrollArrowUp {
+	display: block;
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	right: 0;
+	text-indent: -2000px;
+	overflow: hidden;
+	height: 9px;
+}
+
+a.jScrollArrowDown {
+	display: block;
+	position: absolute;
+	z-index: 1;
+	bottom: 0;
+	right: 0;
+	text-indent: -2000px;
+	overflow: hidden;
+	height: 9px;
+}
+/*BEGIN: Style Scroll bar*/
+.osX .jScrollPaneTrack {
+	background: url(../images/osx_track.gif) repeat-y;
+}
+.osX .jScrollPaneDrag {
+	background: url(../images/osx_drag_middle.gif) repeat-y;
+}
+.osX .jScrollPaneDragTop {
+	background: url(../images/osx_drag_top.gif) no-repeat;
+	height: 6px;
+}
+.osX .jScrollPaneDragBottom {
+	background: url(../images/osx_drag_bottom.gif) no-repeat;
+	height: 7px;
+}
+.osX a.jScrollArrowUp {
+	height: 24px;
+	background: url(../images/osx_arrow_up.png) no-repeat 0 -30px;
+}
+.osX a.jScrollArrowUp:hover {
+	background-position: 0 0;
+}
+.osX a.jScrollArrowDown {
+	height: 24px;
+	background: url(../images/osx_arrow_down.png) no-repeat 0 -30px;
+}
+.osX a.jScrollArrowDown:hover {
+	background-position: 0 0;
+}
+.scroll_pane {
+	margin:0px 5px 0px 5px;
+	width:596px;
+	height:384px;
+	overflow:auto;
+}
+/*END Style Scroll bar*/

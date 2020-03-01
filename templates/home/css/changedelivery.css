@@ -1,0 +1,97 @@
+.container-fluid ._title{text-align: center;font-weight: bold;text-transform: uppercase;}
+.table-condensed .order_id{width:15%}
+.table-condensed .button{width:10%}
+
+.timeline-2 {
+    position: relative;
+    border-left: 2px solid #14082d;
+}
+.time-item {
+    position: relative;
+    padding-bottom: 47px;
+    border-color: #dee5e7;
+    clear: both;
+}
+.time-item:before, .time-item-item:after {
+    display: table;
+    content: " ";
+}
+.item-info {
+    margin-left: 15px;
+}
+.text-muted {
+    color: #98a6ad;
+}
+.panel .panel-body p {
+    margin: 0px;
+}
+.item-info p {
+    
+}
+.timeline-2 .time-item:after, .time-item:after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    top: 5px;
+    width: 14px;
+    height: 14px;
+    margin-left: -8px;
+    background-color: #fff;
+    border-color: #14082d;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    content: '';
+}
+.none{
+    display:none;
+}
+.history_group{
+    text-align: justify;
+}
+.history_group img{
+    cursor: pointer;
+}
+
+.history_logo{
+    width: 12%;
+    float: left;
+}
+p.history_group strong{
+        width: 85%;
+    float: left;
+    padding-left:10px;
+}
+.bill{
+    float: left;
+    padding-left: 146px;
+}
+.bill img{
+    cursor: pointer;
+}
+.date-box .title {
+    float: left;
+    width: 150px;
+}
+.modal-body img{width:100%}
+
+.panel-body {
+    padding: 15px !important;
+}
+
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}

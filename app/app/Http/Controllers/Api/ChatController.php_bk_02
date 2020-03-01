@@ -1,0 +1,2371 @@
+<?php
+namespace App\Http\Controllers\Api;
+use App\Jobs\SendChatNotification;
+use Validator;
+use Illuminate\Http\Request;
+use App\Http\Controllers\ApiController;
+use App\Models\ChatThreads;
+use App\Models\ChatMessages;
+use App\Models\ChatThreadUser;
+use App\Models\ChatUserOff;
+use App\Models\ChatBackground;
+use App\Models\ChatUserBackground;
+use App\Models\ChatUserAlias;
+use App\Models\ChatUserRead;
+use App\Models\ChatUserInvite;
+use App\Models\ChatMessageRead;
+use App\Models\User;
+use App\Models\Shop;
+use App\Models\UserFollow;
+use Lang;
+use App\Helpers\Hash;
+use App\Helpers\Commons;
+use App\Helpers\Utils;
+use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\File;
+use DB;
+use QrCode;
+class ChatController extends ApiController {
+
+
+    public function listRooms(Request $req){
+        $user = $req->user();
+        $search = "";
+        $type="group";
+        if( isset($req->search)) {
+            $search = $req->search;
+        }
+        if( isset($req->type)) {
+            $type = $req->type;
+        }
+        $params = ['userId' => $user->use_id, 'search' =>  $search, 'type' => $type];
+        $page = $req->page;
+        $pageSize = $req->limit;
+        /*$list = ChatThreads::getList($page, $pageSize, $params);*/
+        $list = ChatThreads::getListAlias($page, $pageSize, $params);
+        $results = $list->paginate($pageSize);
+        $results = $results->toArray();
+        if( $type == 'private') {
+            foreach( $results['data'] as $k => &$v) {
+
+                if( $v['ownerId'] == $user->use_id) {
+                    /*$infoUser = ChatThreadUser::getInfoUser($v['requesterId']);*/
+                    $infoUser = ChatThreadUser::getInfoUserAlias($v['requesterId'], $user['use_id']);
+                }
+                else {
+                    /*$infoUser = ChatThreadUser::getInfoUser($v['ownerId']);*/
+                    $infoUser = ChatThreadUser::getInfoUserAlias($v['ownerId'], $user['use_id']);
+                }
+                $infoUser['statusRead'] = ChatThreadUser::getStatusReadThreadUser($user->use_id, $v['groupChatId']);
+                $threadId = $v['groupChatId'];
+                $ownerId = $v['ownerId'];
+                $v['background'] = ChatUserBackground::getBackgroundUser(['groupChatId' => $v['groupChatId'], 'userId' => $user['use_id']]);
+
+                $v['show'] = 1;
+                if( $v['ownerId'] == $user->use_id && $v['idGroupDefault'] == 1) {
+                    $check = ChatMessages::where(['threadId' => $threadId, 'ownerId' => $v['requesterId']])->first();
+                    if(!$check) {
+                        $v['show'] = 0;
+                    }
+                }
+                $v = array_merge($v, $infoUser);
+                $lastMessage = ChatThreads::getLastMessage($v['groupChatId']);
+                $v = array_merge($v, ['lastMessage' => $lastMessage ]);
+            }
+        }
+        else {
+            foreach( $results['data'] as $k => &$v) {
+                $v['background'] = ChatUserBackground::getBackgroundUser(['groupChatId' => $v['groupChatId'], 'userId' => $user['use_id']]);
+                $lastMessage = ChatThreads::getLastMessage($v['groupChatId']);
+                /*$infoAdmin  = ChatThreads::getInfoIsAdmin($v['use_id'], $v['groupChatId']);*/
+                $infoAdmin  = ChatThreads::getInfoIsAdmin($user['use_id'], $v['groupChatId']);
+                $v['admin'] = $infoAdmin['admin'];
+                $v = array_merge($v, ['lastMessage' => $lastMessage ]);
+            }
+        }
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $results
+        ]);
+    }
+
+    public function detailUserJoinGroup(Request $req) {
+        $user = $req->user();
+        $groupChatId = $req->groupChatId;
+        $userId = $req->userId;
+        $infoGroup = ChatThreads::where(['id' => $groupChatId])->first();
+        if($infoGroup) {
+            $type = $infoGroup['type'];
+            /*$data = ChatThreads::getDetailUserJoinGroup($type, $groupChatId, $userId);*/
+            $data = ChatThreads::getDetailUserJoinGroupAlias($type, $groupChatId, $userId, $user['use_id']);
+            return response([
+                'msg' => Lang::get('response.success'),
+                'data' => $data
+            ]);
+        }
+        return response([
+            'msg' => Lang::get('response.failed'),
+            'data' => []
+        ]);
+
+    }
+
+    public function listMessages(Request $req) {
+        $user = $req->user();
+        $groupChat = $req->groupChatId;
+        $page = $req->page;
+        $pageSize = $req->limit;
+        ChatUserRead::setRead($user->use_id, $groupChat);
+        $infoGroup = ChatThreads::where(['id' => $groupChat])->first();
+        if($infoGroup['idGroupDefault'] == 0) {
+            $params = ['threadId' => $groupChat, 'userLogin' => $user['use_id'],'lastIdMessage' => $infoGroup['lastIdMessage'], 'idDelete' => $infoGroup['idDelete']];
+        }
+        else {
+            //$params = ['threadId' => $infoGroup['idGroupDefault'], 'userLogin' => $user['use_id']];
+            $params = ['threadId' => $groupChat, 'userLogin' => $user['use_id'],'lastIdMessage' => $infoGroup['lastIdMessage'], 'idDelete' => $infoGroup['idDelete']];
+        }
+        /*$list = ChatMessages::getList($page, $pageSize, $params);*/
+        $list = ChatMessages::getListAlias($page, $pageSize, $params);
+        $results = $list->paginate($pageSize);
+
+        if(count($results) > 0 ) {
+            $statusLastChat = ChatMessages::statusLastChat($infoGroup);
+            if($statusLastChat == null) {
+                $statusLastChat = 0;
+            }
+            foreach( $results as $k => &$v) {
+                $v['created_ts'] = Commons::convertDateTotime($v['createdAt']);
+                $v['updated_ts'] = Commons::convertDateTotime($v['updatedAt']);
+                if($v['typedata'] == 'multiImage') {
+                    $v['listImage'] = json_decode($v['listImage'], true);
+                }
+                else {
+                    $v['listImage'] = [];
+                }
+                $messageId = $v['messageId'];
+                if($messageId != 0) {
+                    $infoMessage = ChatMessages::getDetailMesssage($messageId);
+                    $v['parentMessage'] = $infoMessage;
+
+                }
+                else {
+                    $v['parentMessage'] = null;
+                }
+                $v['statusRead'] = $statusLastChat;
+            }
+        }
+
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $results
+        ]);
+    }
+
+    public function listUserGroup(Request $req) {
+        $user = $req->user();
+        $group = $req->groupChatId;
+        $infoGroup = ChatThreads::where(['id' => $group])->first();
+        $typegroup = $infoGroup->typegroup;
+        $pageSize = $req->limit;
+        $page = $req->page;
+        $params = ['threadId' => $group, 'userId' => $user['use_id']];
+        if($typegroup == 'default') {
+            switch ($infoGroup['alias']) {
+                case 'agent':
+                    $results = $this->getListBrandPagination( $user['use_id'] ,$req);
+                    break;
+
+                case 'afflliate':
+                    $results = $this->listAllaffiliateUnderPagination($req);
+                    break;
+
+                case 'staff':
+                    $results = $this->listStaffPagination( $user['use_id'] ,$req);
+
+                    break;
+
+                case 'customer_bought':
+                    $results = $this->customer_boughtpagination($user['use_id'], $req);
+                    break;
+
+                case 'customer_sell':
+                    # code...
+                    $results = [];
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+        else {
+            /*$list = ChatThreadUser::getListUserOfGroup($page, $pageSize, $params);*/
+            $list = ChatThreadUser::getListUserOfGroupAlias($page, $pageSize, $params);
+            $results = $list->paginate($pageSize);
+        }
+        foreach( $results as $k => &$v) {
+            $v['userCreateGroup'] = $infoGroup['ownerId'];
+        }
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $results
+        ]);
+
+    }
+
+    public function listGroupDefault(Request $req) {
+        // group default
+        $user = $req->user();
+        $use_group = $user['use_group'];
+        $userId = $user['use_id'];
+        $check = DB::table('chatthreads')->where(['ownerId' => $userId, 'typegroup' => 'default'])->exists();
+        if(!$check) {
+            switch ($use_group) {
+                case '3':
+                    //shop
+
+                    $arrName = [
+                                   ['name' => 'Cộng tác viên của tôi', 'alias' => 'afflliate', 'avatar' => 'icon_default/ic_gianhang_menu.png' ],
+                                   ['name' => 'Nhân viên', 'alias' => 'staff', 'avatar' => 'icon_default/ic_nhanvien.png' ],
+                                   ['name' => 'Chi nhánh', 'alias' => 'agent' , 'avatar' => 'icon_default/ic_search_group.png'],
+                                   ['name' => 'Khách hàng đã mua', 'alias' => 'customer_bought', 'avatar' => 'icon_default/cart.png' ],
+                                   ['name' => 'Người chọn bán hàng cho mình', 'alias' => 'customer_sell', 'avatar' => 'icon_default/ic_search_all_product.png' ],
+
+                                ];
+                    foreach( $arrName as $k => $v ) {
+                        $arrData = ['type' => 'group',
+                                     'ownerId' =>  $userId,
+                                     'namegroup' => $v['name'],
+                                     'alias' => $v['alias'],
+                                     'avatar' => $v['avatar'],
+                                     'typegroup' => 'default',
+                                     'typechat' => 1,
+                                     'requesterId' => 0,
+                                     'createdAt'=> date('Y-m-d H:i:s'),
+                                     'updatedAt'=> date('Y-m-d H:i:s')
+                                    ];
+                        $threadId  = ChatThreads::createGroup($arrData);
+                    }
+
+                    break;
+                case '2':
+
+                    $arrName = [
+                                   ['name' => 'Khách hàng đã mua', 'alias' => 'customer_bought', 'avatar' => 'icon_default/cart.png' ],
+                                ];
+                    foreach( $arrName as $k => $v ) {
+                        $arrData = ['type' => 'group',
+                                     'ownerId' =>  $userId,
+                                     'namegroup' => $v['name'],
+                                     'alias' => $v['alias'],
+                                     'avatar' => $v['avatar'],
+                                     'typegroup' => 'default',
+                                     'typechat' => 1,
+                                     'requesterId' => 0,
+                                     'createdAt'=> date('Y-m-d H:i:s'),
+                                     'updatedAt'=> date('Y-m-d H:i:s')
+                                    ];
+                        $threadId  = ChatThreads::createGroup($arrData);
+                    }
+                    break;
+
+                case '15':
+                    $arrName = [
+                                   ['name' => 'Cộng tác viên của tôi', 'alias' => 'afflliate' , 'avatar' => 'icon_default/ic_gianhang_menu.png'],
+                                   ['name' => 'Chi nhánh', 'alias' => 'agent', 'avatar' => 'icon_default/ic_search_group.png' ],
+
+                                ];
+                    foreach( $arrName as $k => $v ) {
+                        $arrData = ['type' => 'group',
+                                     'ownerId' =>  $userId,
+                                     'namegroup' => $v['name'],
+                                     'alias' => $v['alias'],
+                                     'avatar' => $v['avatar'],
+                                     'typegroup' => 'default',
+                                     'typechat' => 1,
+                                     'requesterId' => 0,
+                                     'createdAt'=> date('Y-m-d H:i:s'),
+                                     'updatedAt'=> date('Y-m-d H:i:s')
+                                    ];
+                        $threadId  = ChatThreads::createGroup($arrData);
+                    }
+                    break;
+
+                default:
+
+                    break;
+            }
+        }
+
+        $list = ChatThreads::getListThreadDefault($userId);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $list
+        ]);
+    }
+
+    public function acceptJoinRoom(Request $req) {
+        $user = $req->user();
+        $groupChatId = $req->groupChatId;
+        $valueRequest = $req->valueRequest;
+        if($valueRequest == -1) {
+            //ChatThreadUser::where(['userId' => $user['use_id'], 'threadId' => $groupChatId])->delete();
+            DB::table('chatthreaduser')->where(['userId' => $user['use_id'], 'threadId' => $groupChatId])->delete();
+        }
+        else {
+            /*ChatThreadUser::where(['userId' => $user['use_id'], 'threadId' => $groupChatId])->update(['accept_request' => $valueRequest ]);*/
+            DB::table('chatthreaduser')->where(['userId' => $user['use_id'], 'threadId' => $groupChatId])->update(['accept_request' => $valueRequest ]);
+
+        }
+        ChatUserInvite::minusCountInvite($user['use_id']);
+        /*$infoGroup = ChatThreads::getDetailThread($groupChatId, $user['use_id']);*/
+        $infoGroup = ChatThreads::getDetailThreadAlias($groupChatId, $user['use_id']);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $infoGroup,
+            'groupChatId' => $groupChatId,
+            'userId' =>  $infoGroup['use_id']
+        ]);
+    }
+
+    public function createGroupChat(Request $req) {
+        $namegroup = $req->namegroup;
+        $user = $req->user();
+        $listUserJoinGroup = $req->listUser;
+        $typechat = 2;
+        if( isset($req->typechat)) {
+            $typechat = $req->typechat;
+        }
+        $arrUserDefault = [];
+        if( isset($req->groupDefault)) {
+            $infoThreadDefault = ChatThreads::where("id", "=",$req->groupDefault )->first();
+            if($infoThreadDefault) {
+                switch ($infoThreadDefault['alias']) {
+                    case 'agent':
+                        $listUser = $this->getListBrand( $user['use_id'] ,$req);
+                        foreach($listUser as $k => $v) {
+                            $arrUserDefault[] = $v['use_id'];
+                            ChatUserInvite::updateCountInvite($v['use_id']);
+                        }
+
+                        break;
+
+                    case 'afflliate':
+                        # code...
+                        $listUser = $this->listAllaffiliateUnder($req);
+                        foreach($listUser as $k => $v) {
+                            $arrUserDefault[] = $v['use_id'];
+                            ChatUserInvite::updateCountInvite($v['use_id']);
+                        }
+                        break;
+
+                    case 'staff':
+                        $listUser = $this->listStaff( $user['use_id'] ,$req);
+                        foreach($listUser as $k => $v) {
+                            $arrUserDefault[] = $v['use_id'];
+                            ChatUserInvite::updateCountInvite($v['use_id']);
+                        }
+                        break;
+
+                    case 'customer_bought':
+                        $listUser = $this->customer_bought($req);
+                        foreach($listUser as $k => $v) {
+                            $arrUserDefault[] = $v['use_id'];
+                            ChatUserInvite::updateCountInvite($v['use_id']);
+                        }
+                        break;
+
+                    case 'customer_sell':
+                        # code...
+                        break;
+
+                    default:
+                        # code...
+                        break;
+                }
+            }
+        }
+        $avatar = "";
+        if( isset($req->avatar)) {
+            $avatar = $req->avatar;
+        }
+        $arrData = ['type' => 'group',
+                     'ownerId' =>  $user->use_id,
+                     'namegroup' => $namegroup,
+                     'avatar' => $avatar,
+                     'typegroup' => '' ,
+                     'typechat' => $typechat,
+                     'requesterId' => 0,
+                     'createdAt'=> date('Y-m-d H:i:s'),
+                     'updatedAt'=> date('Y-m-d H:i:s')
+                    ];
+        $threadId  = ChatThreads::createGroup($arrData);
+        if( $threadId) {
+            $listUserJoinGroup = array_diff($listUserJoinGroup, $arrUserDefault);
+            //array_push($listUserJoinGroup, $user->use_id );
+            ChatThreadUser::addUserToGroup($threadId, [$user->use_id], 1, 1);
+            if( count($listUserJoinGroup) > 0 ) {
+                ChatThreadUser::addUserToGroup($threadId, $listUserJoinGroup);
+                /*$dataPushnotification = [
+                                        'userIds' => $listUserJoinGroup,
+                                        'ownerName' => $user->use_username,
+                                        'groupName' => $namegroup
+                                ];
+                dispatch(new SendChatNotification('join-group',$dataPushnotification));*/
+            }
+            if( count($arrUserDefault) > 0  &&  $typechat == 1) {
+                ChatThreadUser::addUserToGroup($threadId, $arrUserDefault, 1);
+            }
+            else {
+                ChatThreadUser::addUserToGroup($threadId, $arrUserDefault);
+            }
+            /*$detailThread = ChatThreads::getDetailThread($threadId, $user->use_id);*/
+            $detailThread = ChatThreads::getDetailThreadAlias($threadId, $user->use_id);
+            foreach( $listUserJoinGroup as $k => $v ) {
+                ChatUserInvite::updateCountInvite($v);
+            }
+            return response([
+                'msg' => Lang::get('response.success'),
+                'data' => $detailThread,
+                'listUserJoinGroup' => $listUserJoinGroup,
+                'userId' => $user['use_id'],
+                'arrUserDefault' => $arrUserDefault,
+                'typechat' => $req->typechat
+            ]);
+        }
+        return response([
+                'msg' => Lang::get('response.failed'),
+
+        ]);
+    }
+
+
+    public function createPrivateChat(Request $req) {
+        $user = $req->user();
+        $ownerId = $req->ownerId;
+        $memberId = $req->memberId;
+        $data = ChatThreads::where(function ($query) use ($ownerId, $memberId)  {
+                     $query->where(['ownerId' => $ownerId, 'requesterId' => $memberId])
+                            ->orWhere(['ownerId' => $memberId, 'requesterId' => $ownerId])
+                     ;
+                })->first();
+        if($data) {
+            /*$detailThread = ChatThreads::detailGroupPrivate($user['use_id'], $data['id']);*/
+            $detailThread = ChatThreads::detailGroupPrivateAlias($user['use_id'], $data['id']);
+            return response([
+                'msg' => Lang::get('response.success'),
+                'data' => ['thread' => $detailThread, 'ownerId' => $ownerId, 'memberId' => $memberId]
+
+            ]);
+        }
+        else {
+            $arrData = ['type' => 'private',
+                     'ownerId' =>  $ownerId,
+                     'namegroup' => '',
+                     'requesterId' => $memberId,
+                     'typegroup' => '',
+                     'avatar' => '',
+                     'alias' => '',
+                     'createdAt' => date('Y-m-d H:i:s'),
+                     'updatedAt' => date('Y-m-d H:i:s'),
+                    ];
+
+            $threadId  = ChatThreads::createGroup($arrData);
+            if( $threadId) {
+                $arr = [$ownerId, $memberId];
+                ChatThreadUser::addUserToGroup($threadId, $arr, 1 );
+                //$data = ChatThreads::where("id","=", $threadId)->first();
+                /*$detailThread = ChatThreads::detailGroupPrivate($user['use_id'], $threadId);*/
+                $detailThread = ChatThreads::detailGroupPrivateAlias($user['use_id'], $threadId);
+                return response([
+                    'msg' => Lang::get('response.success'),
+                    'data' => ['thread' => $detailThread, 'ownerId' => $ownerId, 'memberId' => $memberId]
+
+                ]);
+            }
+            else {
+                return response([
+                        'msg' => Lang::get('response.failed'),
+
+                ]);
+            }
+        }
+    }
+
+
+
+    public function addUserToGroup(Request $req) {
+        $user = $req->user();
+        $groupChatId = $req->groupChatId;
+        $listUser = $req->userId;
+        try {
+            ChatThreadUser::addUserToGroup($groupChatId,$listUser);
+            $user['groupChatId'] = $groupChatId;
+            foreach($listUser as $k => $v ) {
+                ChatUserInvite::updateCountInvite($v);
+            }
+            /*$detailThread = ChatThreads::getDetailThread($groupChatId, $user['use_id']);*/
+            $detailThread = ChatThreads::getDetailThreadAlias($groupChatId, $user['use_id']);
+            return response([
+                'msg' => Lang::get('response.success'),
+                'data' => $detailThread,
+                'listUserJoinGroup' => $listUser
+            ]);
+        }catch(Exception $e) {
+            return response([
+                'msg' => Lang::get('response.failed'),
+            ]);
+        }
+    }
+
+
+    public function sendMedia(Request $req) {
+        $rule = [
+            'file'=>[
+                'required',
+            ],
+            //'type'=>'image|mimes:jpg,png,gif,jpeg',
+            'dir_image'=>'string'
+        ];
+        $validator = Validator::make($req->all(), $rule);
+        if ($validator->fails()) {
+            return response([
+                'msg' => $validator->errors()->first(),
+                'errors' => $validator->errors()
+                ], 422);
+        }
+        $dir_image = 'chat_media';
+        $fileName = Utils::randomFilename() . '.' . $req->file->extension(); // renameing image
+        //FTP
+        $pathFTP = Utils::getUploadsRootFTP('chat_media', $dir_image);
+        Utils::uploadFileToFTP($req->file, $pathFTP.DIRECTORY_SEPARATOR.$fileName);
+
+        /*$pathUpload = Utils::getUploadsRoot('chat_media', $dir_image);
+        $req->file->move($pathUpload, $fileName);
+        $size = getimagesize($pathUpload . DIRECTORY_SEPARATOR. $fileName);
+        if($size) {
+            $width=$size[0];
+            $height=$size[1];
+            if($width > 1024) {
+                $image_resize = Image::make($pathUpload . DIRECTORY_SEPARATOR. $fileName);
+                $image_resize->resize(1024, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $image_resize->save($pathUpload . DIRECTORY_SEPARATOR  . $fileName, null);
+            }
+        }*/
+
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => [
+                'file' => $fileName,
+                'dir_file' => $dir_image,
+                'type' => $req->type
+
+            ]
+        ]);
+    }
+
+    public function customer_bought($userId, $req) {
+        $userdb = User::tableName();
+        $from_view = '( SELECT tbtt_order.order_user, COUNT(tbtt_order.id) '
+            . ' FROM tbtt_order '
+            . ' INNER JOIN tbtt_showcart ON tbtt_showcart.shc_orderid = tbtt_order.id '
+            . ' WHERE tbtt_showcart.shc_saler = ' .$userId
+            . ' GROUP BY tbtt_order.id ) AS from_view';
+
+        $query = User::select(DB::raw('count(from_view.order_user) as count_order'),'from_view.order_user', DB::raw($userdb.'.use_id, '
+            . $userdb.'.use_username,'.$userdb.'.use_email,'.$userdb.'.use_address,'.$userdb.'.use_fullname,'.$userdb.'.use_mobile'));
+        $query->from(DB::raw($from_view));
+        $query->join($userdb, 'tbtt_user.use_id', 'from_view.order_user');
+        $query->groupBy('order_user');
+        $query->orderBy('order_user','DESC');
+        if ($req->use_username) {
+            $query->where($userdb . '.use_username', 'LIKE', '%' . $req->use_username . '%');
+        }
+        if ($req->use_fullname) {
+            $query->where($userdb . '.use_fullname', 'LIKE', '%' . $req->use_fullname . '%');
+        }
+
+        if ($req->use_fullname) {
+            $query->where($userdb . '.use_fullname', 'LIKE', '%' . $req->use_fullname . '%');
+        }
+        if ($req->use_mobile) {
+            $query->where($userdb . '.use_mobile', 'LIKE', '%' . $req->use_mobile . '%');
+        }
+        /*$limit = $req->limit ? (int) $req->limit : 10;
+        $page = $req->page ? (int) $req->page : 0;
+
+        $results = $query->paginate($limit, ['*'], 'page', $page);
+        return $results;*/
+        $data = $query->get()->toArray();
+        return $data;
+
+    }
+
+
+    public function customer_boughtpagination($userId, $req) {
+        $userdb = User::tableName();
+        $from_view = '( SELECT tbtt_order.order_user, COUNT(tbtt_order.id) '
+            . ' FROM tbtt_order '
+            . ' INNER JOIN tbtt_showcart ON tbtt_showcart.shc_orderid = tbtt_order.id '
+            . ' WHERE tbtt_showcart.shc_saler = ' .$userId
+            . ' GROUP BY tbtt_order.id ) AS from_view';
+
+        $query = User::select(DB::raw('count(from_view.order_user) as count_order'),'from_view.order_user', DB::raw($userdb.'.use_id, '
+            . $userdb.'.use_username,'.$userdb.'.use_email,'.$userdb.'.use_address,'.$userdb.'.use_fullname,'.$userdb.'.use_mobile'));
+        $query->from(DB::raw($from_view));
+        $query->join($userdb, 'tbtt_user.use_id', 'from_view.order_user');
+        $query->groupBy('order_user');
+        $query->orderBy('order_user','DESC');
+        if ($req->use_username) {
+            $query->where($userdb . '.use_username', 'LIKE', '%' . $req->use_username . '%');
+        }
+        if ($req->use_fullname) {
+            $query->where($userdb . '.use_fullname', 'LIKE', '%' . $req->use_fullname . '%');
+        }
+
+        if ($req->use_fullname) {
+            $query->where($userdb . '.use_fullname', 'LIKE', '%' . $req->use_fullname . '%');
+        }
+        if ($req->use_mobile) {
+            $query->where($userdb . '.use_mobile', 'LIKE', '%' . $req->use_mobile . '%');
+        }
+        $limit = $req->limit ? (int) $req->limit : 10;
+        $page = $req->page ? (int) $req->page : 0;
+        $query->leftJoin(DB::raw("(select * from chatuseralias where userId = $userId) as chatuseralias"), function($join) {
+                         $join->on('tbtt_user.use_id', '=', 'chatuseralias.userId_alias');
+                })
+        ->select("tbtt_user.use_id as use_id","tbtt_user.avatar","tbtt_user.use_username",
+                    DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'));
+
+        $results = $query->paginate($limit, ['*'], 'page', $page);
+        return $results;
+
+    }
+
+
+    public function getListBrand($id, $req) {
+        $shopdb = (new Shop)->getTable();
+        $userdb = (new User)->getTable();
+        $query = User::where(['use_status' => User::STATUS_ACTIVE, 'use_group' => User::TYPE_BranchUser]);
+        if ($req->createdByMeOnly) {
+            $query->whereIn('parent_id', $id);
+        }
+        $query->whereIn('parent_id', function($q) use($id) {
+                $q->select('use_id');
+                $q->from((new User)->getTable());
+                $q->where(function($q2) use ($id) {
+                    $q2->whereIn('use_group', [User::TYPE_StaffStoreUser]);
+                    $q2->where(['parent_id' => $id]);
+                });
+                $q->orWhere('use_id', $id);
+            })->join($shopdb, $shopdb . '.sho_user', $userdb . '.use_id')
+            ->with('shop')->withCount('affNumber');
+
+        if (!empty($req->orderBy)) {
+            $req->orderBy = explode(',', $req->orderBy);
+            $key = $req->orderBy[0];
+            $value = $req->orderBy[1] ? $req->orderBy[1] : 'DESC';
+            $query->orderBy($key, $value);
+        } else {
+            $query->orderBy('use_fullname', 'ASC');
+        }
+
+        if (!empty($req->keywords)) {
+            $query->where(function($q) use ($req) {
+                $q->orWhereRaw('LOWER(use_fullname) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_username) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_fullname) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_mobile) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_phone) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+            });
+        }
+        if ($req->sum) {
+            return $data['total'] = $query->count();
+        }
+
+        /*$limit = $req->limit ? (int) $req->limit : 1000;
+        $page = $req->page ? (int) $req->page : 0;
+
+        $paginate = $query->paginate($limit, ['tbtt_user.use_id'], 'page', $page);
+        $results = $paginate->toArray();*/
+        $data = $query->get()->toArray();
+        return $data;
+
+    }
+
+    public function getListBrandPagination($id, $req) {
+        $shopdb = (new Shop)->getTable();
+        $userdb = (new User)->getTable();
+        $query = User::where(['use_status' => User::STATUS_ACTIVE, 'use_group' => User::TYPE_BranchUser]);
+        if ($req->createdByMeOnly) {
+            $query->whereIn('parent_id', $id);
+        }
+        $query->whereIn('parent_id', function($q) use($id) {
+                $q->select('use_id');
+                $q->from((new User)->getTable());
+                $q->where(function($q2) use ($id) {
+                    $q2->whereIn('use_group', [User::TYPE_StaffStoreUser]);
+                    $q2->where(['parent_id' => $id]);
+                });
+                $q->orWhere('use_id', $id);
+            })->join($shopdb, $shopdb . '.sho_user', $userdb . '.use_id')
+            ->leftJoin(DB::raw("(select * from chatuseralias where userId = $id) as chatuseralias"), function($join) {
+                         $join->on('tbtt_user.use_id', '=', 'chatuseralias.userId_alias');
+                })
+            ->select("tbtt_user.use_id as use_id","tbtt_user.avatar","tbtt_user.use_username",
+                    DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'))
+            ;
+            //->with('shop')->withCount('affNumber');
+
+        if (!empty($req->orderBy)) {
+            $req->orderBy = explode(',', $req->orderBy);
+            $key = $req->orderBy[0];
+            $value = $req->orderBy[1] ? $req->orderBy[1] : 'DESC';
+            $query->orderBy($key, $value);
+        } else {
+            $query->orderBy('use_fullname', 'ASC');
+        }
+
+        if (!empty($req->keywords)) {
+            $query->where(function($q) use ($req) {
+                $q->orWhereRaw('LOWER(use_fullname) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_username) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_fullname) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_mobile) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_phone) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+            });
+        }
+        if ($req->sum) {
+            return $data['total'] = $query->count();
+        }
+        $limit = $req->limit ? (int) $req->limit : 1000;
+        $page = $req->page ? (int) $req->page : 0;
+        $paginate = $query->paginate($limit, ["tbtt_user.use_id as use_id","tbtt_user.avatar","tbtt_user.use_username","tbtt_user.use_fullname"], 'page', $page);
+        return $paginate;
+
+    }
+
+    public function listStaff($userId, $req) {
+        $limit = $req->limit ? (int) $req->limit : 1000;
+        $page = $req->page ? (int) $req->page : 0;
+        $group = [User::TYPE_StaffUser,User::TYPE_StaffStoreUser];
+        if($req->showAll){
+            $group[] = User::TYPE_BranchUser;
+        }
+        $query = User::where(['use_status' => User::STATUS_ACTIVE, 'parent_id' => $userId])
+            ->whereIn('use_group', $group);
+        $query->withCount('affNumber')->withCount('branchNumber');
+        if(!empty($req->keywords)){
+             $query->where(function($q) use ($req) {
+                $q->orWhereRaw('LOWER(use_fullname) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_username) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_fullname) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_mobile) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_phone) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+            });
+        }
+        if (!empty($req->orderBy)) {
+            $req->orderBy = explode(',', $req->orderBy);
+            $key = $req->orderBy[0];
+            $value = $req->orderBy[1] ? $req->orderBy[1] : 'DESC';
+            $query->orderBy($key, $value);
+        }else{
+            $query->orderBy('use_regisdate','DESC');
+        }
+        /*$paginate = $query->paginate($limit, ['*'], 'page', $page);
+        $results = $paginate->toArray();
+        return $results['data'];*/
+        $data = $query->get()->toArray();
+        return $data;
+    }
+
+    public function listStaffPagination($userId, $req) {
+        $limit = $req->limit ? (int) $req->limit : 1000;
+        $page = $req->page ? (int) $req->page : 0;
+        $group = [User::TYPE_StaffUser,User::TYPE_StaffStoreUser];
+        if($req->showAll){
+            $group[] = User::TYPE_BranchUser;
+        }
+        $query = User::where(['use_status' => User::STATUS_ACTIVE, 'parent_id' => $userId])
+            ->whereIn('use_group', $group);
+        $query->withCount('affNumber')->withCount('branchNumber');
+        if(!empty($req->keywords)){
+             $query->where(function($q) use ($req) {
+                $q->orWhereRaw('LOWER(use_fullname) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_username) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_fullname) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_mobile) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_phone) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+            });
+        }
+        if (!empty($req->orderBy)) {
+            $req->orderBy = explode(',', $req->orderBy);
+            $key = $req->orderBy[0];
+            $value = $req->orderBy[1] ? $req->orderBy[1] : 'DESC';
+            $query->orderBy($key, $value);
+        }else{
+            $query->orderBy('use_regisdate','DESC');
+        }
+        $query->leftJoin(DB::raw("(select * from chatuseralias where userId = $userId) as chatuseralias"), function($join) {
+                         $join->on('tbtt_user.use_id', '=', 'chatuseralias.userId_alias');
+                })
+        ->select("tbtt_user.use_id as use_id","tbtt_user.avatar","tbtt_user.use_username",
+                    DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'));
+        $paginate = $query->paginate($limit, ["tbtt_user.use_id as use_id","tbtt_user.avatar","tbtt_user.use_username","tbtt_user.use_fullname"], 'page', $page);
+        return $paginate;
+    }
+
+    public function listAllaffiliateUnder($req) {
+        $tree = [];
+        $tree[] = $req->user()->id;
+        $user = $req->user();
+        $query = User::where(['use_status' => User::STATUS_ACTIVE, 'use_group' => User::TYPE_AffiliateUser]);
+        $query->whereIn('parent_id', function($q) use ($user) {
+            $q->select('use_id');
+            $q->from((new User)->getTable());
+            $q->where('use_status', User::STATUS_ACTIVE);
+            $q->where(function($q2) use ($user) {
+                $q2->whereIn('use_group', [User::TYPE_StaffStoreUser, User::TYPE_StaffUser, User::TYPE_BranchUser,
+                    User::TYPE_AffiliateStoreUser,User::TYPE_Partner2User,User::TYPE_Partner1User,User::TYPE_Developer1User,User::TYPE_Developer2User]);
+                $q2->where(['use_status' => User::STATUS_ACTIVE, 'parent_id' => $user->use_id]);
+            });
+            $q->orWhere(function($q) use($user) {
+                $q->where('use_group', User::TYPE_StaffUser);
+                $q->whereIn('parent_id', function($q) use($user) {
+                    $q->select('use_id');
+                    $q->from(User::tableName());
+                    $q->where(function($q) use ($user) {
+                        $q->where('use_group', User::TYPE_BranchUser);
+                        $q->where(['use_status' => User::STATUS_ACTIVE, 'parent_id' => $user->use_id]);
+                    });
+                });
+            });
+            $q->orWhere(function($q) use($user) {
+                $q->where('use_group', User::TYPE_StaffUser);
+                $q->whereIn('parent_id', function($q) use($user){
+                    $q->select('use_id');
+                    $q->from(User::tableName());
+                    $q->where('use_status', User::STATUS_ACTIVE);
+                    $q->where('use_group', User::TYPE_BranchUser);
+                    $q->whereIn('parent_id', function($q) use($user) {
+                        $q->select('use_id');
+                        $q->from(User::tableName());
+                        $q->where('use_group', User::TYPE_StaffStoreUser);
+                        $q->where('parent_id',$user->use_id);
+                    });
+                });
+            });
+            $q->orWhere(function($q) use($user) {
+                $q->where('use_group', User::TYPE_BranchUser);
+                $q->where('use_status', User::STATUS_ACTIVE);
+                $q->whereIn('parent_id', function($q) use($user) {
+                    $q->select('use_id');
+                    $q->from(User::tableName());
+                    $q->where('use_group', User::TYPE_StaffStoreUser);
+                     $q->where('parent_id',$user->use_id);
+                });
+            });
+            $q->orWhere('use_id', $user->use_id);
+        });
+
+        if (!empty($req->orderBy)) {
+            $req->orderBy = explode(',', $req->orderBy);
+            $key = $req->orderBy[0];
+            $value = $req->orderBy[1] ? $req->orderBy[1] : 'DESC';
+            $query->orderBy($key, $value);
+        } else {
+            $query->orderBy('use_regisdate', 'DESC');
+        }
+
+         if (!empty($req->keywords)) {
+            $query->where(function($q) use ($req) {
+                $q->orWhereRaw('LOWER(use_fullname) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_username) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_fullname) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_mobile) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_phone) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+            });
+        }
+
+        $limit = $req->limit ? (int) $req->limit : 1000;
+        $page = $req->page ? (int) $req->page : 0;
+
+        /*$paginate = $query->paginate($limit, ['*'], 'page', $page);
+        $result = $paginate->toArray();
+        return $results['data'];*/
+        $data = $query->get()->toArray();
+        return $data;
+    }
+
+
+    public function listAllaffiliateUnderPagination($req) {
+        $tree = [];
+        $tree[] = $req->user()->id;
+        $user = $req->user();
+        $query = User::where(['use_status' => User::STATUS_ACTIVE, 'use_group' => User::TYPE_AffiliateUser]);
+        $query->whereIn('parent_id', function($q) use ($user) {
+            $q->select('use_id');
+            $q->from((new User)->getTable());
+            $q->where('use_status', User::STATUS_ACTIVE);
+            $q->where(function($q2) use ($user) {
+                $q2->whereIn('use_group', [User::TYPE_StaffStoreUser, User::TYPE_StaffUser, User::TYPE_BranchUser,
+                    User::TYPE_AffiliateStoreUser,User::TYPE_Partner2User,User::TYPE_Partner1User,User::TYPE_Developer1User,User::TYPE_Developer2User]);
+                $q2->where(['use_status' => User::STATUS_ACTIVE, 'parent_id' => $user->use_id]);
+            });
+            $q->orWhere(function($q) use($user) {
+                $q->where('use_group', User::TYPE_StaffUser);
+                $q->whereIn('parent_id', function($q) use($user) {
+                    $q->select('use_id');
+                    $q->from(User::tableName());
+                    $q->where(function($q) use ($user) {
+                        $q->where('use_group', User::TYPE_BranchUser);
+                        $q->where(['use_status' => User::STATUS_ACTIVE, 'parent_id' => $user->use_id]);
+                    });
+                });
+            });
+            $q->orWhere(function($q) use($user) {
+                $q->where('use_group', User::TYPE_StaffUser);
+                $q->whereIn('parent_id', function($q) use($user){
+                    $q->select('use_id');
+                    $q->from(User::tableName());
+                    $q->where('use_status', User::STATUS_ACTIVE);
+                    $q->where('use_group', User::TYPE_BranchUser);
+                    $q->whereIn('parent_id', function($q) use($user) {
+                        $q->select('use_id');
+                        $q->from(User::tableName());
+                        $q->where('use_group', User::TYPE_StaffStoreUser);
+                        $q->where('parent_id',$user->use_id);
+                    });
+                });
+            });
+            $q->orWhere(function($q) use($user) {
+                $q->where('use_group', User::TYPE_BranchUser);
+                $q->where('use_status', User::STATUS_ACTIVE);
+                $q->whereIn('parent_id', function($q) use($user) {
+                    $q->select('use_id');
+                    $q->from(User::tableName());
+                    $q->where('use_group', User::TYPE_StaffStoreUser);
+                     $q->where('parent_id',$user->use_id);
+                });
+            });
+            $q->orWhere('use_id', $user->use_id);
+        });
+
+
+
+        if (!empty($req->orderBy)) {
+            $req->orderBy = explode(',', $req->orderBy);
+            $key = $req->orderBy[0];
+            $value = $req->orderBy[1] ? $req->orderBy[1] : 'DESC';
+            $query->orderBy($key, $value);
+        } else {
+            $query->orderBy('use_regisdate', 'DESC');
+        }
+
+         if (!empty($req->keywords)) {
+            $query->where(function($q) use ($req) {
+                $q->orWhereRaw('LOWER(use_fullname) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_username) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_fullname) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_mobile) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+                $q->orWhereRaw('LOWER(use_phone) like ?', array('%' . mb_strtolower($req->keywords) . '%'));
+            });
+        }
+
+        $userId = $req->user()->use_id;
+        $query->leftJoin(DB::raw("(select * from chatuseralias where userId = $userId) as chatuseralias"), function($join) {
+                         $join->on('use_id', '=', 'chatuseralias.userId_alias');
+                })->select("tbtt_user.use_id as use_id","tbtt_user.avatar","tbtt_user.use_username",
+                    DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'));
+
+        $limit = $req->limit ? (int) $req->limit : 1000;
+        $page = $req->page ? (int) $req->page : 0;
+        $paginate = $query->paginate($limit, ['*'], 'page', $page);
+        return $paginate;
+
+
+    }
+
+    public function checkGetInfo(Request $req) {
+
+        $data = $this->getListBrand($req->id,$req);
+        echo '<pre>';
+        print_r($data);
+
+
+    }
+
+    public function sendMessage(Request $req) {
+        $user = $req->user();
+        $messageId = 0;
+        if( isset($req->messageId)) {
+            $messageId = $req->messageId;
+        }
+        $width = 0;
+        $height = 0;
+        $size = "";
+        if( isset($req->width)) {
+            $width = $req->width;
+        }
+        if( isset($req->height)) {
+            $height = $req->height;
+        }
+        if( isset($req->size)) {
+            $size = $req->size;
+        }
+        $textmessage = $req->text;
+        if($req->typedata == 'multiImage') {
+            $textmessage = json_encode($textmessage);
+        }
+        $arrData = ['type' => $req->type,
+                    'ownerId' => $req->ownerId,
+                    'threadId' => $req->threadId,
+                    'text' => $textmessage,
+                    'typedata' => $req->typedata,
+                    'messageId' => $messageId,
+                    'width' => intval($width),
+                    'height' => intval( $height),
+                    'size' => $size,
+                    'createdAt' => date('Y-m-d H:i:s'),
+                    'updatedAt' => date('Y-m-d H:i:s'),
+                    'listImage' => json_encode($req->listImage)
+                ];
+
+        /*$listUser = [['use_id' => '1352'], ['use_id' => '1353']];
+        $infoThread = ChatThreads::getInfoThread(8);
+        $arrReturn = ChatThreads::createMessageForGroup($user->use_id, $listUser, $arrData);
+        return response([
+                    'msg' => Lang::get('response.success'),
+                    'data' => $arrReturn,
+                    'arrUser' => $listUser
+        ]);
+        die();
+        */
+        $dataDefault = [];
+        $reload = 0;
+        $namegroup_return = "";
+        if( $req->type == 'private') {
+            $info = ChatThreads::where(['id' => $req->threadId ])->first();
+            if( $info['ownerId'] == $user->use_id && $info['idGroupDefault'] == 1) {
+                $check = ChatMessages::where(['threadId' => $req->threadId, 'ownerId' => $info['requesterId']])->exists();
+                if(!$check) {
+                    $reload = 1;
+                }
+            }
+            else {
+                if( $info['requesterId'] == $user->use_id && $info['idGroupDefault'] == 1) {
+                    $check = ChatMessages::where(['threadId' => $req->threadId, 'ownerId' => $user->use_id ])->exists();
+                    if(!$check) {
+                        $reload = 1;
+                    }
+                }
+            }
+        }
+        if( $req->type == 'private') {
+            $info_1 = DB::table("chatthreads")->where(['id' => $req->threadId])->where('userDeleteGroup', '<>', 0)->first();
+            if($info_1) {
+                $updateUserDelete = DB::table("chatthreads")->where(['id' => $req->threadId])
+                ->update(['userDeleteGroup' => 0 , 'idDelete' => $info_1->userDeleteGroup ]);
+                $reload = 1;
+            }
+        }
+        $messageId  = ChatMessages::sendMessage($arrData);
+
+        if( $messageId) {
+            ChatUserRead::updateCountMessageUnread($req->threadId, $user['use_id']);
+            ChatMessageRead::createRowMessage(['messageId' => $messageId, 'threadId' => $req->threadId, 'userLogin' => $user['use_id'] ]);
+            $detail = ChatMessages::getDetailMesssage($messageId);
+            $arrCountMessage = [];
+            if( $req->type == 'private') {
+                $arrUser = [$info['ownerId'], $info['requesterId']];
+                $arrCountMessage[$info['ownerId']] = ChatUserRead::getSumCountUnreadOfUser($info['ownerId']);
+                $arrCountMessage[$info['requesterId']] = ChatUserRead::getSumCountUnreadOfUser($info['requesterId']);
+
+            }
+            else {
+                $infoThread = ChatThreads::getInfoThread($req->threadId);
+                $namegroup_return = $infoThread['namegroup'];
+                $typegroup = $infoThread['typegroup'];
+                if( $typegroup == 'default') {
+                    $arrUser = [$user['use_id']];
+                    switch ($infoThread['alias']) {
+                        case 'agent':
+                            $listUser = $this->getListBrand( $user['use_id'] ,$req);
+                            foreach($listUser as $k => $v) {
+                                $arrUser[] = $v['use_id'];
+                                $arrCountMessage[$v['use_id']] = ChatUserRead::getSumCountUnreadOfUser($v['use_id']);
+                            }
+                            /*ChatThreads::createGroupForDefault('agent', $listUser, $infoThread, $user);*/
+                            $dataDefault =  ChatThreads::createMessageForGroup($user->use_id, $listUser, $arrData);
+                            break;
+
+                        case 'afflliate':
+                            # code...
+                            $listUser = $this->listAllaffiliateUnder($req);
+                            foreach($listUser as $k => $v) {
+                                $arrUser[] = $v['use_id'];
+                                $arrCountMessage[$v['use_id']] = ChatUserRead::getSumCountUnreadOfUser($v['use_id']);
+                            }
+                            /*ChatThreads::createGroupForDefault('afflliate', $listUser, $infoThread, $user);*/
+                            $dataDefault =  ChatThreads::createMessageForGroup($user->use_id, $listUser, $arrData);
+                            break;
+
+                        case 'staff':
+                            $listUser = $this->listStaff( $user['use_id'] ,$req);
+                            foreach($listUser as $k => $v) {
+                                $arrUser[] = $v['use_id'];
+                                $arrCountMessage[$v['use_id']] = ChatUserRead::getSumCountUnreadOfUser($v['use_id']);
+                            }
+                            $dataDefault =   ChatThreads::createMessageForGroup($user->use_id, $listUser, $arrData);
+                            /*ChatThreads::createGroupForDefault('staff', $listUser, $infoThread, $user);*/
+                            break;
+
+                        case 'customer_bought':
+                            $listUser = $this->customer_bought($req);
+                            foreach($listUser as $k => $v) {
+                                $arrUser[] = $v['use_id'];
+                                $arrCountMessage[$v['use_id']] = ChatUserRead::getSumCountUnreadOfUser($v['use_id']);
+                            }
+                            /*ChatThreads::createGroupForDefault('customer_bought', $listUser, $infoThread, $user);*/
+                            $dataDefault =   ChatThreads::createMessageForGroup($user->use_id, $listUser, $arrData);
+                            break;
+
+                        case 'customer_sell':
+                            # code...
+                            break;
+
+                        default:
+                            # code...
+                            break;
+                    }
+                }
+                else {
+                    $typechat = $infoThread->typechat;
+                    $listUser = ChatThreadUser::where(['threadId' => $req->threadId, 'accept_request' => 1])->get();
+                    $arrUser = [];
+                    foreach($listUser as $k => $v) {
+                        $arrUser[] = $v['userId'];
+                        $arrCountMessage[$v['userId']] = ChatUserRead::getSumCountUnreadOfUser($v['userId']);
+                    }
+
+                    if( $typechat == 1) {
+                        // chat nhom 1chieu
+                        /*$dataDefault =  ChatThreads::createMessageForGroup1($user->use_id, $arrUser, $arrData);*/
+                    }
+                }
+            }
+            ChatThreadUser::updateStatusReadMessage($req->ownerId, $req->threadId);
+            $detail['groupChatId'] = $detail['threadId'];
+
+            if( $req->type == 'private') {
+                $infoA = ChatThreadUser::where(['userId' => $user['use_id'], 'threadId' => $req->threadId])->first();
+                if($infoA) {
+                    $detail['blocked'] = $infoA['blocked'];
+                    $detail['blockedNotify'] = $infoA['blockedNotify'];
+                }
+                if($info['requesterId'] != $user['use_id']) {
+                    $infoB = ChatThreadUser::where(['userId' => $info['requesterId'] , 'threadId' => $req->threadId])->first();
+                    if($infoB) {
+                        $detail['blocked_B'] = $infoB['blocked'];
+                        $detail['blockedNotify_B'] = $infoB['blockedNotify'];
+                    }
+                     $userGroup = User::where(['use_id' => $info['requesterId'] ])->select("use_fullname")->first();
+                }
+                else {
+                    $infoB = ChatThreadUser::where(['userId' => $info['ownerId'] , 'threadId' => $req->threadId])->first();
+                    if($infoB) {
+                        $detail['blocked_B'] = $infoB['blocked'];
+                        $detail['blockedNotify_B'] = $infoB['blockedNotify'];
+                    }
+                     $userGroup = User::where(['use_id' => $info['ownerId'] ])->select("use_fullname")->first();
+                }
+                if($reload == 1) {
+                    $detail['reload'] = 1;
+                }
+
+                $namegroup_return = $userGroup['use_fullname'];
+            }
+            else {
+                $infoThreadUser = ChatThreadUser::where('threadId', $req->threadId)->select("userId as use_id","blockedNotify")->get();
+                $detail['info'] = $infoThreadUser;
+
+            }
+
+            $detail['namegroup'] = $namegroup_return;
+
+            return response([
+                    'msg' => Lang::get('response.success'),
+                    'data' => $detail,
+                    'arrUser' => $arrUser,
+                    'dataDefault' => $dataDefault,
+                    'arrCountMessage' => $arrCountMessage
+            ]);
+        }
+        else {
+            return response([
+                    'msg' => Lang::get('response.success'),
+
+            ]);
+        }
+    }
+
+    public function deleteMessage(Request $req) {
+        $user = $req->user();
+        $messageId = $req->messageId;
+        $condDelete = 2;
+        if( isset($req->condDelete)) {
+            $condDelete = $req->condDelete;
+        }
+        $infoChat = ChatMessages::where(['id' => $messageId])->first();
+        if( $condDelete == 1) {
+            // xoa minh toi
+            $check = DB::table('chatmessages')
+                        ->where('id', "=", $messageId)
+                        ->where('userDelete',"<>", 0)->exists();
+            if( $check) {
+                $delete = ChatMessages::where(['id' => $messageId])->delete();
+            }
+            else {
+                $delete = DB::table('chatmessages')
+                    ->where('id', "=", $messageId)
+                    ->update(['userDelete' => $user['use_id'] ]);
+            }
+
+
+        }
+        else {
+            // xoa ca hai ben
+            $delete = ChatMessages::where(['id' => $messageId])->delete();
+        }
+
+        if( $delete) {
+            if( $condDelete == 1) {
+                $arrUser = [$user['use_id']];
+            }
+            else {
+                $threadId = $infoChat['threadId'];
+                $listUser = ChatThreadUser::where(['threadId' => $threadId])->get();
+                $arrUser = [];
+                foreach($listUser as $k => $v) {
+                    $arrUser[] = $v['userId'];
+                }
+            }
+
+            return response([
+                'msg' => Lang::get('response.success'),
+                'data' => ['messageId' => $messageId],
+                'arrUser' => $arrUser,
+                'userId' => $user['use_id']
+            ]);
+        }
+        else {
+            return response([
+                'msg' => Lang::get('response.failed'),
+            ]);
+        }
+    }
+
+    public function deleteConversation(Request $req) {
+        $threadId = $req->threadId;
+        $type = 'private';
+        if( isset($req->type)) {
+            $type = $req->type;
+        }
+
+        if($type == 'private') {
+            $user = $req->user();
+            $arrUser = [$user['use_id']];
+            $check =  DB::table("chatthreads")->where(['id' => $threadId, 'userDeleteGroup' => 0])->first();
+            if($check) {
+                $infolastmessage = ChatMessages::where(['threadId' => $threadId])->orderby('id','desc')->limit(0,1)->first();
+                if($infolastmessage) {
+                    $lastIdMes = $infolastmessage['id'];
+                }
+                else {
+                    $lastIdMes = 0;
+                }
+                $delete = DB::table("chatthreads")->where(['id' => $threadId])->update(['userDeleteGroup' => $user['use_id'],'lastIdMessage' => $lastIdMes]);
+                DB::table("chatuserread")->where(['threadId' => $threadId, 'userId' => $user['use_id'] ])->update(['countUnread' => 0]);
+                DB::table("chatmessageread")->where(['threadId' => $threadId, 'userId' => $user['use_id'] ])->delete();
+            }
+            else {
+                /*$delete = ChatThreads::where(['id' => $threadId])->delete();*/
+                $delete = ChatThreads::deleteTypeGroup($threadId);
+            }
+        }
+        else {
+            $arrUser = ChatThreads::getUserOfThread($threadId, $type);
+            $delete = ChatThreads::deleteTypeGroup($threadId);
+        }
+        $arrCountMessage = [];
+        foreach($arrUser as $k => $v ) {
+            $arrCountMessage[$v] = ChatUserRead::getSumCountUnreadOfUser($v);
+        }
+        if( $delete) {
+            return response([
+                'msg' => Lang::get('response.success'),
+                'data' => $arrUser,
+                'arrCountMessage' => $arrCountMessage
+
+            ]);
+        }
+        else {
+            return response([
+                'msg' => Lang::get('response.failed'),
+            ]);
+        }
+    }
+
+    public function getListUsers(Request $req) {
+        $user = $req->user();
+        $search = "";
+        if( isset($req->search)) {
+            $search = $req->search;
+        }
+        $typegroup = 0;
+        if( isset($req->typegroup)) {
+            $typegroup = $req->typegroup;
+        }
+
+        $params = ['search' =>  $search, 'userId' => $user['use_id'], 'typegroup'=> $typegroup];
+        $page = $req->page;
+        $pageSize = $req->limit;
+        if( isset($req->follow) && $req->follow == 1 ) {
+            /*$list = User::getListUsersFolow($page, $pageSize, $params);*/
+            $list = User::getListUsersFolowAlias($page, $pageSize, $params);
+        }
+        else {
+            /*$list = User::getListUsers($page, $pageSize, $params);*/
+            $list = User::getListUsersAlias($page, $pageSize, $params);
+        }
+
+        $results = $list->paginate($pageSize);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $results
+        ]);
+
+    }
+
+
+    public function deleteUserInGroup(Request $req) {
+        $user = $req->user();
+        $threadId = $req->roomId;
+        $userId =  $req->userId;
+        $listUser = ChatThreadUser::where(['threadId' => $threadId])->get();
+        $delete = ChatThreadUser::where(['userId' => $userId, 'threadId' => $threadId])->delete();
+        /*$infoUserDelete = User::where(['use_id'=> $userId])->first();*/
+        $infoUserDelete = ChatThreadUser::getInfoUserAlias($userId, $user['use_id']);
+        $infoUserDelete['groupChatId'] = $threadId;
+        $delete = true;
+        if( $delete) {
+            $arrUser = [];
+            foreach($listUser as $k => $v) {
+                $arrUser[] = $v['userId'];
+            }
+            return response([
+                'msg' => Lang::get('response.success'),
+                'status' => 200,
+                'threadId' => $threadId,
+                'infoUserDelete' => $infoUserDelete,
+                'arrUser' => $arrUser
+            ]);
+        }
+        else {
+            return response([
+                'msg' => Lang::get('response.failed'),
+                'status' => 400,
+            ]);
+        }
+    }
+
+    public function updateLatLngUser(Request $req) {
+        $limit = $req->limit;
+        $page = $req->page;
+        $start = ($page - 1) * $limit;
+        $listUser = User::limit($start, $limit)->get();
+        foreach ( $listUser as $k => $v) {
+            $address = $v['use_address'];
+            $infoLatLng = Commons::getLatLng($address);
+            DB::table('tbtt_user')
+            ->where('use_id', $v['use_id'])
+            ->update(['use_lat' => $infoLatLng['lat'],'use_lng' => $infoLatLng['lng']]);
+
+        }
+
+    }
+
+    public function getListUserNotJoinGroup(Request $req) {
+        $page = $req->page;
+        $limit = $req->limit;
+        $threadId = $req->groupChatId;
+        $search = "";
+        if( isset($req->search)) {
+            $search = $req->search;
+        }
+        $user = $req->user();
+        $userId = $user['use_id'];
+        $params = ['search' => $search, 'userId' => $userId];
+        if( isset($req->follow) && $req->follow == 1 ) {
+            /*$listUser = ChatThreadUser::getListUserNotJoinFolow($threadId, $page, $limit, $params);*/
+            $listUser = ChatThreadUser::getListUserNotJoinFolowAlias($threadId, $page, $limit, $params);
+        }
+        else {
+            /*$listUser = ChatThreadUser::getListUserNotJoin($threadId, $page, $limit, $params);*/
+            $listUser = ChatThreadUser::getListUserNotJoinAlias($threadId, $page, $limit, $params);
+        }
+        $results = $listUser->paginate($limit);
+        $results = $results->toArray();
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $results
+        ]);
+    }
+
+    public function searchFriendRadius(Request $req){
+        /*$lat = $req->lat;
+        $lng = $req->lng;*/
+        $user = $req->user();
+        $lat = $user['use_lat'];
+        $lng = $user['use_lng'];
+        $userId = $user['use_id'];
+        $configRadius = 10;
+        $distance = "( 6371 * acos( cos( radians('".$lat."') ) * cos( radians( use_lat ) ) * cos( radians( use_lng ) - radians('".$lng."') ) + sin( radians('".$lat."') ) * sin( radians( use_lat ) ) ) ) AS distance";
+        if( isset($req->use_group)) {
+            if(count($req->use_group) > 0 ) {
+
+                if(in_array(9999, $req->use_group)) {
+                    $arrFollow = [];
+                    $listFollow = UserFollow::where("user_id", "=", $userId)->get();
+                    if( $listFollow) {
+                        foreach( $listFollow as $kk => $vv) {
+                            $arrFollow[] = $vv['follower'];
+                        }
+                    }
+                    $use_group = $req->use_group;
+                    $query = User::where(['use_status' => 1])
+                                 ->where(function ($query) use ($use_group,$arrFollow) {
+                                        $query->whereIn('use_group', $use_group)
+                                            ->orWhereIn('use_id', $arrFollow );
+                                 });
+
+                }
+                else {
+                    $query = User::where(['use_status' => 1])->whereIn('use_group', $req->use_group);
+                }
+            }
+            else {
+                $query = User::where(['use_status' => 1]);
+            }
+
+        }
+        else {
+            $query = User::where(['use_status' => 1]);
+        }
+        /*$users = $query->selectRaw("tbtt_user.use_id,tbtt_user.use_fullname,tbtt_user.use_username,tbtt_user.use_phone, tbtt_user.use_address, tbtt_user.avatar ," . $distance)->having('distance', '<=', $configRadius)->get()->toArray();*/
+        $users = $query->leftJoin(DB::raw("(select * from chatuseralias where userId = $userId) as chatuseralias"), function($join) {
+                         $join->on('tbtt_user.use_id', '=', 'chatuseralias.userId_alias');
+                })->selectRaw("tbtt_user.use_id, (CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname ,tbtt_user.use_username,tbtt_user.use_phone, tbtt_user.use_address, tbtt_user.avatar ," . $distance)->having('distance', '<=', $configRadius)->get()->toArray();
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $users
+        ]);
+    }
+
+    public function searchShopRadius(Request $req) {
+        $user = $req->user();
+        $userId = $user['use_id'];
+        $lat = $req->lat;
+        $lng = $req->lng;
+        $configRadius = 30;
+        $distance = "( 6371 * acos( cos( radians('".$lat."') ) * cos( radians( sho_lat ) ) * cos( radians( sho_lng ) - radians('".$lng."') ) + sin( radians('".$lat."') ) * sin( radians( sho_lat ) ) ) ) AS distance";
+        $query = User::where(['sho_status' => 1]);
+        /*$users = $query->selectRaw("tbtt_user.use_id,tbtt_user.use_fullname,tbtt_user.use_username,tbtt_user.use_phone, tbtt_user.use_address ," . $distance)->having('distance', '<=', $configRadius)->get()->toArray();*/
+        $users = $query->leftJoin(DB::raw("(select * from chatuseralias where userId = $userId) as chatuseralias"), function($join) {
+                         $join->on('tbtt_user.use_id', '=', 'chatuseralias.userId_alias');
+                })->selectRaw("tbtt_user.use_id,(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname ,tbtt_user.use_username,tbtt_user.use_phone, tbtt_user.use_address ," . $distance)->having('distance', '<=', $configRadius)->get()->toArray();
+
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $users
+        ]);
+    }
+
+    public function setStatusMessage(Request $req) {
+        $user = $req->user();
+        $groupChatId = $req->groupChatId;
+        $update = DB::table('chatthreaduser')->where(['userId' => $user->use_id, 'threadId' => $groupChatId])->update(['statusRead' => 1]);
+        ChatUserRead::setRead($user->use_id, $groupChatId);
+        //$detailThread = ChatThreads::getDetailThread($groupChatId);
+        $info = ChatThreads::where(['id' => $groupChatId ])->first();
+        $detailThread = ChatThreads::getDetailThreadStatus($groupChatId, $user->use_id);
+        if( $info['ownerId'] == $user->use_id) {
+            $idSend = $info['requesterId'];
+        }
+        else {
+            $idSend = $info['ownerId'];
+        }
+       /* $params = ['userId' => $user['use_id']];
+        $listGroup = ChatThreads::getListGroupUser($params);
+        $sum = ChatUserRead::getSumCountUnread($user['use_id'], $listGroup);*/
+
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' =>  $detailThread,
+            'idSend' => $idSend
+            //'countmessage' => intval($sum)
+
+        ]);
+
+    }
+
+    public function detailGroup(Request $req) {
+        $user = $req->user();
+        $groupChatId = $req->groupChatId;
+        /*$detailThread = ChatThreads::getDetailThread($groupChatId, $user['use_id']);*/
+        $detailThread = ChatThreads::getDetailThreadAlias($groupChatId, $user['use_id']);
+        $info = ChatThreadUser::where(['threadId' => $groupChatId, 'userId' => $user['use_id']])->first();
+        $detailThread['blockedNotify'] = $info['blockedNotify'];
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' =>  $detailThread
+        ]);
+
+    }
+
+    public function updateGroup(Request $req){
+        $namegroup = $req->namegroup;
+        $threadId = $req->groupChatId;
+        if( isset($req->avatar) && $req->avatar != "") {
+            $avatar = $req->avatar;
+            $update = DB::table('chatthreads')->where(['id' => $threadId])->update(['namegroup' => $namegroup,'avatar' => $avatar]);
+        }
+        else {
+           $update = DB::table('chatthreads')->where(['id' => $threadId])->update(['namegroup' => $namegroup]);
+        }
+        if( $update) {
+            //$detail = ChatThreads::where(['id' => $threadId])->first();
+            $user = $req->user();
+            /*$detail = ChatThreads::getDetailThread($threadId, $user['use_id']);*/
+            $detail = ChatThreads::getDetailThreadAlias($threadId, $user['use_id']);
+            return response([
+                'msg' => Lang::get('response.success'),
+                'status' => 200,
+                'data' => $detail
+            ]);
+        }
+        else {
+            return response([
+                'msg' => Lang::get('response.failed'),
+                'status' => 400,
+            ]);
+        }
+    }
+
+    public function blockMessage(Request $req) {
+        $threadId = $req->groupChatId;
+        $userBlocked = $req->userId;
+        $user = $req->user();
+        $update = DB::table('chatthreaduser')
+                    ->where(['threadId' => $threadId,'userId' => $userBlocked])
+                    ->update(['blocked' => 1]);
+        if( $update) {
+            $user['groupChatId'] = $threadId;
+            return response([
+                'msg' => Lang::get('response.success'),
+                'status' => 200,
+                'data' => $user,
+                'threadId' => $threadId,
+                'userBlocked' => $userBlocked
+            ]);
+        }
+        else {
+            return response([
+                'msg' => Lang::get('response.failed'),
+                'status' => 400,
+            ]);
+        }
+
+    }
+
+    public function blockNotify(Request $req) {
+        $threadId = $req->groupChatId;
+        $userBlocked = $req->userId;
+        $user = $req->user();
+        $update = DB::table('chatthreaduser')->where(['threadId' => $threadId,'userId' => $userBlocked])->update(['blockedNotify' => 1]);
+        if( $update) {
+            $user['groupChatId'] = $threadId;
+            return response([
+                'msg' => Lang::get('response.success'),
+                'status' => 200,
+                'data' => $user,
+                'threadId' => $threadId,
+                'userBlocked' => $userBlocked
+            ]);
+        }
+        else {
+            return response([
+                'msg' => Lang::get('response.failed'),
+                'status' => 400,
+            ]);
+        }
+
+    }
+
+    public function blockNotifyGroup(Request $req) {
+        $threadId = $req->groupChatId;
+        $user = $req->user();
+        $update = DB::table('chatthreaduser')->where(['threadId' => $threadId,'userId' => $user['use_id']])->update(['blockedNotify' => 1]);
+        if( $update) {
+            $user['groupChatId'] = $threadId;
+            return response([
+                'msg' => Lang::get('response.success'),
+                'status' => 200,
+                'data' => $user,
+                'threadId' => $threadId
+            ]);
+        }
+        else {
+            return response([
+                'msg' => Lang::get('response.failed'),
+                'status' => 400,
+            ]);
+        }
+
+    }
+
+    public function unBlockMessage(Request $req){
+        $threadId = $req->groupChatId;
+        $userBlocked = $req->userId;
+        $user = $req->user();
+        $update = DB::table('chatthreaduser')->where(['threadId' => $threadId,'userId' => $userBlocked])->update(['blocked' => 0]);
+
+        if( $update) {
+            $user['groupChatId'] = $threadId;
+            return response([
+                'msg' => Lang::get('response.success'),
+                'status' => 200,
+                'data' => $user,
+                'threadId' => $threadId,
+                'userBlocked' => $userBlocked
+            ]);
+        }
+        else {
+            return response([
+                'msg' => Lang::get('response.failed'),
+                'status' => 400,
+            ]);
+        }
+    }
+
+    public function unBlockNotify(Request $req){
+        $threadId = $req->groupChatId;
+        $userBlocked = $req->userId;
+        $user = $req->user();
+        $update = DB::table('chatthreaduser')->where(['threadId' => $threadId,'userId' => $userBlocked])->update(['blockedNotify' => 0]);
+
+        if( $update) {
+            $user['groupChatId'] = $threadId;
+            return response([
+                'msg' => Lang::get('response.success'),
+                'status' => 200,
+                'data' => $user,
+                'threadId' => $threadId,
+                'userBlocked' => $userBlocked
+            ]);
+        }
+        else {
+            return response([
+                'msg' => Lang::get('response.failed'),
+                'status' => 400,
+            ]);
+        }
+    }
+
+
+    public function unBlockNotifyGroup(Request $req){
+        $threadId = $req->groupChatId;
+        $user = $req->user();
+        $update = DB::table('chatthreaduser')->where(['threadId' => $threadId,'userId' => $user['use_id']])->update(['blockedNotify' => 0]);
+
+        if( $update) {
+            $user['groupChatId'] = $threadId;
+            return response([
+                'msg' => Lang::get('response.success'),
+                'status' => 200,
+                'data' => $user,
+                'threadId' => $threadId
+            ]);
+        }
+        else {
+            return response([
+                'msg' => Lang::get('response.failed'),
+                'status' => 400,
+            ]);
+        }
+    }
+
+    public function detailUserChat(Request $req) {
+        $user = $req->user();
+        $userId = $req->userId;
+        $threadId = $req->groupChatId;
+        /*$detail = ChatThreadUser::detailUserChat($userId, $threadId);*/
+        $detail = ChatThreadUser::detailUserChatAlias($userId, $threadId, $user['use_id']);
+        if($detail) {
+            return response([
+                'msg' => Lang::get('response.success'),
+                'status' => 200,
+                'data' => $detail
+            ]);
+        }
+        else {
+            return response([
+                'msg' => Lang::get('response.failed'),
+                'status' => 400,
+            ]);
+        }
+
+    }
+
+
+    public function checkPhone(Request $req) {
+        $user = $req->user();
+        $arrParam = $req->phone;
+        $phone = [];
+        $phoneName = [];
+        foreach($arrParam as $k => $v ) {
+            $phone[] = $v['phone'];
+            $phoneName[$v['phone']] = $v['name'];
+        }
+        $userId = $user['use_id'];
+
+        /*$dataExist = User::where(function ($query) use ($phone ) {
+                        $query->whereIn('use_mobile',  $phone );
+
+                })->select("tbtt_user.avatar","tbtt_user.use_username", "tbtt_user.use_fullname", "tbtt_user.use_id", "tbtt_user.use_mobile")->get()->toArray();*/
+        $dataExist = User::leftJoin(DB::raw("(select * from chatuseralias where userId = $userId) as chatuseralias"), function($join) {
+                             $join->on('tbtt_user.use_id', '=', 'chatuseralias.userId_alias');
+                })
+                ->where(function ($query) use ($phone ) {
+                        $query->whereIn('use_mobile',  $phone );
+
+                })->select("tbtt_user.avatar","tbtt_user.use_username", DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'), "tbtt_user.use_id", "tbtt_user.use_mobile")->get()->toArray();
+        $arrExist = [];
+        foreach ($dataExist as $key => &$value) {
+            /*$checkFollow = UserFollow::where("user_id", "=", $userId)
+                                    ->where("follower", "=", $value['use_id'])
+                                    ->where("hasFollow","=", 1)
+                                    ->first();*/
+            $checkFollow = UserFollow::where("user_id", "=",$value['use_id'])
+                                    ->where("follower", "=", $userId )
+                                    ->where("hasFollow","=", 1)
+                                    ->first();
+
+            if($checkFollow) {
+                $value['follow'] = true;
+            }
+            else {
+                $value['follow'] = false;
+            }
+            if( isset($phoneName[$value['use_mobile']])) {
+                $value['name_local'] = $phoneName[$value['use_mobile']];
+            }
+            else {
+                $value['name_local'] = "";
+            }
+            $arrExist[] = $value['use_mobile'];
+
+        }
+        $dataNotExist=array_diff($phone,$arrExist);
+        foreach( $dataNotExist as $k => $v ) {
+            if( isset($phoneName[$v])) {
+                $name_local = $phoneName[$v];
+            }
+            else {
+                $name_local = "";
+            }
+
+            $dataExist[] = [
+                                "avatar" => "",
+                                "use_username" => "",
+                                "use_fullname" => "",
+                                "use_id" => "",
+                                "use_mobile" => $v,
+                                "follow" => false,
+                                'name_local' => $name_local
+
+                            ];
+        }
+
+        return response(['msg' => 'Success', 'data' => $dataExist]);
+
+    }
+
+    public function checkFace(Request $req) {
+        $user = $req->user();
+        $arrParam = $req->face;
+        $arrReturn = [];
+        $userId = $user['use_id'];
+
+        foreach($arrParam as $k => $v ) {
+            $idFace = $v['id'];
+            /*$dataExist = User::where(function ($query) use ($idFace ) {
+                        $query->where('use_message', "LIKE", '%' .$idFace. '%' );
+
+                })->select("tbtt_user.avatar","tbtt_user.use_username", "tbtt_user.use_fullname", "tbtt_user.use_id", "tbtt_user.use_mobile")->first();*/
+            $dataExist = User::leftJoin(DB::raw("(select * from chatuseralias where userId = $userId) as chatuseralias"), function($join) {
+                         $join->on('tbtt_user.use_id', '=', 'chatuseralias.userId_alias');
+                })
+                ->where(function ($query) use ($idFace ) {
+                        $query->where('use_message', "LIKE", '%' .$idFace. '%' );
+
+                })->select("tbtt_user.avatar","tbtt_user.use_username", DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'), "tbtt_user.use_id", "tbtt_user.use_mobile")->first();
+
+            if($dataExist) {
+                $dataExist->toArray();
+                $dataExist['face_id'] = $idFace;
+               /* $checkFollow = UserFollow::where("user_id", "=", $userId)
+                                    ->where("follower", "=", $dataExist['use_id'])
+                                    ->where("hasFollow","=", 1)
+                                    ->first();*/
+                $checkFollow = UserFollow::where("user_id", "=", $dataExist['use_id'])
+                                    ->where("follower", "=", $userId )
+                                    ->where("hasFollow","=", 1)
+                                    ->first();
+                if($checkFollow) {
+                    $dataExist['follow'] = true;
+                }
+                else {
+                    $dataExist['follow'] = false;
+                }
+                $dataExist['face_name'] = $v['name'];
+                if( isset($v['picture'])) {
+                    $dataExist['face_picture'] = $v['picture'];
+                }
+                else {
+                    $dataExist['face_picture'] = "";
+                }
+
+
+                $arrReturn[] = $dataExist;
+            }
+            else {
+                if( isset($v['picture'])) {
+                    $picture = $v['picture'];
+                }
+                else {
+                    $picture = "";
+                }
+
+                $arrReturn[]  = [
+                                "avatar" => "",
+                                "use_username" => "",
+                                "use_fullname" => "",
+                                "use_id" => "",
+                                "use_mobile" => "",
+                                "follow" => false,
+                                "face_id" => $idFace,
+                                "face_name" => $v['name'],
+                                "face_picture" => $picture
+
+
+                            ];
+            }
+
+        }
+
+        return response(['msg' => 'Success', 'data' => $arrReturn]);
+
+    }
+
+    public function listInviteChat(Request $req){
+        // chat
+
+        $user = $req->user();
+        ChatUserInvite::setInviteRead($user['use_id']);
+        $page = $req->page;
+        $limit = $req->limit;
+        $offset = ($page - 1) * $limit;
+
+       /* $list = ChatThreadUser::join("chatthreads.id","=","chatthreaduser.threadId")
+                        ->where(['chatthreaduser.userId' => $user['use_id'], 'chatthreaduser.accept_request' => 0])
+                        ->select("chatthreads.namegroup", "chatthreaduser.*")
+                        ->first()->toArray();*/
+        $list = ChatThreadUser::join("chatthreads","chatthreads.id","=","chatthreaduser.threadId")
+                        ->where(['chatthreaduser.userId' => $user['use_id'], 'chatthreaduser.accept_request' => 0])
+                        ->select("chatthreaduser.*","chatthreads.namegroup","chatthreads.avatar as avatargroup","chatthreads.ownerId as ownerIdGroup");
+        $list = $list->paginate($limit);
+        $list = $list->toArray();
+        foreach( $list['data'] as $k => &$v) {
+            $v = (array)$v;
+            if($v['namegroup'] == "") {
+                $ownerId = $v['ownerIdGroup'];
+                /*$user = User::where('use_id',"=", $ownerId)->first();*/
+                $user = ChatThreadUser::getInfoUserAlias($ownerId, $user['use_id']);
+                $v['namegroup'] =  $user['use_fullname'];
+                if($v['avatargroup'] == "" ) {
+                    $v['avatar'] =  $user['avatar'];
+                }
+                else {
+                    $v['avatar'] = $v['avatargroup'];
+                }
+                $v['use_username'] =  $user['use_username'];
+                $v['use_fullname'] =  $user['use_fullname'];
+
+            }
+            else {
+                if($v['avatargroup'] == "" ) {
+                    $ownerId = $v['ownerIdGroup'];
+                    /*$user = User::where('use_id',"=", $ownerId)->first();*/
+                    $user = ChatThreadUser::getInfoUserAlias($ownerId, $user['use_id']);
+                    $v['avatar'] =  $user['avatar'];
+                    $v['use_username'] =  $user['use_username'];
+                    $v['use_fullname'] =  $user['use_fullname'];
+                }
+                else{
+                    $v['avatar'] = $v['avatargroup'];
+                    $ownerId = $v['ownerIdGroup'];
+                    /*$user = User::where('use_id',"=", $ownerId)->first();*/
+                    $user = ChatThreadUser::getInfoUserAlias($ownerId, $user['use_id']);
+                    $v['use_username'] =  $user['use_username'];
+                    $v['use_fullname'] =  $user['use_fullname'];
+                }
+            }
+        }
+
+
+        return response([
+                'msg' => Lang::get('response.success'),
+                'data' => $list
+            ]);
+
+    }
+
+    public function getArrUserPrivate(Request $req) {
+        $user = $req->user();
+        $task = $req->task;
+        $arrId = ChatThreads::getArrUserPrivate($user['use_id']);
+        return response([
+                'msg' => Lang::get('response.success'),
+                'status' => 200,
+                'data' => $arrId,
+                'task' => $task
+            ]);
+
+    }
+
+    public function updateTimeOffline(Request $req) {
+        $userId = $req->userId;
+        $ts = time();
+        $timeDate = date('Y-m-d H:i:s');
+        $save = ChatUserOff::updateTime(['userId' => $userId, 'timeTs' => $ts, 'timeDate'=> $timeDate]);
+        if($save) {
+            return response([
+                'msg' => Lang::get('response.success'),
+                'status' => 200,
+
+            ]);
+        }
+        else {
+            return response([
+                'msg' => Lang::get('response.failed'),
+                'status' => 500,
+
+            ]);
+        }
+
+
+    }
+
+    public function getTimeOffUser(Request $req) {
+        $userId = $req->userId;
+        $info =  DB::table('chatuseroffline')
+            ->where('userId', $userId)->first();
+        if(!$info)  {
+            $timedate =  'Đang offline';
+
+        }
+        else {
+            $timedate = ChatUserOff::time_elapsed_string($info->timeDate);
+
+        }
+        return response([
+                'msg' => Lang::get('response.success'),
+                'data' => $timedate,
+
+        ]);
+
+    }
+
+    public function renderQrcode(Request $req) {
+        $user = $req->user();
+        $user = $user->toArray();
+        $arr = ['use_id' => $user['use_id'], 'use_username' => $user['use_username'], 'use_fullname' => $user['use_fullname']];
+        $png =  base64_encode(QrCode::format('png')->size(399)->color(40,40,40)->generate((string)json_encode($arr)));
+        return "data:image/png;base64,".$png;
+    }
+
+    public function listBackgroundChat(Request $req) {
+        $user = $req->user();
+        $list = ChatBackground::getList(['userId' => $user['use_id']]);
+        return response([
+                'msg' => Lang::get('response.success'),
+                'data' => $list,
+
+        ]);
+    }
+
+    public function updateBackground(Request $req) {
+        $user = $req->user();
+        $groupChatId = $req->groupChatId;
+        $side = $req->side;
+        $background = $req->background;
+        $update = ChatUserBackground::updateBackground(['userId' => $user['use_id'], 'groupChatId' => $groupChatId, 'side' => $side, 'background'=> $background]);
+        $detailThread = ChatThreads::getDetailThreadBackground($groupChatId, $user['use_id']);
+        $listUser = [];
+        if( $side == 2) {
+            $listUser = ChatUserBackground::getListUser($groupChatId,$user['use_id']);
+        }
+        return response([
+                'msg' => Lang::get('response.success'),
+                'data' => $detailThread,
+                'side' => $side,
+                'listUser' => $listUser,
+                'userId' => $user['use_id']
+        ]);
+
+    }
+
+    public function updateBackgroundUpload(Request $req) {
+        $user = $req->user();
+        $background = $req->background;
+
+        $save = ChatBackground::saveBackground(['userId' => $user['use_id'], 'name' => $background]);
+        if( $save) {
+            return response([
+                'msg' => Lang::get('response.success'),
+                'data' => $save,
+
+            ]);
+        }
+        else {
+            return response([
+                    'msg' => Lang::get('response.failed'),
+                    'data' => [],
+
+            ]);
+        }
+
+
+    }
+
+    public function userNotAcceptGroup(Request $req) {
+        $user = $req->user();
+        $userId = $user['use_id'];
+        $page = $req->page;
+        $limit = $req->limit;
+        $groupChatId =  $req->groupChatId;
+        $list = ChatThreadUser::join("chatthreads","chatthreads.id","=","chatthreaduser.threadId")
+                        ->join("tbtt_user","tbtt_user.use_id","=","chatthreaduser.userId")
+                        ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userId) as chatuseralias"), function($join) {
+                                 $join->on('chatthreaduser.userId', '=', 'chatuseralias.userId_alias');
+                        })
+                        ->where(['chatthreaduser.threadId' => $groupChatId, 'chatthreaduser.accept_request' => 0])
+                        ->select("tbtt_user.use_id as use_id","tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'), "chatthreads.id as groupChatId", "chatthreads.namegroup");
+                       /* ->select("chatthreaduser.*","chatthreads.namegroup","chatthreads.ownerId as ownerIdGroup","tbtt_user.use_username","tbtt_user.use_fullname","tbtt_user.avatar");*/
+        $list = $list->paginate($limit);
+        return response([
+                'msg' => Lang::get('response.success'),
+                'data' => $list
+
+        ]);
+
+    }
+
+    public function resendRequestJoinGroup(Request $req){
+        $user = $req->user();
+        $groupChatId = $req->groupChatId;
+        $userId =  $req->userId;
+        $check = DB::table('chatthreaduser')->where(['userId' => $userId, 'threadId' => $groupChatId])->first();
+        if(!$check) {
+            ChatThreadUser::addUserToGroup($groupChatId, [$userId]);
+        }
+        ChatUserInvite::updateCountInvite($userId);
+        /*$detailThread = ChatThreads::getDetailThread($groupChatId, $user['use_id']);*/
+        $detailThread = ChatThreads::getDetailThreadAlias($groupChatId, $user['use_id']);
+        return response([
+                    'msg' => Lang::get('response.success'),
+                    'data' => $detailThread,
+                    'userId' => $userId
+
+        ]);
+
+    }
+
+    public function renameUser(Request $req) {
+        $user = $req->user();
+        $data = $req->data;
+        foreach( $data as $k => $v ) {
+            $userId_alias = $v['userId_alias'];
+            $name_alias = $v['name_alias'];
+            $arrData = ['userId' => $user['use_id'], 'userId_alias' => $userId_alias, 'name_alias' => $name_alias];
+            $rename = ChatUserAlias::updateAlias($arrData);
+        }
+
+        //$detail = ChatThreadUser::detailUserChatAlias($userId_alias, 560, $user['use_id']);
+        return response([
+                        'msg' => Lang::get('response.success'),
+                        'data' => $data
+
+        ]);
+
+    }
+
+    public function listUserNotAdmin(Request $req){
+        $user = $req->user();
+        $page = $req->page;
+        $limit = $req->limit;
+        $threadId = $req->groupChatId;
+        $search = "";
+        if(isset($req->search)) {
+            $search = $req->search;
+        }
+        $arrData = ['userId' => $user['use_id'],'threadId' => $threadId, 'search' => $search];
+        $info = ChatThreadUser::getListUserOfGroupNotAdmin($page, $limit, $arrData);
+        if($info) {
+            $results = $info->paginate($limit);
+            return response([
+                            'msg' => Lang::get('response.success'),
+                            'data' => $results
+
+            ]);
+        }
+        else {
+            return response([
+                            'msg' => Lang::get('response.success'),
+                            'data' => []
+
+            ]);
+        }
+
+    }
+
+    public function listUserIsAdmin(Request $req){
+        $user = $req->user();
+        $page = $req->page;
+        $limit = $req->limit;
+        $threadId = $req->groupChatId;
+        $search = "";
+        if(isset($req->search)) {
+            $search = $req->search;
+        }
+        $arrData = ['userId' => $user['use_id'],'threadId' => $threadId, 'search' => $search];
+        $info = ChatThreadUser::getListUserOfGroupIsAdmin($page, $limit, $arrData);
+        if($info) {
+            $results = $info->paginate($limit);
+            return response([
+                            'msg' => Lang::get('response.success'),
+                            'data' => $results
+
+            ]);
+        }
+        else {
+            return response([
+                            'msg' => Lang::get('response.success'),
+                            'data' => []
+
+            ]);
+        }
+
+    }
+
+    public function addUserToAdmin(Request $req) {
+        $user = $req->user();
+        $groupChatId = $req->groupChatId;
+        $listUser = $req->userId;
+        foreach ( $listUser as $k => $v ) {
+            $add = ChatThreadUser::updateUserAdmin($v, $groupChatId, 1);
+        }
+        array_push($listUser, $user['use_id']);
+        //$detail = ChatThreadUser::getDetailUserAdmin($userId, $groupChatId, $user['use_id']);
+        $detail = ChatThreads::getDetailThreadAlias($groupChatId, $user['use_id']);
+        return response([
+                            'msg' => Lang::get('response.success'),
+                            'data' => $detail,
+                            'listUser' => $listUser
+
+        ]);
+
+    }
+
+    public function deleteUserAdminInGroup(Request $req) {
+        $user = $req->user();
+        $groupChatId = $req->groupChatId;
+        $userId = $req->userId;
+        $delete = ChatThreadUser::updateUserAdmin($userId, $groupChatId, 0);
+        $listUser = [$user['use_id'], $userId];
+        $detail = ChatThreadUser::getDetailUserAdmin($userId, $groupChatId, $user['use_id']);
+        return response([
+                            'msg' => Lang::get('response.success'),
+                            'data' => $detail,
+                            'listUser' => $listUser
+
+        ]);
+
+    }
+
+    public function countMessageNotRead(Request $req) {
+        $user = $req->user();
+        $params = ['userId' => $user['use_id']];
+        $listGroup = ChatThreads::getListGroupUser($params);
+        $sum = ChatUserRead::getSumCountUnread($user['use_id'], $listGroup);
+        return response([
+                            'msg' => Lang::get('response.success'),
+                            'data' => intval($sum),
+                            'userId' => $user['use_id']
+
+        ]);
+    }
+
+    public function countInviteUnread(Request $req) {
+        $user = $req->user();
+        $params = ['userId' => $user['use_id']];
+        $sum = ChatUserInvite::getSumCountInvite($user['use_id']);
+        return response([
+                            'msg' => Lang::get('response.success'),
+                            'data' => intval($sum),
+                            'userId' => $user['use_id'],
+
+        ]);
+    }
+
+    public function userViewMessageIngroup(Request $req){
+        $user = $req->user();
+        $messageId = $req->messageId;
+        $page = $req->page;
+        $pageSize = $req->limit;
+        $detailMessage = ChatMessages::where('id', $messageId)->select("threadId")->first();
+        $groupChatId = $detailMessage->threadId;
+        $list = ChatThreadUser::getListUserViewMessage($page, $pageSize, $messageId, $groupChatId, $user['use_id']);
+        $list = $list->paginate($pageSize);
+        return response([
+                            'msg' => Lang::get('response.success'),
+                            'data' => $list,
+
+        ]);
+
+    }
+
+    public function userUnreadMessageIngroup(Request $req) {
+        $user = $req->user();
+        $messageId = $req->messageId;
+        $page = $req->page;
+        $pageSize = $req->limit;
+        $detailMessage = ChatMessages::where('id', $messageId)->select("threadId")->first();
+        $groupChatId = $detailMessage->threadId;
+        $list = ChatThreadUser::getListUserUnreadMessage($page, $pageSize, $messageId, $groupChatId, $user['use_id']);
+        $list = $list->paginate($pageSize);
+        return response([
+                            'msg' => Lang::get('response.success'),
+                            'data' => $list,
+
+        ]);
+
+    }
+
+    public function userAnswerMessage(Request $req) {
+        $user = $req->user();
+        $messageId = $req->messageId;
+        $page = $req->page;
+        $pageSize = $req->limit;
+        $list = ChatMessages::listUserAnswerMessage($page, $pageSize, $messageId,$user['use_id']);
+        $list = $list->paginate($pageSize);
+        if(count($list) > 0) {
+            foreach( $list as $k => &$v) {
+                $userId = $v['use_id'];
+                $message = ChatMessages::where(['ownerId' => $userId, 'messageId' => $messageId])->orderby('id', 'desc')->first();
+                if($message) {
+                    $v['message'] = $message->text;
+                }
+
+            }
+        }
+        return response([
+                            'msg' => Lang::get('response.success'),
+                            'data' => $list,
+
+        ]);
+    }
+
+    public function detailUserReplymessage(Request $req) {
+        /*$user = $req->user();
+        $messageId = $req->messageId;
+        $userId = $req->userId;
+        $page = $req->page;
+        $pageSize = $req->limit;
+        $infoUser = ChatThreadUser::getInfoUserAlias($userId, $user['use_id']);
+        $list = ChatMessages::listReplyMessage($page, $pageSize, $messageId,$userId, $user['use_id']);
+        $list = $list->paginate($pageSize);
+        if(count($list) > 0) {
+            foreach( $list as $k => &$v) {
+                $v['created_ts'] = Commons::convertDateTotime($v['createdAt']);
+                $v['updated_ts'] = Commons::convertDateTotime($v['updatedAt']);
+                if($v['typedata'] == 'multiImage') {
+                    $v['listImage'] = json_decode($v['listImage'], true);
+                }
+                else {
+                    $v['listImage'] = [];
+                }
+
+            }
+        }
+        $info =  DB::table('chatuseroffline')
+            ->where('userId', $userId)->first();
+        if(!$info)  {
+            $timedate =  'Đang offline';
+
+        }
+        else {
+            $timedate = ChatUserOff::time_elapsed_string($info->timeDate);
+
+        }
+        $infoUser['statusUser'] = $timedate;
+        $infoUser['lastAnswer'] = ChatMessages::getLastTimeAnswer($messageId,$userId, $user['use_id']);
+        return response([
+                            'msg' => Lang::get('response.success'),
+                            'data' => $list,
+                            'infoUser' => $infoUser
+
+        ]);*/
+
+        $user = $req->user();
+        $messageId = $req->messageId;
+        $userId = $req->userId;
+        $infoUser = ChatThreadUser::getInfoUserAlias($userId, $user['use_id']);
+        $info =  DB::table('chatuseroffline')
+            ->where('userId', $userId)->first();
+        if(!$info)  {
+            $timedate =  'Đang offline';
+
+        }
+        else {
+            $timedate = ChatUserOff::time_elapsed_string($info->timeDate);
+
+        }
+        $detail = ChatMessages::getDetailMesssage($messageId);
+        $infoUser['statusUser'] = $timedate;
+        $infoUser['lastAnswer'] = ChatMessages::getLastTimeAnswer($messageId, $userId, $user['use_id']);
+        $infoUser['detail'] = $detail;
+        return response([
+                            'msg' => Lang::get('response.success'),
+                            'data' => $infoUser
+
+
+        ]);
+    }
+
+
+
+}

@@ -1,0 +1,64 @@
+body.dark-theme header .subscribe input {
+    background: #6d737f;
+}
+
+body.dark-theme header .overlay {
+    background-color: #1c1e22;
+}
+
+body.dark-theme section .feature-items .feature-item .feature-item-title {
+    color: white;
+}
+
+body.dark-theme section .team-members .team-member-info {
+    color: #6d737f;
+    background: rgb(43, 45, 48);
+}
+
+body.dark-theme section h2 {
+    color: white;
+}
+
+body.dark-theme section {
+    color: #6d737f;
+    background-color: #1c1e22;
+}
+
+body.dark-theme section.bg {
+    color: white;
+}
+
+body.dark-theme section.gray {
+    background-color: #17181a;
+}
+
+body.dark-theme footer {
+    background-color: #222222;
+    color: #6d737f;
+}
+
+body.dark-theme footer hr {
+    background: #6d737f;
+}
+
+body.dark-theme footer .social a {
+    color: #6d737f;   
+}
+
+body.dark-theme section .twitter ul li {
+    background-color: #1c1e22;
+}
+
+body.dark-theme .form-control {
+    color: white;
+    background: #6d737f;
+    border-color: #6d737f;
+}
+
+body.dark-theme .form-control::-webkit-input-placeholder {
+    color: rgb(183, 190, 203);
+}
+
+body.dark-theme .form-control::-moz-input-placeholder {
+    color: rgb(183, 190, 203);
+}

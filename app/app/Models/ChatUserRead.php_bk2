@@ -1,0 +1,92 @@
+<?php
+
+namespace App\Models;
+use App\BaseModel;
+use App\Models\User;
+use App\Models\ChatMessageRead;
+use DB;
+use DateTime;
+
+/**
+ * ChatUser model
+ *
+ */
+class ChatUserRead extends BaseModel {
+
+    protected $table = 'chatuserread';
+    protected static $table_name = 'chatuserread';
+    protected $fillable = [
+        'userId',
+        'threadId',
+        'countUnread'
+
+    ];
+
+
+    public static function getSumCountUnread($userId, $arrThread) {
+       $sum =  DB::table(ChatUserRead::$table_name)
+        ->where('userId', '=', $userId)
+        ->whereIn("threadId", $arrThread)
+        ->sum('countUnread');
+        if($sum) {
+            return intval($sum);
+        }
+        else {
+            return 0;
+        }
+    }
+
+
+    public static function getSumCountUnreadOfUser($userId) {
+       $sum =  DB::table(ChatUserRead::$table_name)
+        ->where('userId', '=', $userId)
+        ->sum('countUnread');
+        if($sum) {
+            return intval($sum);
+        }
+        else {
+            return 0;
+        }
+    }
+
+
+    public static function updateCountMessageUnread($threadId, $userId) {
+        $listUserThread = ChatThreadUser::where("threadId", "=", $threadId)
+            ->where("userId", "<>", $userId)
+            ->where("accept_request", "=", 1)->select("userId")->get();
+        if($listUserThread) {
+            foreach( $listUserThread as $k => $v ) {
+                $userIdThread = $v['userId'];
+                $check =  DB::table(ChatUserRead::$table_name)
+                            ->where(['userId' => $userIdThread, 'threadId' => $threadId])
+                            ->first();
+                if($check) {
+                    $countUnread = $check->countUnread + 1;
+                    DB::table(ChatUserRead::$table_name)
+                            ->where(['userId' => $userIdThread, 'threadId' => $threadId])
+                            ->update(['countUnread' => $countUnread]);
+                }
+                else {
+                    DB::table(ChatUserRead::$table_name)
+                            ->insert(['userId' => $userIdThread, 'threadId' => $threadId, 'countUnread' => 1]);
+
+                }
+            }
+        }
+    }
+
+    public static function setRead($userId, $threadId) {
+        $check =  DB::table(ChatUserRead::$table_name)
+                            ->where(['userId' => $userId, 'threadId' => $threadId])
+                            ->first();
+        if($check) {
+            DB::table(ChatUserRead::$table_name)
+                            ->where(['userId' => $userId, 'threadId' => $threadId])
+                            ->update(['countUnread' => 0]);
+        }
+        ChatMessageRead::updateMessage($userId, $threadId);
+    }
+
+
+
+}

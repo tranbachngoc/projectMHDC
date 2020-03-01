@@ -1,0 +1,60 @@
+/* CSS Document */
+.menuCenTerQ{
+	padding-top:10px;
+}
+.drodownlistlang{
+	height:26px !important;
+}
+
+.simple_tip_content{top:-11px!important;}
+
+.banner-event {float:left;padding-right:100px}
+.reg-log {float:right}
+.bottomraovat img{margin-left:1px;}
+.reg-log {margin-top:-30px}
+div#header-1 div#slide-holder {
+
+    position: relative!important;
+
+}
+DIV.wrap{ width:500px;}
+.title h3{ font-size:14px; padding-top:5px;}
+#topnav ul{
+	float:right;
+	padding-right:10px;
+	
+}
+.signup-estore-menu{
+	clear:both;
+	width:200px;
+}
+#slide-holder{
+	z-index:-1 !important;
+}
+#slide-runner{
+	z-index:-1 !important;
+}
+#slide-runner{
+	z-index:-1 !important;
+}
+.mega{
+	width:570px !important;
+}
+.image_view_detail_top{
+	z-index:-1 !important;
+}
+
+
+#wrap{
+	z-index:0 !important;
+}
+.k_detailtable{padding-left:0px !important; margin-left:10px !important; margin-right:20px !important}
+.k_detailtablefixpaddingleft{padding-left:10px !important}
+.k_fixwidthie{width:98% !important}
+.k_fixpaddingie{padding-top:0px !important}
+.border_bottom_blue{margin-top:-10px}
+.k_fixwidthie2{width:98% !important}
+.k_border_bottom_bluefixmarginie{margin-top:0px !important}
+.k_listhead{padding-top:0px !important}
+.k_fixwidthietieudetinravatuathich{width:66% !important}
+.k_detailtable2{margin-right:10px !important}

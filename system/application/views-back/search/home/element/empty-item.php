@@ -1,0 +1,1 @@
+<div class="text-center f16 text-bold text-red">Không có kết quả tìm kiếm.</div>

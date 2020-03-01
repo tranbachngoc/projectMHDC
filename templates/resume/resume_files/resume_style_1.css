@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700&subset=latin-ext,vietnamese');
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+body { font-family: 'Quicksand', sans-serif; font-weight: 400; font-size: 16px;}
+#header { position: fixed; left: 0; right: 0; top:0; z-index: 999; background: #fff; box-shadow: 0 0 3px #333; }
+#header button { margin: 13px 0;}
+a#logo { display: inline-block;}
+a#logo img { height: 60px; padding: 10px 0;}
+.sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    right: -200px;
+    background:rgba(0,0,0,.90);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+.sidenav ul { padding-left: 0; }
+.sidenav ul li { list-style: none; }
+.sidenav ul li a {
+    padding: 5px 15px;
+    text-decoration: none;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+.sidenav ul li a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+.fix16x9 { position: relative; width:100%; padding-bottom: 56.25%; overflow: hidden;}
+.fix16x9 .c { position: absolute; width:100%; height:100%;}
+
+.fix4x3 { position: relative; width:100%;padding-bottom: 75%; overflow: hidden;}
+.fix4x3 .c { position: absolute; width:100%; height:100%;}
+
+.fix1x1 { position: relative; width:100%;padding-bottom: 100%; overflow: hidden;}
+.fix1x1 .c { position: absolute; width:100%; height:100%;}
+
+.section .overlay {  padding: 30px 0;}
+.section .heading{  margin-bottom: 30px}	
+
+
+.section.about{ height: 100vh;  display: table;  width: 100%; position: relative;}
+.section.about .overlay{ background: rgba(0,0,0,.5); display: table-cell; width: 1%; vertical-align: middle;  }
+.section.about .avartar img { border: 5px solid #eee; width:130px; height: 130px}
+.section.about .career {  padding: 15px; font-size: 65%}
+.section.about { color: #fff; }
+.section.about a { color: #fff; text-decoration: none; }
+.section.about .learn-more { position: absolute; bottom:10px; left: 0; right: 0;  }
+
+.section.quotes { color: #fff; }
+.section.quotes .overlay{ background: rgba(0,0,0,.5); }
+
+.section.testimonials,
+.section.statistics { color: #fff; }
+.section.testimonials .overlay,
+.section.statistics .overlay { background: rgba(0,0,0,0.5); height: 100%; }
+.statistic_number { color: #fff; text-align: center; }
+.statistic_number .number { font-size: 50px; display: inline-block; border: 3px solid; border-radius: 50%; width: 200px; height: 200px; line-height: 200px; margin-bottom: 10px; font-weight: bold; }
+.statistic_number .label {  display: block; }
+
+h2 span.title{ display:  inline-block; border-bottom: 2px solid; margin-bottom: 15px; padding-bottom: 5px;}
+
+.owl-dots{ text-align: center;margin-top: 20px; }
+.owl-dots .owl-dot { width: 15px; height: 15px; padding: 0; margin: 5px; border-radius: 50%; border: 0px; }
+.owl-dots .owl-dot:hover { background: #f00; }
+.owl-dots .owl-dot.active { background: #f00; }
+
+.zoomex { display: none; }
+.zoomex a {color: #fff; position: absolute; top: 50%; background: rgba(0,0,0,.25); padding: 15px; width: 50px; text-align: center; margin-top: -25px; left: 50%; border-radius: 50%;}
+.zoomex .zoomlink1 { margin-left: -55px;}
+.zoomex .zoomlink2 { margin-right: -5px;}	    
+.proitem:hover .zoomex { display: block;}
+
+.section.blog { background: #eeeeee; }
+
+
+#footer { background: #333; color: #fff; padding: 15px 0;}
+
+.owl-nav { text-align: center; padding: 20px; }
+.owl-nav button { padding: 0px 10px; margin:5px; font-size: 20px; }
+
+ul.tabfilter { overflow: auto; white-space: nowrap; }
+ul.tabfilter li a { 
+    display: block; border-radius: 1px solid; padding: 5px 10px; background: #39f;color: #fff; text-decoration: none;
+    -webkit-border-radius: 4px; -o-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;
+}
+ul.tabfilter li:hover a,
+ul.tabfilter li.active a {background: #333; }
+
+::-webkit-scrollbar {
+    display: none;
+}

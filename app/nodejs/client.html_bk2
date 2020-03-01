@@ -1,0 +1,206 @@
+<html>
+<head>
+    <title>Demo chat</title>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js"></script>
+    <button type="button" name="send" onclick="CreateRoom()">Create Room</button>
+    <button type="button" name="send" onclick="joinRoom(6)">Join Room 6</button>
+    <button type="button" name="send" onclick="joinRoom(7)">Join Room 7</button>
+    <button type="button" name="send" onclick="SendMessage(471)">Send Message 1</button>
+    <button type="button" name="send" onclick="CountInvite()">Count invite</button>
+    <button type="button" name="send" onclick="SendMessage(7)">Send Message 2</button>
+    <button type="button" name="send" onclick="JoinPrivateRoom()">Join private room</button>
+    <button type="button" name="send" onclick="SendMessagePrivateRoom(3)">send private room</button>
+    <button type="button" name="send" onclick="getListOnline(1)">Danh sách thành vien online</button>
+    <button type="button" name="send" onclick="deleteMessageChat(1)">Xoa message Chat</button>
+    <button type="button" name="send" onclick="deleteConversation(42)">Xoa cuoc dam thoại</button>
+    <button type="button" name="send" onclick="callPrivate(1)">Tao cuoc goi private</button>
+    <button type="button" name="send" onclick="getListGroupCall(4875)">Lay danh sach call</button>
+    <button type="button" name="send" onclick="deleteUserInGroup()">Xoa user in group</button>
+    <button type="button" name="send" onclick="setStatatusMessage(6)">tHIETT LAP TRANG THAI</button>
+    <button type="button" name="send" onclick="onlinePP(6)">ONLINE P2P</button>
+
+
+    <script type="text/javascript">
+
+        var socket = io('http://localhost:3000', {
+            path: '/socket.io-client',
+            query: "token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6ImQzYmE3MjAwLTlhMGItMTFlNy04NTE4LTk3MWM5MjFiMzI4ZCIsInVzZXJJZCI6NDIyMSwiZ3JvdXAiOjMsInVzZXJuYW1lIjoibmdhbm5ndXllbiIsIm5hbWUiOiJuZ1x1MDBlMm4gbmd1eVx1MWVjNW4iLCJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2F6aWJhaS1hcGlcL3B1YmxpY1wvYXBpXC92MVwvbG9naW4iLCJpYXQiOjE1MTU0MDc3NTEsImV4cCI6MTU1MTQwNzc1MSwibmJmIjoxNTE1NDA3NzUxLCJqdGkiOiJhMGJkZTU3ZmFiZjc3N2I3ZWIyMDNjYzU2ZDk1YTA0NSJ9.6EBImaE73D5in2BWGZpllDP9nAAJW45uL4LgqQF-doY"
+        })
+
+        function CreateRoom() {
+            var data = {"namegroup": "Nhom behanh", "listUser":[]};
+            socket.emit('create-room', data,function(data) {
+                console.log(data);
+            });
+        }
+
+        // listen event createRoom
+
+        socket.on("createRoomSuccess", function(data) {
+                console.log(data);
+        });
+
+        function onlinePP(roomId) {
+            var data = {roomId: roomId};
+            socket.emit('check-online', data);
+
+
+        }
+
+        function CountInvite() {
+            socket.emit('count-invite', {});
+
+        }
+
+        socket.on("check-online", function(data) {
+                console.log(data);
+        });
+
+
+        function joinRoom(roomId) {
+            var data = {roomId: roomId ,'type':'group' };
+            socket.emit('join-room', data,function(data) {
+
+            });
+        }
+
+
+        function setStatatusMessage(threadId) {
+            var data = {groupChatId: threadId};
+            console.log(threadId);
+            socket.emit('setstatus-message', data);
+        }
+
+        socket.on("join-room-user", function(data) {
+                console.log(data);
+        });
+
+        socket.on("setstatus-message", function(data) {
+                console.log(data);
+        });
+
+
+        function deleteUserInGroup() {
+            var data = {roomId: 6, userId: 4875  };
+            socket.emit('delete-useringroup',data);
+
+        }
+
+        function SendMessage(roomId) {
+            socket.emit("new-chat-message", {
+                roomId:roomId,
+                text: "truonglemyhanh2",
+                typedata: "text",
+                type:'group'
+            });
+        }
+
+        socket.on("new-chat-message", function(data) {
+            console.log("Du lieu trave ne");
+            console.log(data);
+        });
+
+        socket.on("join-room", function(data) {
+            //console.log(data);
+        });
+
+        function JoinPrivateRoom() {
+            var data = {ownerId: 4875, memberId:1336};
+            socket.emit('join-private-room', data,function(data) {
+                var roomId = data.id;
+                console.log('join-room' + roomId);
+            });
+        }
+
+        function SendMessagePrivateRoom(roomId) {
+            socket.emit("new-chat-message", {
+                roomId:roomId,
+                text: "truonglemyhanh2",
+                typedata: "text",
+                type:'private'
+            });
+        }
+
+        socket.on("leave-room", function(data) {
+            console.log("Roi khoi phong");
+            console.log(data);
+        });
+
+        //join-room-private
+        socket.on("join-room-private", function(data) {
+            console.log("join private room");
+            console.log(data);
+        });
+
+
+        socket.on("online-members", function(data) {
+            console.log("Thành viên online");
+            console.log(data);
+        });
+
+
+        socket.on("deleteMessageSuccess", function(data) {
+            console.log(data);
+            console.log('Xóa message');
+        });
+        //_error
+
+        socket.on("_error", function(data) {
+            console.log("Co loi");
+            console.log(data);
+
+        });
+
+        function getListOnline(roomId){
+            socket.emit("online-members", roomId, function(data) {
+                console.log(data);
+            });
+        }
+
+        function deleteMessageChat(messageId) {
+            socket.emit("delete-messagechat", {messageId: messageId}, function(data) {
+                console.log(data);
+            });
+        }
+
+        function deleteConversation(threadId) {
+            //delete-conversation
+            socket.emit("delete-conversation", {threadId: threadId}, function(data) {
+                console.log(data);
+            });
+        }
+
+        socket.on("deleteConversationSuccess", function(data) {
+            console.log(data);
+            console.log('Xóa cuộc đàm thoại');
+        });
+
+        function callPrivate(roomId) {
+            var data = {'room': roomId};
+            socket.emit("group-call-init", data, function(currentRoom, id) {
+                console.log("currentRoom " +  currentRoom);
+                console.log("Id " +  id);
+                console.log('data return');
+            });
+        }
+
+        socket.on("peer.connected", function(data) {
+            console.log("peer connected");
+            console.log(data);
+        });
+
+
+        function getListGroupCall(userId) {
+            socket.emit("get-all-group-chat", userId, function(data) {
+                console.log(data);
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>

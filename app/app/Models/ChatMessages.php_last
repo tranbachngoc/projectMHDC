@@ -1,0 +1,1045 @@
+<?php
+
+namespace App\Models;
+
+use App\BaseModel;
+use DB;
+use DateTime;
+use App\Models\User;
+use App\Models\ChatThreadUser;
+use App\Models\ChatThreads;
+use App\Models\ChatUserRead;
+use App\Models\ChatMessageRead;
+use App\Models\Product;
+use App\Models\ChatMessageEmoij;
+use Carbon\Carbon;
+
+
+/**
+ * Category model
+ *
+ */
+class ChatMessages extends BaseModel {
+
+    protected $table = 'chatmessages';
+    protected $fillable = [
+        'type',
+        'ownerId',
+        'threadId',
+        "text",
+        'typedata',
+        'createdAt',
+        'updatedAt',
+        'userDelete',
+        'messageId',
+        'width',
+        'height',
+        'size',
+        'listImage',
+        'productId',
+        'public',
+        'caption',
+        'timeDelete',
+        'time_streaming'
+      ];
+
+    public static function getList($page, $pageSize, $params) {
+        $threadId = $params['threadId'];
+        $offset = ($page - 1) * $pageSize;
+        $userLogin = $params['userLogin'];
+        $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->where("chatmessages.threadId","=", $threadId)
+                ->where("chatmessages.userDelete","<>", $userLogin)
+                ->orderBy('chatmessages.id','desc')
+                ->select("tbtt_user.avatar","tbtt_user.use_username","tbtt_user.use_fullname", "chatmessages.*" )
+               ;
+        return $list;
+
+    }
+
+    public static function getListAlias($page, $pageSize, $params) {
+        $threadId = $params['threadId'];
+        $offset = ($page - 1) * $pageSize;
+        $userLogin = $params['userLogin'];
+        $lastIdMessage = 0;
+        $idDelete = 0;
+        if(isset($params['lastIdMessage'])) {
+            $lastIdMessage = $params['lastIdMessage'];
+        }
+        if(isset($params['idDelete'])) {
+            $idDelete = $params['idDelete'];
+        }
+        $detailThread = ChatThreads::where("id", $threadId)->first();
+        $ownerThread = $detailThread->ownerId;
+        $typeThread = $detailThread->type;
+        if( $typeThread == 'private' || ($userLogin == $ownerThread ) ) {
+            if( $idDelete == $userLogin) {
+                $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                    ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                             $join->on('tbtt_user.use_id', '=', 'chatuseralias.userId_alias');
+                    })
+                    ->where("chatmessages.threadId","=", $threadId)
+                    ->where("chatmessages.userDelete","<>", $userLogin)
+                    ->where("chatmessages.id",">", $lastIdMessage)
+                    ->orderBy('chatmessages.id','desc')
+                    ->select("tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'), "chatmessages.*" )
+                   ;
+            }
+            else {
+                $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                    ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                             $join->on('tbtt_user.use_id', '=', 'chatuseralias.userId_alias');
+                    })
+                    ->where("chatmessages.threadId","=", $threadId)
+                    ->where("chatmessages.userDelete","<>", $userLogin)
+                    //->where("chatmessages.id",">", $lastIdMessage)
+                    ->orderBy('chatmessages.id','desc')
+                    ->select("tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'), "chatmessages.*" )
+                   ;
+            }
+        }
+        else {
+            if( $idDelete == $userLogin) {
+                $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                    ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                             $join->on('tbtt_user.use_id', '=', 'chatuseralias.userId_alias');
+                    })
+                    ->where("chatmessages.threadId","=", $threadId)
+                    ->where("chatmessages.userDelete","<>", $userLogin)
+                    ->where("chatmessages.id",">", $lastIdMessage)
+                    ->where(function ($query) use ($userLogin) {
+                        $query->where('public', '=', 1)
+                            ->orWhere('chatmessages.ownerId', '=', $userLogin);
+                    })
+                    ->orderBy('chatmessages.id','desc')
+                    ->select("tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'), "chatmessages.*" )
+                   ;
+            }
+            else {
+                $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                    ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                             $join->on('tbtt_user.use_id', '=', 'chatuseralias.userId_alias');
+                    })
+                    ->where("chatmessages.threadId","=", $threadId)
+                    ->where("chatmessages.userDelete","<>", $userLogin)
+                    ->where(function ($query) use ($userLogin) {
+                        $query->where('public', '=', 1)
+                            ->orWhere('chatmessages.ownerId', '=', $userLogin);
+                    })
+                    //->where("chatmessages.id",">", $lastIdMessage)
+                    ->orderBy('chatmessages.id','desc')
+                    ->select("tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'), "chatmessages.*" )
+                   ;
+            }
+        }
+        return $list;
+
+    }
+
+    public static function deleteMessSecret($userLogin, $threadId) {
+        $deleteMessage  = ChatMessages::join("chatmessageread","chatmessageread.messageId", "=", "chatmessages.id")
+        ->where(function ($query) use ($userLogin) {
+             $query->whereRaw(" chatmessageread.statusRead = 1 and chatmessages.timeDelete > 0  and
+                    (chatmessageread.updated_at) <= (DATE_SUB(current_timestamp, INTERVAL (select timeDelete from chatmessages where chatmessages.id = chatmessageread.messageId ) SECOND)) ");
+        })
+        ->where("chatmessages.type","=","secret")
+        ->where("chatmessages.threadId","=", $threadId)
+        ->selectRaw("chatmessages.id, count(chatmessageread.messageId) as countMes, sum(chatmessageread.statusRead) as sumRead")->groupby("chatmessages.id")->get();
+        $arrDelete = [];
+        foreach($deleteMessage as $k => $v) {
+            if($v['countMes'] == 2 && $v['sumRead'] == 2) {
+                $arrDelete[] = $v['id'];
+            }
+
+        }
+        ChatMessages::whereIn('id', $arrDelete)->delete();
+
+    }
+
+    public static function getListSecretAlias($page, $pageSize, $params) {
+        //xoa di nhung message 2 ben deu doc het rui
+        $submius = Carbon::now()->subSeconds(5);
+        $threadId = $params['threadId'];
+        $offset = ($page - 1) * $pageSize;
+        $userLogin = $params['userLogin'];
+        $lastIdMessage = 0;
+        $idDelete = 0;
+        self::deleteMessSecret($userLogin,$threadId);
+        if(isset($params['lastIdMessage'])) {
+            $lastIdMessage = $params['lastIdMessage'];
+        }
+        if(isset($params['idDelete'])) {
+            $idDelete = $params['idDelete'];
+        }
+        $detailThread = ChatThreads::where("id", $threadId)->first();
+        $ownerThread = $detailThread->ownerId;
+        $typeThread = $detailThread->type;
+        if( $idDelete == $userLogin) {
+            $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                         $join->on('tbtt_user.use_id', '=', 'chatuseralias.userId_alias');
+                })
+                ->join("chatmessageread","chatmessageread.messageId", "=", "chatmessages.id")
+                ->join("chatthreaduser","chatthreaduser.userId", "=", "chatmessages.ownerId")
+                /*->where(function ($query) use ($userLogin) {
+                     $query->where(['chatmessageread.statusRead' => 0, 'chatmessageread.userId' => $userLogin])
+                        ->orWhere("chatmessages.timeDelete","<=",0)
+                        ->orWhereRaw(" chatmessageread.userId = $userLogin and chatmessageread.statusRead = 1 and  (chatmessageread.updated_at) > (DATE_SUB(current_timestamp, INTERVAL (select timeDelete from chatmessages where chatmessages.id = chatmessageread.messageId ) SECOND)) ");
+
+                })*/
+                ->where("chatmessages.type","=","secret")
+                ->where("chatmessageread.userId","=", $userLogin)
+                //->where("chatmessageread.statusRead","=",0)
+                ->where("chatmessages.threadId","=", $threadId)
+                ->where("chatthreaduser.threadId","=", $threadId)
+                ->where("chatmessages.userDelete","<>", $userLogin)
+                ->where("chatmessages.id",">", $lastIdMessage)
+                ->orderBy('chatmessages.id','desc')
+                ->groupby("chatmessages.id")
+                ->select("tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'), "chatmessages.*", "chatthreaduser.alias_secret", "chatthreaduser.avatar_secret" )
+               ;
+        }
+        else {
+            $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                         $join->on('tbtt_user.use_id', '=', 'chatuseralias.userId_alias');
+                })
+                ->join("chatmessageread","chatmessageread.messageId", "=", "chatmessages.id")
+                ->join("chatthreaduser","chatthreaduser.userId", "=", "chatmessages.ownerId")
+                /*->where(function ($query) use ($userLogin) {
+                     $query->where(['chatmessageread.statusRead' => 0, 'chatmessageread.userId' => $userLogin])
+                        ->orWhere("chatmessages.timeDelete","<=",0)
+                        ->orWhereRaw(" chatmessageread.userId = $userLogin and chatmessageread.statusRead = 1 and  (chatmessageread.updated_at) > (DATE_SUB(current_timestamp, INTERVAL (select timeDelete from chatmessages where chatmessages.id = chatmessageread.messageId ) SECOND)) ");
+
+                })*/
+                ->where("chatmessages.type","=","secret")
+                ->where("chatmessages.threadId","=", $threadId)
+                ->where("chatthreaduser.threadId","=", $threadId)
+                ->where("chatmessageread.userId","=", $userLogin)
+                ->where("chatmessages.userDelete","<>", $userLogin)
+                //->where("chatmessages.id",">", $lastIdMessage)
+                ->orderBy('chatmessages.id','desc')
+                ->groupby("chatmessages.id")
+                ->select("tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'), "chatmessages.*" , "chatthreaduser.alias_secret", "chatthreaduser.avatar_secret")
+               ;
+        }
+
+        return $list;
+
+    }
+
+
+    public static function sendMessage($arrData) {
+        $id = DB::table('chatmessages')->insertGetId($arrData);
+        return $id;
+
+    }
+
+    public static function convertDateTotime($date) {
+        return (new DateTime($date))->getTimestamp();
+
+    }
+
+
+    public static function getDetailMesssage($messageId, $userLogin = "") {
+        if( $userLogin == "") {
+            $info = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->where("chatmessages.id","=", $messageId)
+                ->select("tbtt_user.avatar","tbtt_user.use_username","tbtt_user.use_fullname", "chatmessages.*" )->first();
+        }
+        else {
+            $info = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                            $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                    })
+                ->where("chatmessages.id","=", $messageId)
+                ->select("tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'), "chatmessages.*" )->first();
+        }
+
+        if( $info) {
+            $info['created_ts'] = ChatMessages::convertDateTotime($info['createdAt']);
+            $info['updated_ts'] = ChatMessages::convertDateTotime($info['updatedAt']);
+            if($info['typedata'] =='multiImage') {
+                $info['listImage'] = json_decode($info['listImage'], true);
+            }
+            else {
+                $info['listImage'] = [];
+            }
+            if($info['typedata'] =='product') {
+                $infoProduct = self::getDetailProduct($info['productId']);
+                $info['infoProduct'] = $infoProduct;
+            }
+            else {
+                $info['infoProduct'] = null;
+            }
+
+            $messageId = $info['messageId'];
+            if($messageId != 0) {
+                $infoMessage = ChatMessages::getDetailMesssage($messageId);
+                $info['parentMessage'] = $infoMessage;
+            }
+            else {
+                $info['parentMessage'] = null;
+            }
+            $info['emoij'] = ChatMessageEmoij::getEmoijMessage($info['id']);
+            if($messageId != 0) {
+                $info['parentMessageArr'] = ChatMessages::getArrayMessageParent($messageId);
+            }
+            else {
+                $info['parentMessageArr'] = null;
+            }
+        }
+        return $info;
+
+    }
+
+     public static function getDetailMesssageSecret($messageId, $userLogin = "", $threadId) {
+        if( $userLogin == "") {
+            $info = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->join("chatthreaduser","chatthreaduser.userId","=","chatmessages.ownerId")
+                ->where("chatmessages.id","=", $messageId)
+                ->where("chatthreaduser.threadId","=", $threadId)
+                ->select("tbtt_user.avatar", "chatthreaduser.alias_secret","chatthreaduser.avatar_secret","tbtt_user.use_username","tbtt_user.use_fullname", "chatmessages.*" )->first();
+        }
+        else {
+            $info = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->join("chatthreaduser","chatthreaduser.userId","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                            $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                    })
+                ->where("chatmessages.id","=", $messageId)
+                ->where("chatthreaduser.threadId","=", $threadId)
+                ->select("tbtt_user.avatar","chatthreaduser.alias_secret","chatthreaduser.avatar_secret","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'), "chatmessages.*" )->first();
+        }
+
+        if( $info) {
+            $info['created_ts'] = ChatMessages::convertDateTotime($info['createdAt']);
+            $info['updated_ts'] = ChatMessages::convertDateTotime($info['updatedAt']);
+            if($info['typedata'] =='multiImage') {
+                $info['listImage'] = json_decode($info['listImage'], true);
+            }
+            else {
+                $info['listImage'] = [];
+            }
+            if($info['typedata'] =='product') {
+                $infoProduct = self::getDetailProduct($info['productId']);
+                $info['infoProduct'] = $infoProduct;
+            }
+            else {
+                $info['infoProduct'] = null;
+            }
+
+            $messageId = $info['messageId'];
+            if($messageId != 0) {
+                $infoMessage = ChatMessages::getDetailMesssage($messageId);
+                $info['parentMessage'] = $infoMessage;
+            }
+            else {
+                $info['parentMessage'] = null;
+            }
+            $info['emoij'] = ChatMessageEmoij::getEmoijMessage($info['id']);
+            if($messageId != 0) {
+                $info['parentMessageArr'] = ChatMessages::getArrayMessageParent($messageId);
+            }
+            else {
+                $info['parentMessageArr'] = null;
+            }
+        }
+        return $info;
+
+    }
+
+
+    public static function getDetailMesssageParent($messageId, $userLogin = "") {
+        if( $userLogin == "") {
+            $info = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->where("chatmessages.id","=", $messageId)
+                ->select("tbtt_user.avatar","tbtt_user.use_username","tbtt_user.use_fullname", "chatmessages.*" )->first();
+        }
+        else {
+            $info = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                            $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                    })
+                ->where("chatmessages.id","=", $messageId)
+                ->select("tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'), "chatmessages.*" )->first();
+        }
+        if( $info) {
+            $info['created_ts'] = ChatMessages::convertDateTotime($info['createdAt']);
+            $info['updated_ts'] = ChatMessages::convertDateTotime($info['updatedAt']);
+            if($info['typedata'] =='multiImage') {
+                $info['listImage'] = json_decode($info['listImage'], true);
+            }
+            else {
+                $info['listImage'] = [];
+            }
+            if($info['typedata'] =='product') {
+                $infoProduct = self::getDetailProduct($info['productId']);
+                $info['infoProduct'] = $infoProduct;
+            }
+            else {
+                $info['infoProduct'] = null;
+            }
+
+            /*$messageId = $info['messageId'];
+            if($messageId != 0) {
+                $infoMessage = ChatMessages::getDetailMesssage($messageId);
+                $info['parentMessage'] = $infoMessage;
+            }
+            else {
+                $info['parentMessage'] = null;
+            }*/
+            $info['emoij'] = ChatMessageEmoij::getEmoijMessage($info['id']);
+            /*if($messageId != 0) {
+                $info['parentMessageArr'] = ChatMessages::getArrayMessageParent($messageId);
+            }
+            else {
+                $info['parentMessageArr'] = null;
+            }*/
+        }
+        return $info;
+
+    }
+
+    public static function getDetailMesssageEmoij($messageId, $userLogin) {
+        $info = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin ) as chatuseralias"), function($join) {
+                             $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                    })
+                ->where("chatmessages.id","=", $messageId)
+                ->select("tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'), "chatmessages.*" )->first();
+        if( $info) {
+            $info['created_ts'] = ChatMessages::convertDateTotime($info['createdAt']);
+            $info['updated_ts'] = ChatMessages::convertDateTotime($info['updatedAt']);
+            if($info['typedata'] =='multiImage') {
+                $info['listImage'] = json_decode($info['listImage'], true);
+            }
+            else {
+                $info['listImage'] = [];
+            }
+            if($info['typedata'] =='product') {
+                $infoProduct = self::getDetailProduct($info['productId']);
+                $info['infoProduct'] = $infoProduct;
+            }
+            else {
+                $info['infoProduct'] = null;
+            }
+
+            $info['emoij'] = ChatMessageEmoij::getEmoijMessage($info['id']);
+            $infoEmoi = ChatMessageEmoij::infoChooseEmoij($info['id'], $userLogin);
+            if(count($infoEmoi) > 0) {
+                $info['chooseEmoij'] = 1;
+                $info['typeEmoij'] = $infoEmoi['emoij'];
+                $info['emoijId'] = $infoEmoi['emoijId'];
+            }
+            else {
+                $info['chooseEmoij'] = 0;
+                $info['typeEmoij'] = "";
+                $info['emoijId'] = 0;
+            }
+            if($info['messageId'] != 0) {
+                $info['parentMessageArr'] = ChatMessages::getArrayMessageParent($info['messageId'], $userLogin);
+            }
+            else {
+                $info['parentMessageArr'] = null;
+            }
+            $infoGroup = ChatThreads::where("id", $info['threadId'])->first();
+            if($infoGroup) {
+                if($infoGroup['type'] != 'private') {
+                    $statusLastChat = ChatMessages::statusReadOfMessage($infoGroup, $messageId);
+                    $info['statusRead'] = $statusLastChat;
+                }
+
+            }
+
+
+        }
+        return $info;
+
+    }
+
+    public static function getArrayMessageParent($messageId, $userLogin = "") {
+        $arrId = [];
+        self::getMessageParentRecurise($messageId, $arrId, $userLogin);
+        $arrId = array_reverse($arrId);
+        return $arrId;
+    }
+
+    public static function getMessageParentRecurise($messageId, &$arrId, $userLogin = "") {
+        $info =  ChatMessages::getDetailMesssageParent($messageId, $userLogin);
+        if($info) {
+            $info = $info->toArray();
+            $arrId[] = $info;
+            if($info['messageId'] != 0) {
+                self::getMessageParentRecurise($info['messageId'], $arrId, $userLogin);
+            }
+        }
+    }
+
+
+    public static function getArrIdMesRecurise($messageId, &$arrId) {
+        $info =  ChatMessages::getDetailMesssageParent($messageId);
+        if($info) {
+            $info = $info->toArray();
+            $arrId[] = $info['id'];
+            if($info['messageId'] != 0) {
+                self::getArrIdMesRecurise($info['messageId'], $arrId);
+            }
+        }
+    }
+
+    public static function getArrayMessageParentId($messageId) {
+        $arrId = [];
+        self::getArrIdMesRecurise($messageId, $arrId);
+        $arrId = array_reverse($arrId);
+        return $arrId;
+    }
+
+    public static function getLinkProduct($pro_category, $pro_id, $pro_name) {
+        return env('APP_FONTEND_URL', 'http://') . '/' . $pro_category . '/' . $pro_id . '/' . str_slug($pro_name);
+
+    }
+
+    public static function getDetailProduct($productId) {
+        $info = Product::where("pro_id", "=", $productId)->select("pro_cost","pro_name","pro_descr","pro_image", "pro_id", "pro_dir","pro_category")->first();
+        if( $info) {
+            $info = $info->toArray();
+            $info['pro_url'] = self::getLinkProduct($info['pro_category'], $info['pro_id'], $info['pro_name']);
+            return $info;
+        }
+        return null;
+    }
+
+
+
+    public static function getListMessageDeleted($one_week_ago) {
+        return false;
+        $data = ChatMessages::where("createdAt","<", $one_week_ago)->first();
+        if($data) {
+            $delete = ChatMessages::where("createdAt","<", $one_week_ago)->delete();
+            if( $delete) {
+                return 'Xóa dữ liệu message chat thành công';
+            }
+            else {
+                return 'Xóa dữ liệu message chat không thành công';
+            }
+        }
+        else {
+            return 'Không có dữ liệu để xóa';
+        }
+
+    }
+
+    public static function deleteMessageSecret($timeDelete) {
+        $data = ChatMessages::where("createdAt","<", $timeDelete)->where("type","=","secret")->first();
+        if($data) {
+            $delete = ChatMessages::where("createdAt","<", $one_week_ago)->where("type","=","secret")->delete();
+            if( $delete) {
+                return 'Xóa dữ liệu message chat bi mat  thành công';
+            }
+            else {
+                return 'Xóa dữ liệu message chat bi mat không thành công';
+            }
+        }
+        else {
+            return 'Không có dữ liệu để xóa';
+        }
+
+    }
+
+
+    public static function statusReadOfGroup($infoThread) {
+        $count = ChatThreadUser::where(['threadId' => $infoThread['id'], 'accept_request' => 1, 'statusRead' => 0])->count();
+        if($count > 0 ) {
+            return 0;
+        }
+        return 1;
+
+    }
+
+    public static function statusReadOfMessage($infoThread, $messageId) {
+        $sum = ChatMessageRead::where(['threadId' => $infoThread['id'], 'messageId' => $messageId])->count();
+        $count = ChatMessageRead::where(['threadId' => $infoThread['id'], 'messageId' => $messageId, 'statusRead' => 0])->count();
+        if($count > 0) {
+            if( $count == ($sum -1 )) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        }
+        else {
+            return 2;
+        }
+
+
+    }
+
+    public static function statusReadOfUser($infoThread, $messageId, $userId) {
+        $info = ChatMessageRead::where(['threadId' => $infoThread['id'], 'messageId' => $messageId, 'userId' => $userId])->first();
+        if($info){
+            $info->timeRead = (new DateTime($info['updated_at']))->getTimestamp();
+            return $info;
+        }
+        return null;
+
+
+
+
+    }
+
+    public static function statusLastChat($infoThread) {
+        $infoLast = ChatMessages::where(['threadId' => $infoThread['id']])->orderby('createdAt','desc')->limit(0,1)->first();
+        $userId = $infoLast['ownerId'];
+        if($infoThread['ownerId'] == $userId) {
+            $infoStatus = ChatThreadUser::where(['threadId' => $infoThread['id'],'userId' => $infoThread['requesterId']])->first();
+
+            return $infoStatus['statusRead'];
+        }
+        else {
+            $infoStatus = ChatThreadUser::where(['threadId' => $infoThread['id'],'userId' => $infoThread['ownerId']])->first();
+            return $infoStatus['statusRead'];
+        }
+    }
+
+    public static function getTimeReadOfUser($userId, $threadId) {
+        $info = ChatMessageRead::where(['userId' => $userId, 'threadId' => $threadId, 'statusRead' => 1])->orderby('updated_at','desc')->first();
+        if($info) {
+            return (new DateTime($info['updated_at']))->getTimestamp();
+        }
+        return 0;
+    }
+
+    public static function showChildMessage($parent_id, $userLogin, &$arrReturn, $page, $pageSize, $cond)
+    {
+        if( $cond == 0) {
+            $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                         $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                })
+                ->where("chatmessages.messageId", $parent_id)
+                ->where("chatmessages.userDelete",'<>', $userLogin)
+                ->select("tbtt_user.use_id as use_id","chatmessages.id as messageId","tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'))
+                ->orderby("messageId",'asc')
+                ->get()->toArray();
+        }
+        else {
+            $offset = ($page - 1 ) * $pageSize;
+            $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                         $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                })
+                ->where("chatmessages.messageId", $parent_id)
+                ->where("chatmessages.userDelete",'<>', $userLogin)
+                ->select("tbtt_user.use_id as use_id","chatmessages.id as messageId","tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'))
+                ->orderby("messageId",'desc')
+                ->offset($offset)
+                ->limit($pageSize)
+                ->get()->toArray();
+        }
+        if($list) {
+            foreach ($list as $key => $item)
+            {
+                $arrReturn[] = $item;
+                unset($list[$key]);
+                self::showChildMessage( $item['messageId'], $userLogin, $arrReturn, $page, $pageSize, 0);
+            }
+        }
+
+    }
+
+    public static function showChildMessage1($parent_id, $userLogin, $userId, &$arrReturn, $page, $pageSize, $cond)
+    {
+        if( $cond == 0) {
+            $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                         $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                })
+                ->where("chatmessages.messageId", $parent_id)
+                ->where("chatmessages.userDelete",'<>', $userLogin)
+                ->whereIn('chatmessages.ownerId', [$userLogin,$userId])
+                ->select("tbtt_user.use_id as use_id", "chatmessages.*","tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'))
+                ->orderby("chatmessages.id",'asc')
+                ->get()->toArray();
+        }
+        else {
+            $offset = ($page - 1 ) * $pageSize;
+            $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                         $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                })
+                ->where("chatmessages.messageId", $parent_id)
+                ->where("chatmessages.userDelete",'<>', $userLogin)
+                ->whereIn('chatmessages.ownerId', [$userLogin,$userId])
+                ->select("tbtt_user.use_id as use_id","chatmessages.*","tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'))
+                ->orderby("chatmessages.id",'desc')
+                ->offset($offset)
+                ->limit($pageSize)
+                ->get()->toArray();
+        }
+        if($list) {
+            foreach ($list as $key => $item)
+            {
+                $arrReturn[] = $item;
+                self::showChildMessage1( $item['id'], $userLogin, $userId, $arrReturn, $page, $pageSize, 0);
+                //unset($list[$key]);
+            }
+        }
+
+    }
+
+
+    public static function showChildMessageP2P($parent_id, $userLogin, $userMesOrigin, $userId, &$arrReturn, $page, $pageSize, $cond)
+    {
+        if( $cond == 0) {
+            $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                         $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                })
+                ->where("chatmessages.messageId", $parent_id)
+                ->where("chatmessages.userDelete",'<>', $userLogin)
+                ->whereIn('chatmessages.ownerId', [$userMesOrigin,$userId])
+                ->select("tbtt_user.use_id as use_id", "chatmessages.*","tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'))
+                ->orderby("chatmessages.id",'asc')
+                ->get()->toArray();
+        }
+        else {
+            $offset = ($page - 1 ) * $pageSize;
+            $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                         $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                })
+                ->where("chatmessages.messageId", $parent_id)
+                ->where("chatmessages.userDelete",'<>', $userLogin)
+                ->whereIn('chatmessages.ownerId', [$userMesOrigin,$userId])
+                ->select("tbtt_user.use_id as use_id","chatmessages.*","tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'))
+                ->orderby("chatmessages.id",'desc')
+                ->offset($offset)
+                ->limit($pageSize)
+                ->get()->toArray();
+        }
+        if($list) {
+            foreach ($list as $key => $item)
+            {
+                $arrReturn[] = $item;
+                self::showChildMessageP2P( $item['id'], $userLogin, $userMesOrigin, $userId, $arrReturn, $page, $pageSize, 0);
+                //unset($list[$key]);
+            }
+        }
+
+    }
+
+
+    public static function listUserAnswerMessage1($page, $pageSize,$messageId, $userLogin) {
+        $arrReturn = [];
+        $cond = 1;
+        self::showChildMessage($messageId, $userLogin, $arrReturn, $page, $pageSize, $cond);
+        return $arrReturn;
+
+
+    }
+
+    public static function sumUserAnswerMessage($messageId, $userLogin) {
+        $count = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->where("chatmessages.messageId", $messageId)
+                ->where("chatmessages.userDelete",'<>', $userLogin)
+                ->count();
+        return $count;
+
+    }
+
+
+    public static function listUserAnswerMessage($page, $pageSize,$messageId, $userLogin) {
+        $detailMessage = ChatMessages::where("id", $messageId)->first();
+        $threadId = $detailMessage->threadId;
+        $detailThread = ChatThreads::where("id", $threadId)->first();
+        $ownerThread = $detailThread->ownerId;
+        $ownerMessage = $detailMessage->ownerId;
+        $offset = ($page - 1) * $pageSize;
+        $arrIdRecu = self::getArrayMessageParentId($messageId);
+        if( ($userLogin == $ownerThread) || ($userLogin == $ownerMessage) )  {
+            $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                         $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                })
+                /*->where("chatmessages.messageId", $messageId)*/
+                ->whereIn("chatmessages.messageId", $arrIdRecu)
+                ->where("chatmessages.userDelete",'<>', $userLogin)
+                ->offset($offset)
+                ->limit($pageSize)
+                ->select("tbtt_user.use_id as use_id","chatmessages.id as messageId","tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'))
+                ->groupby("tbtt_user.use_id");
+
+        }
+        else {
+            $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                         $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                })
+                /*->where("chatmessages.messageId", $messageId)*/
+                ->whereIn("chatmessages.messageId", $arrIdRecu)
+                ->where(function ($query) use ($userLogin) {
+                    $query->where('public', '=', 1)
+                            ->orWhere('chatmessages.ownerId', '=', $userLogin);
+                })
+                ->where("chatmessages.userDelete",'<>', $userLogin)
+                ->offset($offset)
+                ->limit($pageSize)
+                ->select("tbtt_user.use_id as use_id","chatmessages.id as messageId","tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'))
+                ->groupby("tbtt_user.use_id");
+        }
+        return $list;
+
+    }
+
+    public static function listUserAnswerMessageCond($page, $pageSize,$messageId, $userLogin) {
+        $detailMessage = ChatMessages::where("id", $messageId)->first();
+        $offset = ($page - 1) * $pageSize;
+        $mesId = $detailMessage->messageId;
+        $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                         $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                })
+                ->where("chatmessages.id", $mesId)
+                ->where(function ($query) use ($userLogin) {
+                    $query->where('public', '=', 1)
+                            ->orWhere('chatmessages.ownerId', '=', $userLogin);
+                })
+                ->where("chatmessages.userDelete",'<>', $userLogin)
+                ->offset($offset)
+                ->limit($pageSize)
+                ->select("tbtt_user.use_id as use_id","chatmessages.id as messageId","tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'))
+                ->groupby("tbtt_user.use_id");
+        return $list;
+
+    }
+
+    public static function listReplyMessage($page, $pageSize,$messageId, $userId, $userLogin) {
+        $offset = ($page - 1) * $pageSize;
+        $list = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                                ->leftJoin(DB::raw("(select * from chatuseralias where userId = $userLogin) as chatuseralias"), function($join) {
+                                         $join->on('chatmessages.ownerId', '=', 'chatuseralias.userId_alias');
+                                })
+                            ->where(['messageId' => $messageId])
+                            ->where("chatmessages.userDelete",'<>', $userLogin)
+                            ->where("chatmessages.ownerId",'=', $userId)
+                            ->offset($offset)
+                            ->limit($pageSize)
+                            ->select("chatmessages.*", "tbtt_user.use_id as use_id","tbtt_user.avatar","tbtt_user.use_username",DB::raw('(CASE WHEN chatuseralias.name_alias is null THEN tbtt_user.use_fullname ELSE chatuseralias.name_alias END) AS use_fullname'))
+                            ;
+        return $list;
+    }
+
+    public static function listReplyMessage1($page, $pageSize,$messageId, $userId, $userLogin) {
+        $arrReturn = [];
+        self::getMessageParentRecurise($messageId, $arrReturn);
+        $arrReturn = array_reverse($arrReturn);
+        $cond = 0;
+        self::showChildMessage1($messageId, $userLogin, $userId, $arrReturn, $page, $pageSize, $cond);
+        return $arrReturn;
+    }
+
+    public static function listReplyMessageP2P($page, $pageSize,$messageId, $userId, $userMesOrigin, $userLogin) {
+        $info =  ChatMessages::getDetailMesssageParent($messageId);
+        $arrReturn = [$info];
+        $cond = 0;
+        self::showChildMessageP2P($messageId, $userLogin, $userMesOrigin, $userId, $arrReturn, $page, $pageSize, $cond);
+        return $arrReturn;
+    }
+
+    public static function countReplyMessage1($messageId, $userId, $userLogin) {
+        $count = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->where("chatmessages.messageId", $messageId)
+                ->where("chatmessages.userDelete",'<>', $userLogin)
+                ->whereIn('ownerId', [$userLogin,$userId])
+                ->count();
+        return $count;
+    }
+
+     public static function countReplyMessageP2P($messageId, $userId,$userMesOrigin, $userLogin) {
+        $count = ChatMessages::join("tbtt_user","tbtt_user.use_id","=","chatmessages.ownerId")
+                ->where("chatmessages.messageId", $messageId)
+                ->where("chatmessages.userDelete",'<>', $userLogin)
+                ->whereIn('ownerId', [$userMesOrigin,$userId])
+                ->count();
+        return $count;
+    }
+
+    public static function getLastTimeAnswer($messageId, $userId, $userLogin) {
+        $info = ChatMessages::where(['messageId' => $messageId])
+                            ->where("chatmessages.userDelete",'<>', $userLogin)
+                            ->where("chatmessages.ownerId",'=', $userId)
+                            ->orderby('id', 'desc')->first();
+        if($info) {
+            return $info['createdAt'];
+        }
+        else {
+            return "";
+        }
+
+
+    }
+
+    public static function idGroupInforward($userOwnId, $userId, $arrData) {
+        $thread = ChatThreads::where(function ($query) use ($userOwnId, $userId)  {
+                     $query->where(['chatthreads.ownerId' => $userOwnId, 'chatthreads.requesterId' => $userId])
+                                ->orWhere(['chatthreads.ownerId' => $userId, 'chatthreads.requesterId' => $userOwnId]);
+                })
+                ->where("chatthreads.type","=", 'private')->first();
+        if( $thread) {
+            DB::table('chatthreads')->where("id", "=", $thread->id )->update(['userDeleteGroup' => 0]);
+            return $thread->id;
+        }
+        else {
+            $id = DB::table('chatthreads')->insertGetId($arrData);
+            $arr = [$userOwnId, $userId];
+            ChatThreadUser::addUserToGroup($id, $arr, 1 );
+            return $id;
+        }
+
+    }
+
+    public static function forwardMessage($infoMessage, $userForward, $userSend) {
+        $arrThread = [
+            'type'=> 'private',
+            'ownerId' => $userForward,
+            'requesterId' => $userSend,
+            'typechat'  => 2,
+            'createdAt' => date('Y-m-d H:i:s'),
+            'updatedAt' => date('Y-m-d H:i:s'),
+        ];
+        $threadId = self::idGroupInforward($userForward, $userSend, $arrThread);
+        $arrData = [
+                    'type' => 'private',
+                    'ownerId' => $userForward,
+                    'threadId' => $threadId,
+                    'text' => $infoMessage->text,
+                    'typedata' => $infoMessage->typedata,
+                    'width' => $infoMessage->width,
+                    'height' => $infoMessage->height,
+                    'size' => $infoMessage->size,
+                    'productId' => $infoMessage->productId,
+                    'listImage' => $infoMessage->listImage,
+                    'caption' =>$infoMessage->caption
+
+                ];
+        $id = DB::table('chatmessages')->insertGetId($arrData);
+        ChatUserRead::updateCountMessageUnreadUser($threadId, $userSend);
+        ChatMessageRead::createRowMessageUser(['messageId' => $id, 'threadId' => $threadId, 'userId' => $userSend ]);
+        $detail = ChatMessages::getDetailMesssage($id);
+        $detail['reload'] = 1;
+        $info = ChatThreads::where("id", "=", $threadId)->first();
+        if($info) {
+            $info = $info->toArray();
+            $detail['groupChatId'] = $info['id'];
+
+        }
+        $infoA = ChatThreadUser::where(['userId' => $userForward, 'threadId' => $threadId])->first();
+        if($infoA) {
+            $infoA =  $infoA->toArray();
+            $detail['blocked'] = $infoA['blocked'];
+            $detail['blockedNotify'] = $infoA['blockedNotify'];
+
+        }
+        if($info['requesterId'] != $userForward) {
+            $infoB = ChatThreadUser::where(['userId' => $info['requesterId'] , 'threadId' => $threadId])->first();
+            if($infoB) {
+                $infoB =  $infoB->toArray();
+                $detail['blocked_B'] = $infoB['blocked'];
+                $detail['blockedNotify_B'] = $infoB['blockedNotify'];
+
+            }
+            $userGroup = User::where(['use_id' => $info['requesterId'] ])->select("use_fullname")->first();
+                $detail['namegroup'] = $userGroup['use_fullname'];
+
+        }
+        else {
+            $infoB = ChatThreadUser::where(['userId' => $info['ownerId'] , 'threadId' => $threadId])->first();
+            if($infoB) {
+                $infoB =  $infoB->toArray();
+                $detail['blocked_B'] = $infoB['blocked'];
+                $detail['blockedNotify_B'] = $infoB['blockedNotify'];
+
+            }
+            $userGroup = User::where(['use_id' => $info['ownerId'] ])->select("use_fullname")->first();
+                $detail['namegroup'] = $userGroup['use_fullname'];
+
+        }
+        return $detail;
+    }
+
+    public static function forwardMessageInGroup($infoMessage, $userForward, $threadId) {
+        $arrData = [
+                    'type' => 'group',
+                    'ownerId' => $userForward,
+                    'threadId' => $threadId,
+                    'text' => $infoMessage->text,
+                    'typedata' => $infoMessage->typedata,
+                    'width' => $infoMessage->width,
+                    'height' => $infoMessage->height,
+                    'size' => $infoMessage->size,
+                    'listImage' => $infoMessage->listImage,
+                    'productId' => $infoMessage->productId,
+                    'caption' =>$infoMessage->caption
+
+                ];
+        $id = DB::table('chatmessages')->insertGetId($arrData);
+        $detail = ChatMessages::getDetailMesssage($id);
+        $detail['reload'] = 1;
+        $info = ChatThreads::where("id", "=", $threadId)->first();
+        if($info) {
+            $info = $info->toArray();
+            $detail['groupChatId'] = $info['id'];
+        }
+        $infoA = ChatThreadUser::where(['userId' => $userForward, 'threadId' => $threadId])->first();
+        if($infoA) {
+            $infoA =  $infoA->toArray();
+            $detail['blocked'] = $infoA['blocked'];
+            $detail['blockedNotify'] = $infoA['blockedNotify'];
+
+        }
+        if($info['requesterId'] != $userForward) {
+            $infoB = ChatThreadUser::where(['userId' => $info['requesterId'] , 'threadId' => $threadId])->first();
+            if($infoB) {
+                $infoB =  $infoB->toArray();
+                $detail['blocked_B'] = $infoB['blocked'];
+                $detail['blockedNotify_B'] = $infoB['blockedNotify'];
+            }
+            $userGroup = User::where(['use_id' => $info['requesterId'] ])->select("use_fullname")->first();
+                $detail['namegroup'] = $userGroup['use_fullname'];
+        }
+        else {
+            $infoB = ChatThreadUser::where(['userId' => $info['ownerId'] , 'threadId' => $threadId])->first();
+            if($infoB) {
+                $infoB =  $infoB->toArray();
+                $detail['blocked_B'] = $infoB['blocked'];
+                $detail['blockedNotify_B'] = $infoB['blockedNotify'];
+            }
+            $userGroup = User::where(['use_id' => $info['ownerId'] ])->select("use_fullname")->first();
+                $detail['namegroup'] = $userGroup['use_fullname'];
+        }
+        return $detail;
+
+    }
+
+    public static function checkMessageHasReply($messageId) {
+        $check = ChatMessages::where("messageId", "=", $messageId)->first();
+        if($check) {
+            return true;
+        }
+        return false;
+
+    }
+
+    public static function getOriginMesRecurise($messageId, &$arrId) {
+        $info =  ChatMessages::getDetailMesssageParent($messageId);
+        if($info) {
+            $info = $info->toArray();
+            $arrId[] = $info['id'];
+            if($info['messageId'] != 0) {
+                self::getArrIdMesRecurise($info['messageId'], $arrId);
+            }
+        }
+    }
+
+}

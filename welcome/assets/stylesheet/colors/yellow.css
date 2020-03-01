@@ -1,0 +1,27 @@
+/**
+ * Yellow Color Scheme
+ * color orange = #fccd8f
+ */
+body.yellow-color a,
+body.yellow-color a:hover,
+body.yellow-color section .feature-items .feature-item i,
+body.yellow-color section .team-members .team-member img {
+    color: #fccd8f;
+}
+
+body.yellow-color .btn-primary,
+body.yellow-color header .learn-more a:hover,
+body.yellow-color header .subscribe button,
+body.yellow-color header .social a {
+    color: white;
+    background: #fccd8f;
+}
+
+body.yellow-color .form-control:focus,
+body.yellow-color .btn-primary {
+    border-color: #fccd8f;
+}
+
+body.yellow-color .btn-primary:hover {
+    opacity: .8;
+}

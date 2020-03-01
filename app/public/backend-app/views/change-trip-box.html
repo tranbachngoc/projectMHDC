@@ -1,0 +1,22 @@
+<div class="limo-dialogs">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+            <h4 class="modal-title"><% modalTitle || "Chuyển Hướng"  %></h4>
+        </div>
+        <div class="modal-body form-group">
+            <div class="form-group">
+                <label>Chọn điểm đến</label>
+                <input type="text" class="form-control" options="fn" required name="homeAddress" gplace-autocomplete placeholder="Chọn điểm đến" />
+            </div>
+            <div class="form-group">
+                <label>Giá mới</label>
+                <input type="text" class="form-control" ng-model="estimatePrice" required name="estimatePrice" currency-input placeholder="" readonly/>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>
+            <button type="button" class="btn btn-success btn-yes" ng-disabled="!hash || loading" ng-click="agree()">Yes</button>
+        </div>
+    </div>
+</div>

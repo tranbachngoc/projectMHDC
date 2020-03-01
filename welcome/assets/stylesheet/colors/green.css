@@ -1,0 +1,27 @@
+/**
+ * Green Color Scheme
+ * color green = #31CCB0
+ */
+body.green-color a,
+body.green-color a:hover,
+body.green-color section .feature-items .feature-item i,
+body.green-color section .team-members .team-member img {
+    color: #31CCB0;
+}
+
+body.green-color .btn-primary,
+body.green-color header .learn-more a:hover,
+body.green-color header .subscribe button,
+body.green-color header .social a {
+    color: white;
+    background: #31CCB0;
+}
+
+body.green-color .form-control:focus,
+body.green-color .btn-primary {
+    border-color: #31CCB0;
+}
+
+body.green-color .btn-primary:hover {
+    opacity: .8;
+}

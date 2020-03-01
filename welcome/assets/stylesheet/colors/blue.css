@@ -1,0 +1,27 @@
+/**
+ * Blue Color Scheme
+ * color blue #2e98d4
+ */
+body.blue-color a,
+body.blue-color a:hover,
+body.blue-color section .feature-items .feature-item i,
+body.blue-color section .team-members .team-member img {
+    color: #2e98d4;
+}
+
+body.blue-color .btn-primary,
+body.blue-color header .learn-more a:hover,
+body.blue-color header .subscribe button,
+body.blue-color header .social a {
+    color: white;
+    background: #2e98d4;
+}
+
+body.blue-color .form-control:focus,
+body.blue-color .btn-primary {
+    border-color: #2e98d4;
+}
+
+body.blue-color .btn-primary:hover {
+    opacity: .8;
+}

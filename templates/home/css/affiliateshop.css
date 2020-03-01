@@ -1,0 +1,130 @@
+.clearfix{
+    clear:both
+}
+#header{
+    padding:20px;
+    background:whitesmoke;
+    border-bottom:1px solid #ddd
+}
+.filtervia>span{
+    display:inline-block;
+    border:1px solid #eee;
+    border-radius:20px;
+    padding:2px 8px
+}
+.qty_group>*{
+    float:left
+}
+.qty_group .inpt-qty{
+    border:1px solid #ddd;
+    width:50px;
+    text-align:center;
+    padding:4px
+}
+.qty_group .add-qty,.qty_group .sub-qty{
+    background:#eee;
+    width:30px;
+    padding:4px 0;
+    text-align:center;
+    font-weight:bold;
+    border:1px solid #ddd;
+    cursor:pointer
+}
+.title_detail_tb{
+    width:140px;
+    font-style:italic
+}
+.btn-azibai{
+    background:#008c8c;
+    color:#fff
+}
+.btn-azibai:hover,.btn-azibai:focus{
+    background:#008c8c;
+    color:#fff
+}
+.btn-addCart{
+    background:#777;
+    color:#fff
+}
+.btn-addCart:hover,.btn-addCart:focus{
+    background:#666;
+    color:#fff
+}
+.btn-buyNow{
+    background:#e6e6e6
+}
+.btn-buyNow:hover,.btn-buyNow:focus{
+    background:#eee
+}
+.cost-price{
+    color:gray;
+    text-decoration:line-through;
+    font-size:small
+}
+.sale-price{
+    color:#d00;
+    font-weight:bold;
+    font-size:18px
+}
+.panel{
+    border-radius:0
+}
+.thumbox{
+    position:relative;
+    padding-bottom:100%
+}
+.thumbox a{
+    position:absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0
+}
+.thumbox a img{
+    position:absolute;
+    left:-50%;
+    right:-50%;
+    top:-50%;
+    bottom:-50%;
+    margin:auto;
+    max-height:100%;
+    max-width:100%
+}
+.itempost{
+    background:#fff;
+    margin-bottom:20px;
+    padding:10px 10px 0px;
+    border:1px solid #ddd
+}
+.itempost .rowmid .r-image{
+    margin:10px -10px
+}
+.itempost .rowbot{
+    border-top:1px solid #eee;
+    margin:0 -15px
+}
+.itempost .dropdown-menu{
+    border:1px solid #eee
+}
+.itempost .dropdown-menu li>a{
+    padding:7px 15px 8px
+}
+.itempost .dropdown-menu li+li{
+    border-top:1px solid #eee
+}
+.owl-nav button{ position: absolute; top:50%; margin-top: -33px; font-size: 2em !important; background: rgba(0,0,0,.15) !important}
+.owl-nav button.owl-prev{ left: -10px; }
+.owl-nav button.owl-next{ right: -10px; }
+.proname {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.procost { color: #f00; padding: 1px 0 4px }
+
+.social-share div a{
+    display:inline-block;
+    padding:5px 5px;
+    margin-left:15px
+}
+#footer{
+    background:whitesmoke;
+    padding:20px;
+    border-top:1px solid #ddd
+}

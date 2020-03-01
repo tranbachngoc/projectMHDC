@@ -1,0 +1,663 @@
+<?php
+namespace App\Http\Controllers\Api;
+
+use Validator;
+use Illuminate\Http\Request;
+use App\Http\Controllers\ApiController;
+use App\Models\User;
+use App\Models\Shop;
+use App\Models\Forgot;
+use App\Models\Resume;
+use Lang;
+use App\Helpers\Commons;
+use App\Helpers\Hash;
+use App\Helpers\Utils;
+use Intervention\Image\ImageManagerStatic as Image;
+
+class UserController extends ApiController {
+
+	/**
+     * @SWG\Get(
+     *     path="/api/v1/user/{id}/profile",
+     *     operationId="userProfile",
+     *     description="userProfile",
+     *     produces={"application/json"},
+     *     tags={"User"},
+     *     summary="Thông tin",
+     *     @SWG\Response(
+     *         response=200,
+     *         description="public trips"
+     *     )
+     * )
+     */
+    public function profile($id, Request $req) {
+        $user = User::find($id);
+        if (!$user) {
+            return response([
+                'msg' => Lang::get('response.user_not_found')
+                ], 404);
+        }
+        $result = $user->publicProfile();
+        $result['shop'] = $user->shop;
+        $result['staff_of_user'] = $user->getAllStaffOfUser();
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' =>$result
+        ]);
+    }
+    	/**
+     * @SWG\Get(
+     *     path="/api/v1/me/get-branch-config",
+     *     operationId="grandConfig",
+     *     description="Lấy grand config của user",
+     *     produces={"application/json"},
+     *     tags={"Profile"},
+     *     summary="Thông tin",
+     *     @SWG\Response(
+     *         response=200,
+     *         description="public grand config"
+     *     )
+     * )
+     */
+    public function getBranchConfig(Request $req) {
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $req->user()->branchConfig
+        ]);
+    }
+     	/**
+     * @SWG\Get(
+     *     path="/api/v1/me/check-branch-config",
+     *     operationId="checkConfig",
+     *     description="Kiểm tra Chi Nhánh có được cấu hình đăng sản phẩm hay không",
+     *     produces={"application/json"},
+     *     tags={"Profile"},
+     *     summary="Kiểm tra Chi Nhánh có được cấu hình đăng sản phẩm hay không",
+     *     @SWG\Response(
+     *         response=200,
+     *         description="public grand config"
+     *     )
+     * )
+     */
+    public function checkBrandConfig(Request $req) {
+        $shop = $req->user()->shop;
+        $ConfigPrice = false;
+        if ($req->user()->use_group == User::TYPE_BranchUser) {
+            $branch = $req->user()->branchConfig;
+            if ($branch) {
+                $list_br = explode(",", $branch->config_rule);
+                if (isset($list_br) && in_array('49', $list_br)) {
+                    $ConfigPrice = true;
+                }
+            }
+        }
+
+        if ($shop->shop_type == 0 || $shop->shop_type == 2 || ($shop->shop_type == 3 && $ConfigPrice == true)) {
+            return response([
+                'msg' => Lang::get('response.success'),
+                'data' => [
+                    'show' => true
+                ]
+            ]);
+        } else {
+            return response([
+                'msg' => Lang::get('response.success'),
+                'data' => [
+                    'show' => false
+                ]
+            ]);
+        }
+    }
+
+
+    /**
+     * @SWG\Get(
+     *     path="/api/v1/users/search",
+     *     operationId="searchUser",
+     *     description="Tim kiếm người dùng",
+     *     produces={"application/json"},
+     *     tags={"User"},
+     *     summary="Tìm người dùng",
+     *     @SWG\Parameter(
+     *         name="keywords",
+     *         in="query",
+     *         description="keywords",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Tìm người dùng"
+     *     )
+     * )
+     */
+
+    public function search(Request $req) {
+          $validator = Validator::make($req->all(), [
+                'keywords' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response([
+                'msg' => $validator->errors()->first(),
+                'errors' => $validator->errors()
+                ], 422);
+        }
+        $query = User::where([]);
+        $query->where(function($q) use ($req) {
+            $keywords = $req->keywords;
+            $q->orWhere('use_username', 'LIKE', '%' . $keywords . '%');
+            $q->orWhere('use_fullname', 'LIKE', '%' . $keywords . '%');
+        });
+        $query->whereNotIn('use_group',[User::TYPE_CoreAdminUser,4]);
+        $query->select('use_username','use_fullname','use_id');
+        $limit = $req->limit ? (int) $req->limit : 10;
+        $page = $req->page ? (int) $req->page : 0;
+
+        $results = $query->paginate($limit, ['*'], 'page', $page);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $results
+        ]);
+    }
+       /**
+     * @SWG\Post(
+     *     path="/api/v1/me/check-password",
+     *     operationId="checkPassword",
+     *     description="check password",
+     *     tags={"User"},
+     *     summary="Đăng ký Shop",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         name="password",
+     *         in="body",
+     *         description="your password",
+     *         required=true,
+     *         type="string",
+     *         @SWG\Schema(ref="#/definitions/Authenticated"),
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="success",
+     *         @SWG\Schema(ref="#/definitions/Authenticated/logout")
+     *     )
+     * )
+     */
+    public function checkPassword(Request $req) {
+        $user = User::where('use_id', $req->user()->use_id)->first();
+
+        if (!$user) {
+            return response([
+                'msg' => Lang::get('auth.account_not_found')
+                ], 404);
+        }
+
+        if (!$user->checkPassword($req->password)) {
+            return response([
+                'msg' => Lang::get('auth.wrong_password')
+                ], 400);
+        }
+        return response([
+            'msg' => Lang::get('response.success'),
+            ], 200);
+    }
+
+        /**
+     * @SWG\Post(
+     *     path="/api/v1/forgot",
+     *     operationId="forgotPassword",
+     *     description="forgot password",
+     *     tags={"User"},
+     *     summary="forgot password",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         name="for_email",
+     *         in="body",
+     *         description="Email ",
+     *         required=true,
+     *         type="string",
+     *         @SWG\Schema(ref="#/definitions/Authenticated"),
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="success",
+     *         @SWG\Schema(ref="#/definitions/Authenticated/logout")
+     *     )
+     * )
+     */
+    public function forgotPassword(Request $req) {
+         $salt = User::randomSalt();
+
+        $key = Hash::create($req->use_email, microtime(), 'sha256md5');
+        $email = strtolower(trim(strtolower($req->for_email)));
+        $dataForgot = array(
+            'for_password' => '',
+            'for_salt' => $salt,
+            'for_email' => $email,
+            'for_key' => $key
+        );
+
+
+        Forgot::where('for_email', trim(strtolower($req->for_email)))->delete();
+        $forgot = new Forgot($dataForgot);
+        $forgot->save();
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $forgot
+            ], 200);
+    }
+
+    public function updateProfile(Request $req) {
+        $user =  $req->user();
+        if (!$user) {
+            return response([
+                'msg' => Lang::get('response.user_not_found')
+                ], 404);
+        }
+        $validatorFiled = [
+            'fullname' => 'required|string',
+            'email' => 'email|max:255',
+            'mobile' => [
+                'regex:' . Commons::isPhone()
+            ],
+        ];
+        $validator = Validator::make($req->all(), $validatorFiled);
+        if ($validator->fails()) {
+            return response([
+                'msg' => $validator->errors()->first(),
+                'errors' => $validator->errors()
+                ], 422);
+        }
+        $sex = 1;
+        $birthday = "";
+        if( isset($req->sex)) {
+            $sex = $req->sex;
+        }
+        if( isset($req->birthday)) {
+            $birthday = $req->birthday;
+        }
+        $arrUpdate = [
+            'fullname' => $req->fullname,
+            'career' => $req->career,
+            'department' => $req->department,
+            'mobile' => $req->mobile,
+            'email' => $req->email,
+            'religion' => $req->religion,
+            'marriage' => $req->marriage,
+            'favorites' => $req->favorites,
+            'education' => $req->education,
+            'accommodation' => $req->accommodation,
+            'sayings' => $req->talk,
+            'logo' =>  $req->logo,
+            'banner' =>  $req->banner,
+            'userid' => $user['use_id'],
+            'sex' => $sex,
+            'birthday' => $birthday
+        ];
+        $update = Resume::updateResume($arrUpdate);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => Resume::getDetailResume($user['use_id'])
+        ]);
+
+
+    }
+
+    public function updateCompany(Request $req) {
+        $user =  $req->user();
+        if (!$user) {
+            return response([
+                'msg' => Lang::get('response.user_not_found')
+                ], 404);
+        }
+        $validatorFiled = [
+            'company_name' => 'required|string',
+            'company_intro' => 'required|string'
+        ];
+        $validator = Validator::make($req->all(), $validatorFiled);
+        if ($validator->fails()) {
+            return response([
+                'msg' => $validator->errors()->first(),
+                'errors' => $validator->errors()
+                ], 422);
+        }
+        $show_company = 1;
+        if(isset($req->show_company)) {
+            $show_company = $req->show_company;
+        }
+        $info = ['company_name' => $req->company_name,
+                 'company_intro' => $req->company_intro,
+                 'company_image' => $req->company_image,
+                 'userid' => $user['use_id'],
+                 'show_company' => $show_company
+                ];
+
+        $update = Resume::updateResume($info);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => Resume::getDetailResume($user['use_id'])
+        ]);
+
+
+
+    }
+
+    public function updateSlogan(Request $req) {
+        $user =  $req->user();
+        if (!$user) {
+            return response([
+                'msg' => Lang::get('response.user_not_found')
+                ], 404);
+        }
+        $validatorFiled = [
+            'slogan' => 'required|string',
+            'slogan_by' => 'required|string'
+        ];
+        $validator = Validator::make($req->all(), $validatorFiled);
+        if ($validator->fails()) {
+            return response([
+                'msg' => $validator->errors()->first(),
+                'errors' => $validator->errors()
+                ], 422);
+        }
+        $show_slogan = 1;
+        if(isset($req->show_slogan)) {
+            $show_slogan = $req->show_slogan;
+        }
+        $info = ['slogan' => $req->slogan,
+                 'slogan_by' => $req->slogan_by,
+                 'slogan_bg' => $req->slogan_bg,
+                 'userid' => $user['use_id'],
+                 'show_slogan' => $show_slogan
+                ];
+        $update = Resume::updateResume($info);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => Resume::getDetailResume($user['use_id'])
+        ]);
+    }
+
+    public function updateService(Request $req) {
+        $user =  $req->user();
+        if (!$user) {
+            return response([
+                'msg' => Lang::get('response.user_not_found')
+                ], 404);
+        }
+        $validatorFiled = [
+            'service_desc' => 'required|string'
+        ];
+        $validator = Validator::make($req->all(), $validatorFiled);
+        if ($validator->fails()) {
+            return response([
+                'msg' => $validator->errors()->first(),
+                'errors' => $validator->errors()
+                ], 422);
+        }
+        //show_service
+        $show_service = 1;
+        if(isset($req->show_service)) {
+            $show_service = $req->show_service;
+        }
+        $title_service = "";
+        if(isset($req->title_service)) {
+            $title_service = $req->title_service;
+        }
+
+        $info = ['service_desc' => $req->service_desc,
+                  'title_service' => $title_service,
+                  'service_0' => $req->service_0 == null? null: json_encode($req->service_0),
+                  'service_1' => $req->service_1 == null? null: json_encode($req->service_1),
+                  'service_2' => $req->service_2 == null? null: json_encode($req->service_2),
+                  'service_3' => $req->service_3 == null? null: json_encode($req->service_3),
+                  'service_4' => $req->service_4 == null? null: json_encode($req->service_4),
+                  'service_5' => $req->service_5 == null? null: json_encode($req->service_5),
+                  'userid' => $user['use_id'],
+                  'show_service' => $show_service
+                ];
+        $update = Resume::updateResume($info);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => Resume::getDetailResume($user['use_id'])
+        ]);
+
+    }
+
+    public function updateStatistic(Request $req) {
+        $user =  $req->user();
+        if (!$user) {
+            return response([
+                'msg' => Lang::get('response.user_not_found')
+                ], 404);
+        }
+        $info = [ 'statistic' => json_encode($req->statistic),
+                  'statistic_bg' => $req->statistic_bg,
+                  'show_statistic' => $req->show_statistic,
+                  'userid' => $user['use_id']
+                ];
+        $update = Resume::updateResume($info);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => Resume::getDetailResume($user['use_id'])
+        ]);
+    }
+
+    public function updateConnect(Request $req) {
+        $user =  $req->user();
+        if (!$user) {
+            return response([
+                'msg' => Lang::get('response.user_not_found')
+                ], 404);
+        }
+        $show_contactUs = 1;
+        if(isset($req->show_contactUs)) {
+            $show_contactUs = $req->show_contactUs;
+        }
+
+        $info = [ 'facebook' => $req->facebook,
+                  'twitter' => $req->twitter,
+                  'google' => $req->google,
+                  'userid' => $user['use_id'],
+                  'show_contactUs' => $show_contactUs
+                ];
+
+        $update = Resume::updateResume($info);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => Resume::getDetailResume($user['use_id'])
+        ]);
+    }
+
+    public function updateCertification(Request $req) {
+        $user =  $req->user();
+        if (!$user) {
+            return response([
+                'msg' => Lang::get('response.user_not_found')
+                ], 404);
+        }
+        $validatorFiled = [
+            'certification' => 'required'
+        ];
+        $validator = Validator::make($req->all(), $validatorFiled);
+        if ($validator->fails()) {
+            return response([
+                'msg' => $validator->errors()->first(),
+                'errors' => $validator->errors()
+                ], 422);
+        }
+        $title_certification = "";
+        if(isset($req->title_certification)) {
+            $title_certification = $req->title_certification;
+        }
+
+        $info = [
+                'certification' => json_encode($req->certification),
+                'show_certification' => $req->show_certification,
+                'userid' => $user['use_id'],
+                'title_certification' => $title_certification
+                ];
+        $update = Resume::updateResume($info);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => Resume::getDetailResume($user['use_id'])
+        ]);
+    }
+
+    public function updateProduct(Request $req) {
+        $user =  $req->user();
+        if (!$user) {
+            return response([
+                'msg' => Lang::get('response.user_not_found')
+                ], 404);
+        }
+        $validatorFiled = [
+            'product_desc' => 'required'
+        ];
+        $validator = Validator::make($req->all(), $validatorFiled);
+        if ($validator->fails()) {
+            return response([
+                'msg' => $validator->errors()->first(),
+                'errors' => $validator->errors()
+                ], 422);
+        }
+        $title_product = "";
+        if( isset($req->title_product)) {
+            $title_product = $req->title_product;
+        }
+
+        $info = [
+                'product_desc' => $req->product_desc,
+                'title_product' => $title_product,
+                'product_cat' => $req->product_cat == null? null: json_encode($req->product_cat),
+                'product_list_0' => $req->product_list_0 == null? null: json_encode($req->product_list_0),
+                'product_list_1' => $req->product_list_1 == null? null: json_encode($req->product_list_1),
+                'product_list_2' => $req->product_list_2 == null? null: json_encode($req->product_list_2),
+                'product_list_3' => $req->product_list_3 == null? null: json_encode($req->product_list_3),
+                'userid' => $user['use_id'],
+                'show_product' => $req->show_product
+
+                ];
+        $update = Resume::updateResume($info);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => Resume::getDetailResume($user['use_id'])
+        ]);
+    }
+
+    public function updateCustomerSay(Request $req) {
+        $user =  $req->user();
+        if (!$user) {
+            return response([
+                'msg' => Lang::get('response.user_not_found')
+                ], 404);
+        }
+        $title_customer = "";
+        if( isset($req->title_customer)) {
+            $title_customer = $req->title_customer;
+        }
+
+        $info = [
+                'title_customer' => $title_customer,
+                'customer_bg' => $req->customer_bg,
+                'show_customer' => $req->show_customer,
+                'customer_0' => $req->customer_0 == null? null: json_encode($req->customer_0),
+                'customer_1' => $req->customer_1 == null? null: json_encode($req->customer_1),
+                'customer_2' => $req->customer_2 == null? null: json_encode($req->customer_2),
+                'customer_3' => $req->customer_3 == null? null: json_encode($req->customer_3),
+                'userid' => $user['use_id']
+                ];
+        $update = Resume::updateResume($info);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => Resume::getDetailResume($user['use_id'])
+        ]);
+    }
+
+    public function updateActivity(Request $req) {
+        $user =  $req->user();
+        if (!$user) {
+            return response([
+                'msg' => Lang::get('response.user_not_found')
+                ], 404);
+        }
+        $title_history = "";
+        if(isset($req->title_history)) {
+            $title_history = $req->title_history;
+        }
+        $info = [
+                'title_history' => $title_history,
+                'history_0' => $req->history_0 == null? null: json_encode($req->history_0),
+                'history_1' => $req->history_1 == null? null: json_encode($req->history_1),
+                'history_2' => $req->history_2 == null? null: json_encode($req->history_2),
+                'history_3' => $req->history_3 == null? null: json_encode($req->history_3),
+                'history_4' => $req->history_4 == null? null: json_encode($req->history_4),
+                'history_5' => $req->history_5 == null? null: json_encode($req->history_5),
+                'history_6' => $req->history_6 == null? null: json_encode($req->history_6),
+                'history_7' => $req->history_7 == null? null: json_encode($req->history_7),
+                'history_8' => $req->history_8 == null? null: json_encode($req->history_8),
+                'history_9' => $req->history_9 == null? null: json_encode($req->history_9),
+                'userid' => $user['use_id'],
+                'show_history' => $req->show_history
+                ];
+
+        $update = Resume::updateResume($info);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => Resume::getDetailResume($user['use_id'])
+        ]);
+
+    }
+
+    public function getListMarried(Request $req) {
+        $arrData = ['Độc thân', 'Đính hôn', 'Đã kết hôn','Ly thân', 'Ly hôn','Người góa chồng', 'Người góa vợ'];
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $arrData
+        ]);
+    }
+
+    public function uploadMediaProfile(Request $req) {
+        $rule = [
+            'file'=>[
+                'required',
+            ],
+            //'type'=>'image|mimes:jpg,png,gif,jpeg',
+            'dir_image'=>'string',
+            'userId' => [
+                'required',
+            ]
+        ];
+        $validator = Validator::make($req->all(), $rule);
+        if ($validator->fails()) {
+            return response([
+                'msg' => $validator->errors()->first(),
+                'errors' => $validator->errors()
+                ], 422);
+        }
+        $dir_image = 'images/profiles/' . $req->userId;
+        $fileName = Utils::randomFilename() . '.' . $req->file->extension(); // renameing image
+
+        /*$pathUpload = Utils::getUploadsRoot('profiles', $dir_image);
+        $req->file->move($pathUpload, $fileName);*/
+        $pathFTP = Utils::getUploadsRootFTP('profiles', $dir_image);
+        Utils::uploadFileToFTP($req->file, $pathFTP.DIRECTORY_SEPARATOR.$fileName);
+
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => [
+                'file' => $fileName,
+                'dir_file' => $dir_image,
+                'type' => $req->type
+            ]
+        ]);
+    }
+
+    public function detailProfile(Request $req) {
+        $user =  $req->user();
+        $detail =  Resume::getDetailResume($user['use_id']);
+        return response([
+            'msg' => Lang::get('response.success'),
+            'data' => $detail
+        ]);
+    }
+
+}

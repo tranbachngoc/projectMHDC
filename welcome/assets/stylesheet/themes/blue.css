@@ -1,0 +1,64 @@
+body.blue-theme header .subscribe input {
+    background: #6d737f;
+}
+
+body.blue-theme header .overlay {
+    background-color: #2A343E;
+}
+
+body.blue-theme section .feature-items .feature-item .feature-item-title {
+    color: white;
+}
+
+body.blue-theme section .team-members .team-member-info {
+    color: #A9B1B6;
+    background: #303343;
+}
+
+body.blue-theme section h2 {
+    color: white;
+}
+
+body.blue-theme section {
+    color: #A9B1B6;
+    background-color: #2A343E;
+}
+
+body.blue-theme section.bg {
+    color: white;
+}
+
+body.blue-theme section.gray {
+    background-color: #1E2832;
+}
+
+body.blue-theme footer {
+    background-color: #232323;
+    color: #6d737f;
+}
+
+body.blue-theme footer hr {
+    background: #6d737f;
+}
+
+body.blue-theme footer .social a {
+    color: #6d737f;   
+}
+
+body.blue-theme section .twitter ul li {
+    background-color: #2A343E;
+}
+
+body.blue-theme .form-control {
+    color: white;
+    background: #6d737f;
+    border-color: #6d737f;
+}
+
+body.blue-theme .form-control::-webkit-input-placeholder {
+    color: rgb(183, 190, 203);
+}
+
+body.blue-theme .form-control::-moz-input-placeholder {
+    color: rgb(183, 190, 203);
+}

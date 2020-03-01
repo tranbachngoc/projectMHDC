@@ -1,0 +1,166 @@
+import uuid from 'node-uuid';
+let models  = require('../models');
+var groupRooms = {}, userIds = {};
+let modelsStorage = require('./../storages/model');
+let Redis = require('../components/Redis');
+var moment = require('moment');
+var Queue = require('../components/Queue')
+
+let GROUP_CACHE_PREFIX = 'GROUP_';
+
+import _ from 'lodash';
+
+var firstAvailableRooms = {};
+
+export function register(socket) {
+  var currentRoom, id;
+
+  socket.on('group-call-init', function (data, fn) {
+    // console.log('init group call');
+    currentRoom = (data || {}).room || uuid.v4();
+    //currentRoom = (data).room || uuid.v4();
+    //in private chat room id is modelId
+    var room = groupRooms[currentRoom];
+    socket.threadId = data.room;
+    var roomId = data.room;
+    if (!room) {
+      groupRooms[currentRoom] = [socket];
+      id = userIds[currentRoom] = 0;
+      fn(currentRoom, id);
+      room = groupRooms[currentRoom];
+      firstAvailableRooms[currentRoom] = {
+        model: socket.user.id
+      };
+    }
+    if(room){
+      socket.broadcast.emit('on-group-chat', {
+        online: true,
+        model: socket.user.id,
+        virtualRoom: currentRoom,
+        room: roomId
+      });
+      userIds[currentRoom] += 1;
+      id = userIds[currentRoom];
+      fn(currentRoom, id);
+      room.forEach(function (s) {
+        s.emit('peer.connected', { id: id });
+      });
+      room[id] = socket;
+      socket.groupId = id;
+      models.ChatThread.update({isStreaming: true, virtualId: currentRoom, lastStreamingTime: new Date()}, {
+        where: {id: roomId }
+      }).then(function(thread) {
+        if(!thread){
+          // console.log('update room error');
+          return null;
+        }
+        models.ChatThreadUser.update({
+          isStreaming: true,
+          lastStreamingTime: new Date()
+        }, {
+          where: {
+            threadId: roomId,
+            userId:socket.user.id
+          }
+        });
+        socket.broadcast.to(socket.threadId).emit('join-room', socket.user);
+      });
+    }
+  });
+
+  socket.on('video-msg', function (data) {
+    var to = parseInt(data.to, 10);
+    if (groupRooms[currentRoom] && groupRooms[currentRoom][to]) {
+      //console.log('Redirecting message to', to, 'by', data.by);
+      groupRooms[currentRoom][to].emit('video-msg', data);
+    } else {
+      //console.warn('Invalid user');
+    }
+  });
+
+  socket.on('disconnect', function () {
+    if (!currentRoom || !groupRooms[currentRoom] ) {
+      return;
+    }
+    var virtualRoom = currentRoom;
+    if(socket){
+      models.ChatThread.findOne({
+        where: {
+          id: socket.threadId,
+          ownerId: socket.user.id
+        }
+      }).then(function(thread) {
+        if(!thread){return;}
+        var endDate = moment(new Date());//now
+        var startDate = moment(thread.get('lastStreamingTime'));
+        models.ChatThread.update({
+          isStreaming: false,
+          streamingTime: parseInt(thread.get('streamingTime') + endDate.diff(startDate, 'minutes'))
+        }, {
+          where: {
+            id: thread.get('id')
+          }
+        });
+
+        // create new info chat
+        var message = {
+          type: thread.get('type'),
+          ownerId: socket.user.id,
+          threadId: thread.get('id'),
+          text: 'Cuộc gọi',
+          typedata: 'call'
+        };
+
+        Queue.create('CREATE_DB', {
+          model: 'ChatMessage',
+          data: message,
+          flag: true
+        }).save();
+
+
+      });
+      socket.broadcast.emit('on-group-chat', {
+        online: false,
+        model: socket.user.id,
+        virtualRoom: virtualRoom,
+        room: socket.roomId
+      });
+
+      if(currentRoom && userIds[currentRoom]){
+        var groupId = (socket.groupId) ? socket.groupId : userIds[currentRoom];
+        socket.broadcast.emit('group.disconnected', { id: groupId });
+      }
+      if(firstAvailableRooms[currentRoom] && firstAvailableRooms[currentRoom].model == socket.user.id){
+        // console.log('Delete group room', currentRoom);
+        delete groupRooms[currentRoom];
+        delete firstAvailableRooms[currentRoom];
+      }
+    }
+  });
+
+  socket.on('has-group-room', function(broadcastid, cb) {
+    if (typeof cb !== 'function') { return; }
+    if (groupRooms[broadcastid]) {
+
+      cb(true);
+    } else {
+      cb(false);
+    }
+  });
+
+  socket.on('get-all-group-chat', function(modelId){
+    var findRoom = _.findKey(firstAvailableRooms, {model: modelId});
+    if(findRoom){
+      // console.log('request chat room', socket.threadId);
+      socket.emit('on-group-chat', {
+        online: true,
+        model: modelId,
+        virtualRoom: findRoom,
+        room: socket.threadId
+      });
+    }
+  });
+  socket.on('leave-call', function(){
+    socket.emit('disconnect');
+  });
+}

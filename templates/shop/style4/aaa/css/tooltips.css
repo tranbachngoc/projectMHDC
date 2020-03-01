@@ -1,0 +1,33 @@
+#dhtmltooltip 
+{
+	BORDER-RIGHT: black 1px solid; PADDING-RIGHT: 1px; BORDER-TOP: black 1px solid; PADDING-LEFT: 1px; FONT-SIZE: 11px; Z-INDEX: 100; FILTER: progid:DXImageTransform.Microsoft.Shadow(color=gray,direction=135); LEFT: -300px; VISIBILITY: hidden; PADDING-BOTTOM: 1px; BORDER-LEFT: black 1px solid; WIDTH: 250px; COLOR:#163FFE; PADDING-TOP: 2px; BORDER-BOTTOM: black 1px solid; FONT-FAMILY: Verdana, arial, helvetica; POSITION: absolute; BACKGROUND-COLOR: lightyellow
+}
+
+#dhtmlpointer
+{
+	Z-INDEX: 101; LEFT: -300px; VISIBILITY: hidden; POSITION: absolute;
+}
+
+#theToolTip
+{
+	position: absolute;
+	left: -200px;
+	width: 350px;
+	border: 1px solid #95b6fd;
+	padding: 3px 3px 3px 3px;
+	background-color: #DEEBF5;
+	visibility: hidden;
+	z-index: 1;
+}
+
+.tooltips_help
+{
+	cursor:pointer;
+}
+
+.tooltips_help:hover
+{
+	text-decoration: none;
+	color: #00CCFF;
+	font-weight:bold;
+}

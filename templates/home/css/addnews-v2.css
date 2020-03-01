@@ -1,0 +1,126 @@
+
+
+/* Popup tag*/
+#popup-tag button, #popup-tag .search img  { cursor: pointer; }
+
+
+/* Tag */
+.taggd{position:relative}
+.taggd__image{display:block;height:auto;width:100%;margin:0}
+.taggd__wrapper{
+    display:block;
+    /*height:1em;
+    width:1em;*/
+    position:absolute
+  }
+.taggd__button{display:block;height:100%;width:100%;padding:0;border:0;margin:0;background-color:rgba(0,0,0,.25);background-image:none;text-align:left}
+.taggd__button {
+  /*display: block;
+  height: 1rem;
+  width: 1rem;
+  margin-left: -.5rem;
+  margin-top: -.5rem;
+  border-radius: .5rem;
+  background-color: rgba(219, 50, 92, 0.75);*/
+}
+
+.taggd__button {
+  content: '';
+  background: url(../icons/boxaddnew/tag.svg) no-repeat center;
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: 0px;
+  left: -26px;
+  border: none;
+  background-size: 32px;
+  outline: none;
+  cursor: pointer;
+}
+
+.taggd__wrapper .tag-selecting {
+  position: absolute;
+  top: -12px;
+  left: -34px;
+}
+
+.taggd__button:hover {
+  z-index: 10;
+}
+
+.taggd__image {
+  cursor: url(../icons/boxaddnew/tag.svg) 26 0, auto;
+}
+
+button.addTagImgGallary {
+    content: '';
+    background: url('../icons/boxaddnew/tag.svg') no-repeat center;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    border: none;
+    opacity: 0;
+    background-size: 25px;
+    outline:none;
+    /*filter: invert(100%);*/
+}
+
+.boxaddimagegallerybox:hover button.addTagImgGallary {
+    opacity: 1;
+    z-index: 2;
+    cursor: pointer;
+}
+
+
+/* fix css popup */
+.addvideonews { position: relative; }
+#popup-tag .danhmucsanpham .tit, .danhmucsanpham li { cursor: pointer; }
+#popup-tag .danhmucsanpham .danhmucsanpham-child-title:hover { color: blue; }
+#popup-tag .popup-tag-content-right { overflow: unset; }
+#popup-tag .content-sanpham .scroll-div-product, #popup-tag .content-sanpham .div-pro-choose { overflow: auto; height: 300px; }
+#popup-tag .content-sanpham .content-sanpham-items .linkdachen ul { overflow: auto; max-height: 250px; }
+#popup-tag .danhmucsanpham .tit.opened {border-radius: 5px 5px 0px 0px;}
+.for_azibai { display: none; }
+#popup-tag .checkbox-style { cursor: pointer; height: auto !important }
+#popup-tag .popup-tag-content-right .content-sanpham-items ul {-webkit-align-items: unset; align-items: unset;}
+#popup-tag .menu-active, #popup-tag .child-menu-active { color: blue; }
+#popup-tag .content-sanpham-items {
+  position: relative;
+  min-height: 200px;
+}
+
+#popup-tag .popup-tag-content-left .danhmucsanpham-parent ul.danhmucsanpham-child-content { height: unset; }
+#popup-tag .danhmucsanpham-child-content { color: #000; }
+#popup-tag .danhmucsanpham-child-content li:hover > p { color: blue; }
+#popup-tag .popup-tag-content-right .content-sanpham-items .linkdachen ul li {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.list-button-photo {
+  padding: 10px 0px 10px 0px;
+  margin-left: -10px;
+}
+
+.list-button-photo button {
+  margin-left: 10px;
+  padding: 5px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  background: none;
+  height: 30px;
+  cursor: pointer;
+}
+.list-button-photo button.btn-bg-gray {
+    background: #737373;
+    border: none;
+    color: #fff;
+}
+.list-button-photo button.btn-bg-white {
+    border: 1px solid #454545;
+}
+
+

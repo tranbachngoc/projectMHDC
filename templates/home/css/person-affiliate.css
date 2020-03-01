@@ -1,0 +1,195 @@
+.list-affiliate-service {
+	margin-top: 20px;
+}
+.list-affiliate-service .affiliate-item {
+	float: left;
+	width: 50%;
+	-webkit-box-sizing: border-box;
+  	-moz-box-sizing: border-box;
+  	box-sizing: border-box;
+  	padding: 5px;
+  	font-family: "KoHo", Helvetica, Arial, "DejaVu Sans", "Liberation Sans", Freesans, sans-serif;
+}
+.list-affiliate-service .affiliate-item .affiliate-item-inner {
+	box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.15);
+  	border: 1px solid #cacaca;
+  	border-radius: 5px;
+}
+.list-affiliate-service .affiliate-item .affiliate-item-inner {
+	padding: 5px;
+}
+.affiliate-item-inner .affiliate-item-header {
+	border-bottom: 1px solid #cacaca;
+	padding-bottom: 5px;
+	overflow: auto;
+}
+.affiliate-item-inner .affiliate-item-header .title {
+	float: left;
+	width: 70%;
+}
+.affiliate-item-inner .affiliate-item-header .register {
+	float: left;
+	width: 30%;
+	text-align: right;
+}
+.affiliate-item-inner .affiliate-item-header .register button {
+	background: #f39c12;
+	border: none;
+	color: #ffffff;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.affiliate-item-inner .affiliate-item-content {
+	overflow: auto;
+}
+.affiliate-item-inner .affiliate-item-content .affiliate-item-infomation,
+#config_price_service .affiliate-item-infomation {
+	float: left;
+	width: 50%;
+}
+.affiliate-user table thead {
+	background: #cacaca;
+	color: #ffffff;
+	text-align: center;
+}
+.affiliate-user table th {
+	text-align: center;
+}
+.affiliate-user table td {
+	padding: 5px;
+	border: 1px solid #cacaca;
+	word-break: break-word;
+}
+.affiliate-user table tr:nth-child(even) {
+    background: #ececec;
+}
+.affiliate-user button {
+	background: #f39c12;
+    border: none;
+    color: #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#config_price_service .title-service {
+	font-size: 16px;
+	margin-bottom: 15px;
+}
+#config_price_service .affiliate-item-content {
+	overflow: auto;
+}
+#config_price_service .setup-price {
+	margin-top: 15px;
+}
+#config_price_service .setup-price .left {
+	float: left;
+	width: 40%;
+}
+#config_price_service .setup-price .right {
+	float: left;
+	width: 60%;
+}
+#config_price_service .setup-price .setup-price-row {
+	overflow: auto;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+#edit_price_affiliate {
+	background: #f39c12;
+    border: none;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 5px 15px;
+}
+.config-service-price {
+	background: #000000;
+	color: #ffff;
+	width: 100%;
+	border: none;
+	margin: 5px 0px;
+	font-size: 16px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.delete-service-price {
+	background: #ff2462;
+	color: #ffff;
+	width: 100%;
+	border: none;
+	margin: 5px 0px;
+	font-size: 16px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.tranggioithieu-right .alert,
+.services-right .alert {
+	padding-left: 0px;
+}
+.tranggioithieu-right .alert .success,
+.services-right .alert .success {
+	background: #f39c12;
+	color: #ffffff;
+	padding: 10px 20px;
+	border-left: 5px solid #000000;
+}
+.tranggioithieu-right .alert .error,
+.services-right .alert .error {
+	background: #ff2462;
+	color: #ffffff;
+	padding: 10px 20px;
+	border-left: 5px solid #000000;
+}
+.tranggioithieu-right .copy-link-send {
+	margin-top: 10px;
+	background: #f39c12;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+.modal-body-error {
+	padding: 15px;
+	font-size: 15px;
+	color: red;
+}
+.affiliate-user a {
+	display: block;
+	background: #000000;
+    color: #fff;
+    margin-top: 5px;
+    padding: 5px;
+    border-radius: 5px;
+}
+#myModal_ctv .tien-share {
+	display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    -ms-justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+}
+#myModal_ctv .tien-share .btn-share {
+    background: #737373;
+    border-radius: 5px;
+    float: right;
+    padding: 5px 10px;
+}
+#myModal_ctv .tien-share .btn-share a {
+    color: #fff;
+}
+.modal_affiliate_coupon .buttons-group button.js_apply-commission {
+	background: #000000;
+	color: #ffffff;
+}

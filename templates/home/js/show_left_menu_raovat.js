@@ -1,0 +1,1 @@
+show_left_menu('raovat'); 

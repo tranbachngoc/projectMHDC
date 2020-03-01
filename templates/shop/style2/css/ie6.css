@@ -1,0 +1,23 @@
+.image_showbox_1 {
+	border:0px;
+	height: expression(document.body.clientHeight < 20? "20px" : document.body.clientHeight > 90? "90px" : "auto");
+	width: expression(document.body.clientWidth < 20? "20px" : document.body.clientWidth > 125? "125px" : "auto");
+}
+
+.image_boxpro {
+	border:0px;
+	height: expression(document.body.clientHeight < 20? "20px" : document.body.clientHeight > 75? "75px" : "auto");
+	width: expression(document.body.clientWidth < 20? "20px" : document.body.clientWidth > 100? "100px" : "auto");
+}
+
+.image_top_tip {
+	border:none;
+	height: expression(document.body.clientHeight < 20? "20px" : document.body.clientHeight > 60? "60px" : "auto");
+	width: expression(document.body.clientWidth < 20? "20px" : document.body.clientWidth > 45? "45px" : "auto");
+}
+
+#image_detail {
+	border:0px;
+	height: expression(document.body.clientHeight < 20? "20px" : document.body.clientHeight > 170? "170px" : "auto");
+	width: expression(document.body.clientWidth < 20? "20px" : document.body.clientWidth > 200? "200px" : "auto");
+}

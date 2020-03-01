@@ -1,0 +1,36 @@
+Install packages: babel-core, babel-polyfill, babel-preset-es2015
+Create .babelrc with contents: { "presets": ["es2015"] }
+Do not put import statement in your main entry file, use another file eg: app.js and your main entry file should required babel-core/register and babel-polyfill to make babel works separately at the first place before anything else. Then you can require app.js where import statement.
+Example:
+
+index.js
+
+npm install package.json
+
+require('babel-core/register');
+require('babel-polyfill');
+require('./app');
+app.js
+
+import co from 'co';
+It should works with node index.js.
+
+npm install babel-core
+npm install babel-polyfill
+npm install  babel-preset-es2015
+
+npm install cors
+npm install socket.io
+
+hang doi uu tien
+npm install kue
+
+Sequelize is a promise-based Node.js ORM for Postgres, MySQL, SQLite and Microsoft SQL Server. It features solid transaction support, relations, read replication and more.
+npm install sequelize
+
+npm install jsonwebtoken
+
+npm install mysql2
+npm install async
+
+npm install node-uuid

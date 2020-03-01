@@ -1,0 +1,13 @@
+var c = 0;
+$('#nav-toggle').click(function(){ if(c == 0){ $(this).addClass('active'); $(this).find('.fa').removeClass('fa-bars').addClass('fa-times'); $('.inner-nav').addClass('show-nav'); c = 1; } else { $(this).removeClass('active'); $(this).find('.fa').removeClass('fa-times').addClass('fa-bars'); $('.inner-nav').removeClass('show-nav'); c = 0; } }); 
+var finished = true;
+$('.close-footer i').click(function() { if (finished) { finished = false; var checked = true; if ($('.footer-contact').css('position') == 'static') { $('.footer-contact').css({ position: 'relative' }); $('.footer-contact .footer-content').css({ position: 'absolute' }); $('#google-map .captionMap').fadeOut(); checked = false; } $('.footer-active').slideToggle('slow', function() { if (checked) { $('.footer-contact').css({ position: 'static' }); $('.footer-contact .footer-content').css({ position: 'relative' }); $('#google-map .captionMap').fadeIn(); } finished = true; }); } });
+$('.learn-more a').click(function(e){ e.preventDefault(); var aTag = $('#about'); $('html,body').animate({scrollTop: $(aTag).offset().top - 65},'slow'); });
+$('#owl_certification').lightGallery({selector: '.itemcer', download: false });
+$('#owl_testimonials').lightGallery({selector: '.video', download: false });  
+$('#all, #tab1, #tab2, #tab3').lightGallery({selector: '.zoomlink1', download: false });
+$('#owl_certification').owlCarousel({ loop:false, margin:20, nav:false, dots:false, autoplay:true, autoWidth:false, autoplayTimeout:5000, autoplayHoverPause:true, responsive : { 0: {items: 2, margin: 10}, 768: {items: 3, margin: 20}, 1000: {items: 4, margin: 20} } });
+$('#owl_testimonials').owlCarousel({ loop:false, margin:20, nav:false, dots:false, autoplay:true, autoWidth:false, autoplayTimeout:5000, autoplayHoverPause:true, items:1 });
+$('ul.inner-nav > li > a').click(function(e){ e.preventDefault(); var aTag = $(this).attr('href'); $('html,body').animate({scrollTop: $(aTag).offset().top - 65},'slow'); });
+$(window).scroll(function(){if($(this).scrollTop()>=50){$('#return-to-top').fadeIn(200);}else{$('#return-to-top').fadeOut(200);}});$('#return-to-top').click(function(){$('body,html').animate({scrollTop:0},500);});
+new WOW().init();

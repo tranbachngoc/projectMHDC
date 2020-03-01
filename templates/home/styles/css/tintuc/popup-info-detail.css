@@ -1,0 +1,137 @@
+#modal-show-detail-img .action { display: block; }
+.modal-show-detail  .btn-custom-css {
+    border: 1px solid #c4c4c4;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+    background: unset;
+    font-weight: unset;
+    top: -2px;
+}
+
+.modal-show-detail  .btn-custom-css img {
+    filter: invert(100%);
+    font-weight: bold;
+}
+.big-img .az-volume {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    z-index: 99;
+    cursor: pointer;
+    width: 32px !important;
+    height: auto !important;
+}
+
+@media (max-width: 768px) {
+    .jR3DCarouselGallery .previous.controls { display: none !important}
+    .jR3DCarouselGallery .next.controls { display: none !important }
+}
+.position-tag .tag-number-selected.is-active {
+    border: 2px solid #fff;
+}
+#modal-show-detail-img .tieude-sm { width: 100% }
+.pop-descrip-title .read-more { display: none; }
+.image_main_tag { cursor: pointer; }
+.tag-photo-home-2.tag-selecting.is-active {
+    /* background: rgba(255, 255, 255, 0.6);*/
+    background: rgba(235, 237, 237, 0.6);
+    border: 2px solid #fff;
+}
+
+.taggd__wrapper.position-tag .tag-photo-home-2 {
+    animation-duration: 2.5s;
+    animation-name: mytwopop;
+
+}
+
+.taggd__wrapper.position-tag .tag-photo-home-2 img {
+    animation-duration: 2s;
+    animation-name: myfirstpop;
+
+}
+
+
+.fs-gal-view-detail .current-price {
+    color: white;
+}
+.have-read-more .clearfix{
+    display: none;
+}
+
+.have-read-more .clearfix:first-child {
+    display: block !important;
+}
+
+@keyframes myfirstpop {
+    0%   {
+        /*background: rgba(235, 237, 237, 0.8);*/
+        -webkit-transform:  rotate(6deg); /* Safari */
+        -moz-transform:rotate(6deg); /* Firefox 3.6 Firefox 4 */
+        -ms-transform: rotate(6deg); /* IE9 */
+        -o-transform:  rotate(6deg); /* Opera */
+        transform: rotate(6deg); /* W3C */
+        -webkit-transform-origin: top right;
+        -moz-transform-origin: top right;
+        -ms-transform-origin: top right;
+        -o-transform-origin: top right;
+        transform-origin: top right;
+    }
+
+    40%  {
+        /*background: rgba(235, 237, 237, 0.5);*/
+        -webkit-transform:  rotate(-6deg); /* Safari */
+        -moz-transform:rotate(-6deg); /* Firefox 3.6 Firefox 4 */
+        -ms-transform: rotate(-6deg); /* IE9 */
+        -o-transform:  rotate(-6deg); /* Opera */
+        transform: rotate(-6deg); /* W3C */
+        -webkit-transform-origin: top right;
+        -moz-transform-origin: top right;
+        -ms-transform-origin: top right;
+        -o-transform-origin: top right;
+        transform-origin: top right;
+    }
+
+    80%  {
+        /*background: rgba(235, 237, 237, 0.5);*/
+        -webkit-transform:  rotate(6deg); /* Safari */
+        -moz-transform:rotate(6deg); /* Firefox 3.6 Firefox 4 */
+        -ms-transform: rotate(6deg); /* IE9 */
+        -o-transform:  rotate(6deg); /* Opera */
+        transform: rotate(6deg); /* W3C */
+        -webkit-transform-origin: top right;
+        -moz-transform-origin: top right;
+        -ms-transform-origin: top right;
+        -o-transform-origin: top right;
+        transform-origin: top right;
+    }
+
+    100% {
+        /*background: rgba(235, 237, 237, 0);*/
+        -webkit-transform:  rotate(0deg); /* Safari */
+        -moz-transform:rotate(0deg); /* Firefox 3.6 Firefox 4 */
+        -ms-transform: rotate(0deg); /* IE9 */
+        -o-transform:  rotate(0deg); /* Opera */
+        transform: rotate(0deg); /* W3C */
+        -webkit-transform-origin: top right;
+        -moz-transform-origin: top right;
+        -ms-transform-origin: top right;
+        -o-transform-origin: top right;
+        transform-origin: top right;
+    }
+}
+
+
+@keyframes mytwopop {
+    0%   {
+        background: rgba(235, 237, 237, 0.8);
+    }
+
+    66%  {
+        background: rgba(235, 237, 237, 0.5);
+
+    }
+    100% {
+        background: rgba(235, 237, 237, 0);
+    }
+}

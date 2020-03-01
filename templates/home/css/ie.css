@@ -1,0 +1,34 @@
+.scroll_pane {
+	margin:0px 5px 0px 5px;
+	width:596px;
+	height:396px;
+	overflow:auto;
+}
+
+.fix_scrollads_1 {
+	width: 350px;
+}
+
+.fix_scrollads_2 {
+	width: 108px;
+}
+
+.fix_scrollads_3 {
+	width: 105px;
+}
+
+.loading_image {
+	text-align:center;
+	padding-top:209px;
+	padding-bottom:210px;
+	padding-left:275px;
+	border:none;
+}
+
+.set_enddate {
+	width:70px;
+	font-size:11px;
+}
+.list_ten_mua_ban_rao_vat{
+	padding-top:8px;
+}

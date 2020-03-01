@@ -1,0 +1,6 @@
+ #k_hotrocontent h3{color:#000000 ; font-size:15px; }
+#k_hotrocontent a:hover{text-decoration:underline}
+#k_fix1000px{width:1000px; margin:0px auto}
+#head, #navbarwrapper, #pagewrap{padding:0px !important}
+#main_container{padding:0px 0px 10px}
+#k_100{background:url(../images/body_bg_ie6.gif) 50% top repeat-y #eeeef0;}

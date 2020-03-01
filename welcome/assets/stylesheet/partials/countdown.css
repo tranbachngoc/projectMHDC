@@ -1,0 +1,64 @@
+/*------------------------------------------------------------------
+COUNTDOWN
+
+* body
+  + Header / header
+    - Header Content / .content
+      - Countdown / .countdown
+        - Countdown Container / #countdown
+          - Countdown Numbers / li
+          - Countdown Separater / li.seperator
+            - Numbers / span
+            - Indicators / p
+  + Features Section / section
+  + Team Section / section
+  + Quote Background Section / section.bg-team
+  + Twitter Section / section [see twitter.css]
+  + Footer / footer [see footer.css]
+-------------------------------------------------------------------*/
+/* Countdown Container */
+header ul#countdown {
+  list-style: none;
+  margin: 50px 0;
+  padding: 0;
+  display: block;
+  text-align: center;
+}
+  /* Countdown Numbers */
+  header ul#countdown li {
+    display: inline-block;
+  }
+  /* Countdown Separater */
+  header ul#countdown li.seperator {
+    font-size: 3em;
+    line-height: .9;
+    vertical-align: top;
+  }
+    /* Numbers */
+    header ul#countdown li span {
+      font-size: 3em;
+      line-height: 1;
+      font-weight: 600;
+    }
+    /* Indicators */
+    header ul#countdown li p {
+      color: #a3a7b2;
+      font-size: 1.4em;
+      line-height: 2em;
+    }
+
+/* Small Devices, Tablets */
+@media (min-width: 768px) {
+  header ul#countdown li span,
+  header ul#countdown li.seperator {
+    font-size: 7em;
+  }
+}
+
+/* Medium Devices, Desktops */
+@media (min-width: 992px) { 
+  header ul#countdown li span,
+  header ul#countdown li.seperator {
+    font-size: 8em;
+  }
+}

@@ -1,0 +1,17 @@
+.button_login {
+	width:100px;
+	height:26px;
+	border:none;
+	color:#06F;
+	font-size:12px;
+	font-weight:bold;
+	text-align:center;
+	margin-right:10px;
+	cursor:pointer;
+	background:url(../images/button_login.gif) no-repeat;
+}
+
+.set_enddate {
+	width:70px;
+	font-size:11px;
+}

@@ -1,0 +1,35 @@
+/*------------------------------------------------------------------
+TWITTER
+
+* body
+  + Header / header
+  + Features Section / section
+  + Team Section / section
+  + Quote Background Section / section.bg-team
+  + Twitter Section / section
+    - Twitter Container / .twitter
+      - Twitter Box / .tweet
+      - Tweet List / ul
+        - Tweet Individual / li
+  + Footer / footer [see footer.css]
+-------------------------------------------------------------------*/
+/* Twitter Box */
+section .twitter .tweet {
+  overflow: hidden;
+}
+/* Tweet List */
+section .twitter ul {
+  width: 99999px;
+  height: 120px;
+}
+  /* Tweet Individual */
+  section .twitter ul li {
+    background: white;
+    text-align: left;
+    width: 300px;
+    height: 120px;
+    float: left;
+    padding: 10px;
+    border-radius: 3px;
+    margin: 0 10px 0 0;
+  }

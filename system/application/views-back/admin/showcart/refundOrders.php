@@ -1,0 +1,284 @@
+<?php $this->load->view('admin/common/header'); ?>
+<?php $this->load->view('admin/common/menu'); ?>
+<?php $url =  $this->uri->segment(4).'/'; ?>
+<tr>
+    <td valign="top">
+        <table width="100%" border="0" align="center" class="main" cellpadding="0" cellspacing="0">
+            <tr>
+                <td width="2"></td>
+                <td width="10" class="left_main" valign="top"></td>
+                <td align="center" valign="top">
+                    <!--BEGIN: Main-->
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td height="10"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <!--BEGIN: Item Menu-->
+                                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td width="5%" height="67" class="item_menu_left">
+                                            <a href="<?php echo base_url().'administ/showcart/refundOrders/'.$url; ?>">
+                                            	<img src="<?php echo base_url(); ?>templates/home/images/icon/cart-icon.png" border="0" />
+                                            </a>
+                                        </td>
+                                        <td width="40%" height="67" class="item_menu_middle"><?php echo $page['title'] ?></td>
+                                        <td width="55%" height="67" class="item_menu_right">
+                                           
+                                        </td>
+                                    </tr>
+                                </table>
+                                <!--END Item Menu-->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="10"></td>
+                        </tr>
+                        <tr>
+                            <td align="center">
+                                <!--BEGIN: Search-->
+                                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td width="160" align="left">
+                                            <input type="text" name="keyword" id="keyword" value="<?php echo $keyword; ?>" maxlength="100" class="input_search" onKeyPress="return SummitEnTerAdmin(this,event,'<?php echo base_url().'administ/showcart/refundOrders/'.$url.'search/name/keyword'; ?>','keyword')" />
+                                        </td>
+                                        <td width="120" align="left">
+                                            <select name="search" id="search" onchange="ActionSearch('<?php echo base_url().'administ/showcart/refundOrders/'.$url; ?>',1)" class="select_search">
+                                                <option value="0"><?php echo $this->lang->line('search_by_search'); ?></option>
+                                                <option value="orderid" <?php echo $params['search']=='orderid'?'selected="selected"':''  ?>>Mã đơn hàng</option>
+                                                <option value="buyer" <?php echo $params['search']=='buyer'?'selected="selected"':''  ?>>Người mua</option>
+                                            </select>
+                                        </td>
+                                        <td align="left">
+                                            <img src="<?php echo base_url(); ?>templates/admin/images/icon_search.gif" border="0" style="cursor:pointer;" onclick="ActionSearch('<?php echo base_url().'administ/showcart/refundOrders/'.$url; ?>',1)" title="<?php echo $this->lang->line('search_tip'); ?>" />
+                                        </td>
+                                        <!---->
+                                        <td width="115" align="left">
+                                            <select name="filter" id="filter" onchange="ActionSearch('<?php echo base_url().'administ/showcart/refundOrders/'.$url; ?>',2)" class="select_search">
+                                                <option value="0"><?php echo $this->lang->line('filter_by_search'); ?></option>
+                                                <option value="buydate"><?php echo $this->lang->line('buydate_search_defaults'); ?></option>
+                                                <!--<option value="process"><?php echo $this->lang->line('process_search_defaults'); ?></option>
+                                                <option value="notprocess"><?php echo $this->lang->line('notprocess_search_defaults'); ?></option>-->
+                                            </select>
+                                        </td>
+                                        <td id="DivDateSearch_1" width="10" align="center"><b>:</b></td>
+                                        <td id="DivDateSearch_2" width="60" align="left">
+                                            <select name="day" id="day" class="select_datesearch">
+                                                <option value="0"><?php echo $this->lang->line('day_search'); ?></option>
+                                                <?php $this->load->view('admin/common/day'); ?>
+                                            </select>
+                                        </td>
+                                        <td id="DivDateSearch_3" width="10" align="center"><b>-</b></td>
+                                        <td id="DivDateSearch_4" width="60" align="left">
+                                            <select name="month" id="month" class="select_datesearch">
+                                                <option value="0"><?php echo $this->lang->line('month_search'); ?></option>
+                                                <?php $this->load->view('admin/common/month'); ?>
+                                            </select>
+                                        </td>
+                                        <td id="DivDateSearch_5" width="10" align="center"><b>-</b></td>
+                                        <td id="DivDateSearch_6" width="60" align="left">
+                                            <select name="year" id="year" class="select_datesearch">
+                                                <option value="0"><?php echo $this->lang->line('year_search'); ?></option>
+                                                <?php $this->load->view('admin/common/year'); ?>
+                                            </select>
+                                        </td>
+                                        <script>OpenTabSearch('0',0);</script>
+                                        <td width="25" align="right">
+                                            <img src="<?php echo base_url(); ?>templates/admin/images/icon_search.gif" border="0" style="cursor:pointer;" onclick="ActionSearch('<?php echo base_url().'administ/showcart/refundOrders/'.$url; ?>',2)" title="<?php echo $this->lang->line('filter_tip'); ?>" />
+                                        </td>
+                                    </tr>
+                                </table>
+                                <!--END Search-->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="5"></td>
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td>
+                                <form name="listOrderProgress" id="listOrderProgress" method="post">
+                                <!--BEGIN: Content-->
+                                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td width="25" class="title_list">STT</td>
+                                        <td width="20" class="title_list">
+                                            <input type="checkbox" name="checkall" id="checkall" value="0" />
+                                        </td>
+                                        <td class="title_list">
+                                            Mã đơn hàng
+                                            <img src="<?php echo base_url(); ?>templates/admin/images/sort_asc.gif" onclick="ActionSort('<?php echo $sortUrl; ?>orderid/by/asc<?php echo $pageSort; ?>')" style="cursor:pointer;" border="0" />
+                                            <img src="<?php echo base_url(); ?>templates/admin/images/sort_desc.gif" onclick="ActionSort('<?php echo $sortUrl; ?>orderid/by/desc<?php echo $pageSort; ?>')" style="cursor:pointer;" border="0" />
+                                        </td>
+                                        <td class="title_list">
+                                           Cửa hàng
+                                           <img src="<?php echo base_url(); ?>templates/admin/images/sort_asc.gif" onclick="ActionSort('<?php echo $sortUrl; ?>shopname/by/asc<?php echo $pageSort; ?>')" style="cursor:pointer;" border="0" />
+                                            <img src="<?php echo base_url(); ?>templates/admin/images/sort_desc.gif" onclick="ActionSort('<?php echo $sortUrl; ?>shopname/by/desc<?php echo $pageSort; ?>')" style="cursor:pointer;" border="0" />
+                                        </td>
+                                        <td width="170" class="title_list">
+                                           Thời gian đặt hàng
+                                            <img src="<?php echo base_url(); ?>templates/admin/images/sort_asc.gif" onclick="ActionSort('<?php echo $sortUrl; ?>date/by/asc<?php echo $pageSort; ?>')" style="cursor:pointer;" border="0" />
+                                            <img src="<?php echo base_url(); ?>templates/admin/images/sort_desc.gif" onclick="ActionSort('<?php echo $sortUrl; ?>date/by/desc<?php echo $pageSort; ?>')" style="cursor:pointer;" border="0" />
+                                        </td>
+                                        <td class="title_list">
+                                           Phương thức thanh toán                                           
+                                        </td>
+                                        <td class="title_list">
+                                           Thông tin khách hàng
+                                        </td>
+                                        <td class="title_list">
+                                           Tiền Hoàn trả
+                                        </td>
+                                        <td class="title_list">
+                                           Trạng thái
+                                        </td>
+                                        <td class="title_list" width="10%">
+                                           Chức năng
+                                        </td>
+                                        
+                                    </tr>
+                                    <!---->
+                                    <?php $idDiv = 1; ?><?php
+                                    $protocol = "http://";
+                                    $duoi = explode('//', base_url())[1];
+                                    foreach ($showcart as $key => $showcartArray) {
+
+                                        $shop = $protocol . $showcartArray->sho_link .'.'. $duoi . 'shop/';
+                                        if ($showcartArray->domain != '') {
+                                            $shop = $protocol . $showcartArray->domain . '/shop/';
+                                        }
+                                        ?>
+
+                                        <tr style="background:#<?php if($idDiv % 2 == 0){echo 'F7F7F7';}else{echo 'FFF';} ?>;" id="DivRow_<?php echo $idDiv; ?>" >
+                                        <td class="detail_list" style="text-align:center;"><b><?php echo $sTT++; ?></b></td>
+                                        <td class="detail_list" style="text-align:center;">
+                                            <input type="checkbox" name="orders_id[]" id="order_id_<?php echo $key?>" value="<?php echo $showcartArray->shc_orderid .','.$showcartArray->shc_buyer .','.$showcartArray->shc_saler; ?>" />
+                                        </td>
+                                        <td class="detail_list">
+                                            <a href="<?php echo base_url(); ?>administ/showcart/detail/<?php echo $showcartArray->id;  ?>"><?php echo $showcartArray->id; ?></a>
+                                        </td>
+                                        <td class="detail_list">
+                                            <a href="<?php echo $shop ?>" target="_blank">
+                                            <?php echo $showcartArray->sho_name ?> 
+                                            </a>
+                                        </td>
+                                        <td class="detail_list">
+                                             <?php echo date("d-m-Y H:i:s",$showcartArray->date); ?>
+                                        </td>
+                                        <td class="detail_list">
+                                           <?php if($showcartArray->payment_method == "info_nganluong"){
+											   echo 'Cổng thanh toán Ngân Lượng';
+											}?>
+                                            <?php if($showcartArray->payment_method == "info_cod"){
+											   echo 'Thanh toán khi nhận hàng';
+											}?>
+                                            <?php if($showcartArray->payment_method == "info_bank"){
+											   echo 'Chuyển khoản qua Ngân hàng';
+											}?>
+                                            
+                                            <?php
+                                            //---------------
+                                            ?>
+                                        </td>
+                                        <td class="detail_list">
+                                            <?php
+                                                $user_receive = $this->user_receive_model->get('*','order_id = '.$showcartArray->id);
+                                                $province = $this->province_model->get('pre_name','pre_id = '.$user_receive->ord_province);
+                                                $district   =   $this->district_model->find_by(array('DistrictCode'=>$user_receive->ord_district),'DistrictName');
+                                            ?>
+                                            Người mua : <?php echo $user_receive->ord_sname; ?><br/>
+                                            Địa chỉ: <?php echo $user_receive->ord_saddress.','.$district[0]->DistrictName.','.$province->pre_name; ?><br/>
+                                            <?php if($user_receive->ord_semail): ?>
+                                                <?php echo 'Email : '.$user_receive->ord_semail; ?><br/>
+                                            <?php endif; ?>
+                                            <?php if($user_receive->ord_smobile): ?>
+                                                <?php echo 'Phone: '.$user_receive->ord_smobile; ?><br/>
+                                            <?php endif; ?>
+                                        </td>
+                                         
+                                        <td class="detail_list" style="text-align:right;">
+                                         <span style="color:#F00; font-weight:bold;"><?php echo number_format($showcartArray->order_total,0,",","."); ?> đ </span></td>
+                                        <?php $refund_orders = $this->refund_orders_model->get('refund_status','order_id = '.$showcartArray->id); ?>
+                                        <td class="detail_list">
+                                            <?php
+                                                if($refund_orders->refund_status == 0){
+                                                    echo '<img border="0" src="'.base_url().'templates/admin/images/deactive.png" alt="Chưa xác nhận" title="Chưa xác nhận">';
+                                                } else {
+                                                    echo '<img border="0" src="'.base_url().'templates/admin/images/active.png" alt="Đã xác nhận" title="Đã xác nhận"/>';
+                                                }
+                                            ?>
+                                        </td>
+                                        <td class="detail_list">
+                                            <?php
+                                                if($refund_orders->refund_status == 0){
+                                                    ?>
+                                                        <button type="button" onclick="updateStatus(<?php echo $showcartArray->id; ?>)" class="btn btn-primary" >Xác nhận</button>
+                                                    <?php
+                                                } else {
+                                                    
+                                                }
+                                            ?>
+
+                                        </td>
+                                        
+                                    </tr>
+                                    <?php $idDiv++; ?>
+                                    <?php } ?>
+                                    <!---->
+                                    <tr>
+                                        <td class="show_page" colspan="8"><?php echo $linkPage; ?></td>
+                                    </tr>
+                                </table>
+                                <!--END Content-->
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                    <!--END Main-->
+                </td>
+                <td width="10" class="right_main" valign="top"></td>
+                <td width="2"></td>
+            </tr>
+            <tr>
+                <td width="2" height="11"></td>
+                <td width="10" height="11" class="corner_lb_main" valign="top"></td>
+                <td height="11" class="middle_bottom_main"></td>
+                <td width="10" height="11" class="corner_rb_main" valign="top"></td>
+                <td width="2" height="11"></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+
+<script type="text/javascript">
+function updateStatus(refund_id){
+    var strconfirm = confirm("Bạn chắc chắn muốn xác nhận?");
+    if (strconfirm == true)
+    {
+        $.ajax({
+            url     : '<?php echo base_url(); ?>administ/showcart/updateStatusRefund',
+            type    : "POST",
+            data    : {id : refund_id},
+            success:function(response)
+            {
+                if(response == 0){
+                    alert("Lỗi! Chưa update vào database");
+                } else {
+                    window.location.href='<?php echo base_url(); ?>administ/showcart/refundOrders';
+                }
+            },
+            error: function()
+            {
+                alert("Lỗi! Vui lòng thử lại");
+            }
+        });
+    } else {
+        return false;
+    }
+}
+</script>
+
+<?php $this->load->view('admin/common/footer'); ?>

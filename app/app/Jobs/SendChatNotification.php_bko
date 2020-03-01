@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Jobs;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Models\Notification;
+use App\Models\Device;
+use Illuminate\Support\Facades\Log;
+use Edujugon\PushNotification\PushNotification;
+use DB;
+
+class SendChatNotification implements ShouldQueue
+{
+    use InteractsWithQueue, Queueable, SerializesModels;
+
+    const SERVICE_FCM = 'fcm';
+    const SERVICE_APN = 'apn';
+
+    protected $data;
+
+
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct($type, $data)
+    {
+        $this->type = $type;
+        $this->data = $data;
+    }
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        Log::info("Jobs Send Notification ");
+        switch ($this->type) {
+            case 'join-group':
+                $this->pushNotificationJoinGroupToUser();
+                break;
+
+            default:
+                # code...
+                break;
+        }
+
+    }
+
+    private function pushNotificationJoinGroupToUser() {
+        //$id = DB::table('chatthreads')->insertGetId(['namegroup' => 'This is data job']);
+        $data = $this->data; // user model
+        $userIds = $data['userIds'];
+        $dataSend = ['actionType' => 'chatmessage',
+                    'title' => 'Thông báo mời tham gia nhóm chat',
+                    'body' => $data['ownerName'] ." mời bạn tham gia nhóm " . $data['groupName'],
+                ];
+        $this->sendFCM($userIds, $dataSend);
+    }
+
+
+    private function sendFCM($userIds, $data) {
+        $list = Device::whereIn('userId', $userIds)->pluck('token');
+        if (sizeof($list) === 0) {
+            return;
+        }
+        $tokens = $list->toArray();
+
+        $message = [
+            'collapse_key' => $data['actionType'],
+            'notification' => [
+                'title' => isset($data['title']) ? $data['title'] : 'Bạn có thông báo mới',
+                'body' => isset($data['body']) ? $data['body'] : 'Bạn có thông báo mới',
+                'sound' => 'default'
+            ],
+            'data' => $data
+        ];
+
+        $pushNotification = new PushNotification(self::SERVICE_FCM);
+        $pushNotification->setMessage($message);
+        $pushNotification->setDevicesToken($tokens);
+        $pushNotification->send();
+        Log::error('Send Android '.json_encode($pushNotification->getFeedback()));
+    }
+}

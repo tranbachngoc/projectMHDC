@@ -1,0 +1,539 @@
+<?php
+
+use App\Http\Middleware\CheckToken;
+use App\Http\Middleware\GetToken;
+use App\Http\Middleware\CheckUserType;
+use App\Http\Middleware\CheckUserTypes;
+use App\Http\Middleware\CheckAccessKey;
+use App\Models\User;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
+//none authorization middleware
+
+Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function () {
+
+    Route::get("chat/update-latlnguser", "ChatController@updateLatLngUser");
+    Route::get("chat/info-test", "ChatController@checkGetInfo");
+    Route::group(['namespace' => 'Auth'], function () {
+        Route::post('login', 'AuthenticateController@login');
+        Route::post('register/affiliate', 'AuthenticateController@registerAffiliate')->middleware(GetToken::class);
+        Route::post('register/shop', 'AuthenticateController@registerShop');
+        Route::post('register', 'AuthenticateController@registerMember');
+
+        Route::post('logout', 'AuthenticateController@logout')->middleware(CheckToken::class);
+    });
+    Route::get('users-update-af-key', 'UserController@updateAf');
+     Route::post('forgot', 'UserController@forgotPassword');
+     Route::post('utils/getFacebookId', 'UtilController@GetUserIDFromUsername');
+    /**
+	 * News
+	 */
+    Route::get('news', 'NewsController@index')->middleware(GetToken::class);
+     Route::get('test', 'PackageController@test');
+    Route::get('search', 'SearchController@all')->middleware(GetToken::class);
+    Route::get('search/new', 'SearchController@allNew')->middleware(GetToken::class);
+    Route::get('search/news', 'SearchController@news')->middleware(GetToken::class);
+    Route::get('search/affiliates', 'SearchController@affiliates')->middleware(GetToken::class);
+    Route::get('search/landing_pages', 'SearchController@landingPages')->middleware(GetToken::class);
+    Route::get('search/domains', 'SearchController@domains')->middleware(GetToken::class);
+    Route::get('search/shops', 'SearchController@shops')->middleware(GetToken::class);
+    Route::get('search/pictures', 'SearchController@pictures')->middleware(GetToken::class);
+    Route::get('search/videos', 'SearchController@videos')->middleware(GetToken::class);
+    Route::get('search/categories', 'SearchController@categories')->middleware(GetToken::class);
+    Route::get('search/products', 'SearchController@products')->middleware(GetToken::class);
+	Route::get('search/shops/products', 'SearchController@shopsProducts')->middleware(GetToken::class);
+
+	Route::get('news/{id}', 'NewsController@detail')->middleware(GetToken::class);
+	Route::get('news/{id}/comments', 'NewsController@comments')->middleware(GetToken::class);
+	Route::get('news/{id}/comments/{commentId}/comments', 'NewsController@subComments');
+	Route::get('news/{id}/related', 'NewsController@related')->middleware(GetToken::class);
+    Route::get('news/{id}/userSelected', 'NewsController@userSelected');
+
+
+    /**
+	 * Category
+	 */
+    Route::get('categories/level1', 'CategoryController@level1');
+	Route::get('categories/level1/{id}/level2', 'CategoryController@level2');
+    Route::get('categories/{id}/parent', 'CategoryController@getParentCategory');
+
+	/**
+	 * Provinces
+	 */
+	Route::get('provinces', 'GeoController@provinces');
+	Route::get('districts', 'GeoController@districts');
+
+	/**
+	 * 	Shop User
+	 */
+	Route::get('user/{id}/profile', 'UserController@profile');
+	Route::get('user/{id}/shop', 'ShopController@view')->middleware(GetToken::class);
+	Route::get('user/{id}/shop/pictures', 'ShopController@pictures');
+	Route::get('user/{id}/shop/videos', 'ShopController@videos');
+    Route::get('user/{id}/shop/rule', 'ShopController@shopRule');
+	Route::get('user/{id}/shop/news', 'ShopController@news')->middleware(GetToken::class);
+
+	Route::get('user/{id}/shop/products', 'ShopController@products')->middleware(GetToken::class);
+
+    Route::get('user/{id}/list-affiliate', 'AffiliateController@listAffiliate');
+    Route::get('user/{id}/list-branch', 'BranchController@listBranch');
+    Route::get('user/{id}/categories', 'CategoryController@user');
+
+
+
+
+    /**
+	 * Products
+	 */
+    Route::get('products', 'ProductController@index')->middleware(GetToken::class);
+
+	Route::get('products/{id}', 'ProductController@detail')->middleware(GetToken::class);
+    Route::get('products/{id}/style', 'ProductController@getStyle')->middleware(GetToken::class);
+
+
+	/**
+	 * Settings
+	 */
+	Route::get('settings', 'SettingController@index');
+    Route::put('update-version-app', 'SettingController@updateVersion');
+    Route::get('version-app', 'SettingController@checkCurrentVersion');
+    /**
+	 * Suggestion
+	 */
+	Route::get('suggestion/eating', 'SuggestionController@eating');
+	Route::get('suggestion/buys', 'SuggestionController@buys');
+	Route::get('suggestion/play', 'SuggestionController@play');
+	Route::get('suggestion/place', 'SuggestionController@place');
+	Route::get('suggestion/news', 'SuggestionController@news');
+
+	/**
+	 * Shipping
+	 */
+	Route::post('shipping/fee', 'ShipController@fee');
+    Route::get('shipping/shop/{id}', 'ShipController@getListShipping');
+	/**
+	 * Order
+	 */
+    Route::post('orders/{sellerId}', 'OrderController@create');
+    Route::post('orders/{sellerId}/check', 'OrderController@checkOrder');
+
+
+    Route::get('orders-status', 'OrderController@getStatus');
+    Route::get('payment-status', 'OrderController@getPaymentStatus');
+    Route::get('manufacturers', 'ManufacturerController@index');
+
+	Route::group(['prefix' => 'callback', 'middleware' => CheckAccessKey::class], function () {
+        Route::post('notification', 'CallbackController@pushNotification');
+    });
+
+	Route::get('user/{id}/landing-page', 'ToolMarketingController@userLandingPage');
+    Route::get('shop-master-rule', 'ShopController@shopMasterRuler');
+    Route::put('dc/test', 'TestController@putTest');
+    //
+    Route::get('user/{id}/affiliate-press-products', 'AffiliateController@userPressProducts');
+    Route::get('user/{id}/affiliate-product', 'AffiliateController@userAffiliateProducts');
+    Route::get('user/{id}/staffs', 'StaffController@userListUser');
+
+    Route::get('permissions', 'PermissionMenu@index');
+
+});
+
+Route::group(['prefix' => 'v1', 'namespace' => 'Api', 'middleware' => CheckToken::class], function () {
+    $affiliateStore = User::TYPE_AffiliateStoreUser;
+    $affiliate = User::TYPE_AffiliateUser;
+    $branch = User::TYPE_BranchUser;
+    $partner2 = User::TYPE_Partner2User;
+    $partner1 = User::TYPE_Partner1User;
+    $developer1 = User::TYPE_Developer1User;
+    $developer2 = User::TYPE_Developer2User;
+    $coreAdmin = User::TYPE_CoreAdminUser;
+    $coreMember = User::TYPE_CoreMemberUser;
+    $staff = User::TYPE_StaffUser;
+    $normalUser =User::TYPE_NormalUser;
+    $staffStore = User::TYPE_StaffStoreUser;
+    $isAffiliateStoreUser = CheckUserType::class . ':' . $affiliateStore;
+    $isAffiliate = CheckUserType::class . ':' . $affiliate;
+
+    $allowAboveStaff = $branch . ',' . $partner2 . ','
+        . $partner1 . ',' . $developer1 . ',' .
+        $developer2 . ',' . $coreAdmin . ','
+        . $coreMember . ',' . $affiliateStore . ',' . $affiliate . ',' . $staffStore;
+
+    $allowStaticStaffs = $affiliateStore . ',' . $developer2 . ','
+        . $developer1 . ',' . $partner2 . ',' .
+        $partner1 . ',' . $coreMember . ','
+        . $coreAdmin . ',' . $affiliate . ',' . $staff . ',' . $staffStore;
+
+
+    Route::get('me/categories', 'CategoryController@me');
+    /**
+	 * Profile
+	 */
+	Route::get('me/profile', 'ProfileController@index');
+    Route::put('me/update-af', 'ProfileController@upgrade_af')->middleware(CheckUserTypes::class . ':' . $normalUser);
+    Route::put('me/profile','ProfileController@update');
+    Route::put('me/bank','ProfileController@updateBank');
+    Route::put('me/changePassword','ProfileController@changePassword');
+    Route::get('me/userOrders','OrderController@userOrder');
+    Route::get('me/orders/{id}','OrderController@detail');
+    Route::get('me/userOrders/{id}','OrderController@userOderDetail');
+    Route::get('me/orders','OrderController@order');
+    Route::get('me/count-orders-new','OrderController@countOrderNew');
+    Route::put('me/orders/{id}/accept', 'OrderController@shopAcceptOrder');
+    Route::get('me/customer-order','OrderController@listCustomerOrder')->middleware(CheckUserTypes::class . ':' . $affiliateStore . ',' . $affiliate);
+    Route::get('me/customer-order/{id}/list_orders','OrderController@customerOrderDetail')->middleware(CheckUserTypes::class . ':' . $affiliateStore . ',' . $affiliate);
+    Route::put('me/orders/{order_id}/cancel', 'OrderController@cancel');
+    Route::post('me/check-password','UserController@checkPassword');
+    Route::get('me/permission/menu-create-staff','PermissionMenu@createStaff')->middleware(CheckUserTypes::class . ':' . $affiliateStore . ',' . $staff.','.$branch);
+
+    //Shop
+    Route::get('me/shop', 'ShopController@myShop');
+
+    Route::put('me/shop-info', 'ShopController@shopintro')->middleware(CheckUserTypes::class . ':' . $branch . ',' . $affiliateStore . ',' . $affiliate);
+    Route::put('me/shop-domain', 'ShopController@domain')->middleware(CheckUserTypes::class . ':' . $branch . ',' . $affiliateStore . ',' . $affiliate);
+    Route::put('me/shop-warranty', 'ShopController@warranty')->middleware(CheckUserTypes::class . ':'. $affiliateStore . ',' . $affiliate.','.$branch);
+    Route::put('me/shop-rule', 'ShopController@updateRule')->middleware(CheckUserTypes::class . ':'. $affiliateStore . ',' . $affiliate.','.$branch);
+     Route::get('me/shop-rule', 'ShopController@myRule')->middleware(CheckUserTypes::class . ':'. $affiliateStore . ',' . $affiliate.','.$branch);
+    Route::get('me/shop-supplier', 'ShopController@supplier')->middleware(CheckUserTypes::class . ':'. $affiliateStore . ',' . $affiliate.','.$branch);
+
+    //Bank
+    Route::get('me/money-summary','ProfileController@getInfoAmount');
+     Route::get('me/money-list','ProfileController@listMoeny');
+    //affiliate
+    Route::put('me/shop-affiliate', 'ShopController@affiliateUpdate')->middleware(CheckUserTypes::class.':'.$affiliate.','.$affiliateStore.','.$staff);
+    Route::get('me/affiliate-order','OrderAffiliateController@index');
+    Route::get('me/link-ref', 'ShopController@linkRef');
+    //Store
+    Route::put('me/shop-store', 'ShopController@affiliateStoreUser')->middleware(CheckUserTypes::class.':'.$affiliateStore.','.$branch.','.$affiliate);
+    Route::put('me/shop-banner', 'ShopController@updateBanner')->middleware(CheckUserTypes::class.':'.$affiliateStore.','.$branch.','.$affiliate);
+    Route::put('me/shop-logo', 'ShopController@updateLogo')->middleware(CheckUserTypes::class.':'.$affiliateStore.','.$branch.','.$affiliate);
+    Route::get('shop-style', 'ShopController@getStyle')->middleware(CheckUserTypes::class.':'.$affiliateStore.','.$branch);
+    Route::get('me/list-affiliate', 'AffiliateController@listAffiliate');
+    Route::get('me/list-affiliate-under', 'AffiliateController@listAllaffiliateUnder');
+
+
+    //Products - Backend
+    Route::get('me/count-products', 'ProductController@countProduct')->middleware(CheckUserTypes::class . ':' . $branch . ',' . $affiliateStore.','.$affiliate.','.$branch.','.$staff.','.$staffStore);
+    Route::get('me/get-branch-config','UserController@getBranchConfig');
+    Route::post('products', 'ProductController@create')->middleware(CheckUserTypes::class . ':' . $branch . ',' . $affiliateStore);
+    Route::get('me/products', 'ProductController@myProduct')->middleware(CheckUserTypes::class . ':' . $branch . ',' . $affiliateStore);
+    Route::get('me/allow-create-product', 'ProductController@checkBranchCreateProduct')->middleware(CheckUserTypes::class . ':' . $branch . ',' . $affiliateStore);
+
+    Route::get('me/products/{id}', 'ProductController@myProductDetail')->middleware(CheckUserTypes::class . ':' . $branch . ',' . $affiliateStore);
+    Route::put('me/products/{id}', 'ProductController@update')->middleware(CheckUserTypes::class . ':' . $branch . ',' . $affiliateStore);
+    Route::put('me/products/{id}/update-order', 'ProductController@updateOrder')->middleware(CheckUserTypes::class . ':' . $branch . ',' . $affiliateStore);
+    Route::put('me/products/{id}/set-status', 'ProductController@setStatus')->middleware(CheckUserTypes::class . ':' . $branch . ',' . $affiliateStore);
+    Route::put('me/products/{id}/set-affiliate', 'ProductController@setAffiliate')->middleware(CheckUserTypes::class . ':' . $branch . ',' . $affiliateStore);
+    //San pham gian hang của chi nhánh
+    Route::get('me/products-from-shop', 'ProductController@fromShop')->middleware(CheckUserType::class.':'.$branch);
+    Route::put('me/products-from-shop/{id}','ProductController@brandSelectBuy')->middleware(CheckUserType::class.':'.$branch);
+    //Order Product - FontEnd
+    Route::get('me/products/{id}/orders','OrderController@orderProduct');
+    Route::get('me/products/{id}/user-selected','ProductController@userSelected');
+    //Branch
+    Route::get('me/allow-create-branch', 'BranchController@checkAllowCreateBrand');
+    Route::get('me/list-branch', 'BranchController@mylist')
+        ->middleware(CheckUserTypes::class . ':' . $affiliateStore . ',' . $developer2 . ','
+            . '' . $developer1 . ',' . $partner1 . ',' . $partner2 . ',' . $staffStore . ''
+            . ',' . $coreAdmin . ',' . $coreMember);
+    Route::delete('me/list-branch/{id}', 'BranchController@deleteBranch')
+        ->middleware(CheckUserTypes::class . ':' . $affiliateStore . ',' . $developer2 . ','
+            . '' . $developer1 . ',' . $partner1 . ',' . $partner2 . ',' . $staffStore . ''
+            . ',' . $coreAdmin . ',' . $coreMember);
+    Route::put('me/list-branch/{id}/update-bank', 'BranchController@updateBank');
+
+    Route::post('products/{id}/favorite', 'WishListController@add');
+    //Revenue
+    Route::get('me/count-aff','StaticController@countAffiliate');
+    Route::get('me/revenue','StaticController@revenue');
+    Route::get('me/revenue-analysis','StaticController@revenueAnalysis');
+    Route::get('me/revenue-earnings','StaticController@earning');
+    Route::get('me/revenue-earning-analysis1','StaticController@earningAnalysis');
+     Route::get('me/revenue-earning-analysis','StaticController@earningAnalysisMainV');
+    Route::get('me/revenue-staffs','StaticController@revenueStaff');
+    Route::get('me/statisticlistNVGH/{id}','StaticController@staticsNVGH');
+    Route::get('me/statisticlistNVGH/{id}/affiliate','StaticController@staticsAffilateUser');
+    Route::get('me/statisticlistNVGH/{parentId}/detail/{id}','StaticController@staticsNVGHDetail');
+    Route::get('me/revenue-staffs-summary','StaticController@summaryRevenueStaff');
+   // Route::get('me/revenue-branch','StaticController@revenueBranch');
+     Route::get('me/revenue-branch','StaticController@revenueBranchV1');
+    Route::get('me/statistic-branch/{id}','StaticController@staticsBranchDetail');
+    Route::get('me/statistic-affiliate','StaticController@statisticAffiliate')->middleware(CheckUserTypes::class . ':' . $allowStaticStaffs.','.$branch);
+    Route::get('me/statistic-product','StaticController@product')->middleware(CheckUserTypes::class . ':' . $allowStaticStaffs.','.$branch);
+    Route::get('me/statistic-product/{id}','StaticController@productDetailV2')->middleware(CheckUserTypes::class . ':' . $allowStaticStaffs.','.$branch);
+    Route::get('me/statistic-affiliate/{id}','StaticController@statisticAffiliateDetail')->middleware(CheckUserTypes::class . ':' . $allowStaticStaffs.','.$branch);
+
+	//Revenue
+
+    Route::group(['middleware' => CheckUserTypes::class . ':' . $allowAboveStaff], function () {
+        Route::get('me/income/provisional_store', 'IncomeController@provisionalStore');
+        Route::get('me/income/revenue', 'IncomeController@revenue');
+        Route::get('me/income/provisional_store_cat', 'IncomeController@provisionalStroreByCat');
+        Route::get('me/income/provisional', 'IncomeController@provisional');
+        Route::get('me/income/{id}/category', 'IncomeController@detailCategory');
+    });
+
+
+    Route::get('me/income/{id}/revenue-order', 'IncomeController@provisionalOrder');
+    Route::get('me/income/{id}', 'IncomeController@provisionDetail');
+
+
+    /**
+	 * Notifies
+	 */
+	Route::get('me/notifies', 'NotifyController@index');
+	Route::get('me/notifies/{id}', 'NotifyController@view');
+    /**
+     * Share link
+     */
+    Route::get('me/sharelist', 'NotifyController@shareList');
+    Route::get('me/sharelist/{id}', 'NotifyController@detailShareLink');
+	/**
+	 * News
+	 */
+	Route::post('news', 'NewsController@create')->middleware(CheckUserTypes::class . ':'.$affiliateStore.','.$branch);
+	Route::put('news/{id}', 'NewsController@update')->middleware(CheckUserTypes::class . ':'.$affiliateStore.','.$branch);
+	Route::delete('news/{id}', 'NewsController@destroy')->middleware(CheckUserTypes::class . ':'.$affiliateStore.','.$branch);
+	Route::post('news/{id}/comments', 'NewsController@createComments');
+    Route::post('news/{id}/selects', 'NewsController@select');
+    Route::delete('news/{id}/selects', 'NewsController@unSelected');
+    Route::get('me/news', 'NewsController@me');
+    Route::get('me/news-comments', 'NewsController@listComment');
+    Route::delete('me/news-comments/{id}', 'NewsController@deleteComment');
+	/*
+	 * Utils
+	 */
+	Route::post('utils/uploads/images', 'UtilController@uploads');
+    Route::post('utils/uploads/file', 'UtilController@uploadsFile');
+
+
+
+
+	/**
+	 * Devices
+	 */
+	Route::put('devices/token', 'ProfileController@updateDeviceToken');
+
+    /**
+     * Saff
+     */
+
+
+    Route::post('staffs', 'StaffController@index')->middleware(CheckUserTypes::class . ':' . $allowAboveStaff);
+    Route::get('staffs', 'StaffController@listUser');
+    Route::post('staffs/{id}/tasks', 'StaffController@addTask')->middleware(CheckUserTypes::class . ':' . $allowAboveStaff);
+    Route::put('staffs/{id}/update', 'StaffController@update')->middleware(CheckUserTypes::class . ':' . $allowAboveStaff);
+    Route::put('staffs/{staffId}/tasks/{taskId}/update-status', 'StaffController@updateStatus')->middleware(CheckUserTypes::class . ':' . $allowAboveStaff);
+
+    Route::get('staffs/{id}/tasks', 'StaffController@listTask')->middleware(CheckUserTypes::class . ':' . $allowAboveStaff);
+    Route::put('staffs/{staffId}/tasks/{taskId}', 'StaffController@updateTask')->middleware(CheckUserTypes::class . ':' . $allowAboveStaff);
+    Route::post('staffs/{staffId}/tasks/{taskId}/comment', 'StaffController@commentTask')->middleware(CheckUserTypes::class . ':' . $allowAboveStaff);
+    Route::get('staffs/{staffId}/tasks/{taskId}/comments', 'StaffController@listCommentTask')->middleware(CheckUserTypes::class . ':' . $allowAboveStaff);
+
+    //Comission Aff
+    //TODO CAN CHECK CHO PHEP UPDATE HAY KHONG
+    Route::post('staffs/{id}/commissions', 'CommissionController@updateOrCreateAff');
+    Route::get('staffs/{id}/commissions', 'CommissionController@commission');
+
+    Route::get('tasks/{id}', 'StaffController@detailTask')->middleware(CheckUserTypes::class . ':' . $allowAboveStaff.','.$branch.','.$staff);
+    Route::get('me/tasks', 'StaffController@mytask');
+    Route::get('me/tree-tasks', 'StaffController@treeTasks')->middleware(CheckUserTypes::class . ':' . $allowStaticStaffs.','.$branch);
+    Route::get('me/tasks/{taskId}/comments', 'StaffController@myListCommentTask');
+    Route::post('me/tasks/{taskId}/staff-comment-task', 'StaffController@staffCommentTask')->middleware(CheckUserTypes::class . ':' . $allowStaticStaffs.','.$branch);
+
+    //Contact Backend
+    Route::post('contacts', 'ContactController@send');
+    Route::get('contacts', 'ContactController@index');
+    Route::get('contacts/{id}/detail', 'ContactController@detail');
+     Route::put('contacts/{id}/reply', 'ContactController@reply');
+
+    //Affli Product
+    Route::get('me/affiliate-product', 'AffiliateController@products');
+    Route::post('me/addProduct/{id}', 'AffiliateController@addProduct');
+    Route::get('me/aff-selected-products', 'AffiliateController@myProducts')->middleware(CheckUserType::class.':'.$affiliate);
+    Route::get('user/{id}/aff-selected-products', 'AffiliateController@userProducts');
+    //Danh sách sản phẩm kí gửi online
+    Route::get('me/affiliate-press-products', 'AffiliateController@pressProducts')->middleware(CheckUserType::class.':'.$affiliate);
+    Route::delete('me/removeProduct/{id}', 'AffiliateController@removeProduct');
+
+    //Commission
+    Route::post('commissions', 'CommissionController@add');
+    Route::get('commissions', 'CommissionController@index');
+    Route::get('shop/{id}/commissions', 'CommissionController@getCommisions');
+    Route::put('shop/{userId}/commissions/{id}', 'CommissionController@updateCommisions');
+    Route::put('commissions/{id}', 'CommissionController@update');
+
+    Route::delete('commissions/{id}', 'CommissionController@delete');
+    Route::get('commissions/types', 'CommissionController@commissionTypes');
+
+    //PRoduct
+     Route::get('me/check-branch-config', 'UserController@checkBrandConfig');
+
+     //Package
+    Route::get('package-defaults', 'PackageController@getPackage');
+    Route::get('package-simple', 'PackageController@getSimplePackage');
+    Route::get('package-price', 'PackageController@packagePrice');
+    Route::get('package-service', 'PackageController@packageService');
+    Route::get('package-product', 'PackageController@packageProduct');
+    Route::get('package/{id}/check-price', 'PackageController@packageCheckPrice');
+    Route::post('buy-package','PackageController@buyPackage');
+    Route::get('get-available-date','PackageController@apiGetAvailableDate');
+    Route::get('me/package-purchase','PackageController@serviceUsing')->middleware(CheckUserTypes::class.':'.$affiliate.','.$affiliateStore);
+    Route::get('me/package-purchase/{id}', 'ServiceController@detailPackage')->middleware(CheckUserTypes::class . ':' . $affiliate . ',' . $affiliateStore);
+
+    //totalMarketing
+
+    Route::get('me/check-access-email-marketing', 'ToolMarketingController@checkEmailMarketing');
+    Route::get('me/landing-page', 'ToolMarketingController@landingPage');
+
+    Route::put('me/landing-page/{id}/status', 'ToolMarketingController@changeStatusLanding')->middleware(CheckUserType::class . ':' . $branch);
+    Route::delete('me/landing-page/{id}', 'ToolMarketingController@deleteLandingPage');
+    Route::get('me/landing-share', 'ToolMarketingController@listShare');
+
+    //wallet
+
+     Route::get('me/wallet','WalletController@getMyWallet');
+
+     //Tìm kiếm user
+
+    Route::get('users/search', 'UserController@search');
+
+    Route::get('me/complaints-orders', 'ComplaintController@index');
+    Route::get('me/complaints-orders/{id}/comment', 'ComplaintController@complaintsOrdersForm');
+
+    //Branch
+    Route::get('user/{id}/selected-config', 'BranchController@selectedConfig');
+    Route::get('list-config-branch', 'BranchController@listConfig');
+    Route::put('user/{id}/update-config-branch', 'BranchController@updateConfig');
+    Route::get('branch/product-waiting-approve', 'BranchController@productWaitingApprove')->middleware(CheckUserType::class . ':' . $affiliateStore.','.$branch);
+    Route::get('branch/flyer-wait-approve', 'BranchController@flyerWaitApprove')->middleware(CheckUserType::class . ':' . $affiliateStore.','.$branch);
+    Route::put('branch/flyer-wait-approve/{id}/status', 'BranchController@changeStatusFlyer')->middleware(CheckUserType::class . ':' . $affiliateStore);
+    Route::get('branch/news-wait-approve', 'BranchController@flyerWaitApprove')->middleware(CheckUserType::class . ':' . $affiliateStore.','.$branch);
+    Route::put('branch/news-wait-approve/{id}/status', 'BranchController@flyerWaitApprove')->middleware(CheckUserType::class . ':' . $affiliateStore.','.$branch);
+    Route::put('branch/product-waiting-approve/{id}/status', 'BranchController@changeStatusProduct')->middleware(CheckUserType::class . ':' . $affiliateStore.','.$branch);
+    Route::get('user/{id}/kho', 'BranchController@getKho');
+    Route::put('user/{id}/kho', 'BranchController@updateKho');
+
+    // Follow
+    Route::post('user/{id}/follow', 'UserFollowController@follow');
+
+    /* */
+    Route::get('user/listbran_order', 'OrderController@listbran_order');
+
+    Route::put('permissions/{not_id}', 'PermissionMenu@updatePermission');
+    Route::put('news/{not_id}/ghim', 'NewsController@ghimNew');
+
+    Route::get("chat/list-groups", "ChatController@listRooms");
+    Route::get("chat/list-messages", "ChatController@listMessages");
+    Route::get("chat/detail-message", "ChatController@detailMessage");
+    Route::get("chat/list-user-group", "ChatController@listUserGroup");
+    Route::get("chat/list-groups-default", "ChatController@listGroupDefault");
+    Route::post("chat/create-group-chat", "ChatController@createGroupChat");
+    Route::post("chat/create-private-chat", "ChatController@createPrivateChat");
+    Route::post("chat/add-user-togroup", "ChatController@addUserToGroup");
+    Route::post("chat/send-media", "ChatController@sendMedia");
+    Route::post("chat/delete-message", "ChatController@deleteMessage");
+    Route::post("chat/delete-conversation", "ChatController@deleteConversation");
+    Route::get("chat/get-list-users", "ChatController@getListUsers");
+    Route::post("chat/send-message", "ChatController@sendMessage");
+    Route::post("chat/delete-useringroup", "ChatController@deleteUserInGroup");
+    Route::get("chat/users-notjoin", "ChatController@getListUserNotJoinGroup");
+    Route::post("chat/searchfriend-radius", "ChatController@searchFriendRadius");
+    Route::post("chat/searchshop-radius", "ChatController@searchShopRadius");
+    Route::post("chat/setstatus-message", "ChatController@setStatusMessage");
+    Route::post("chat/update-group", "ChatController@updateGroup");
+    Route::post("chat/block-message", "ChatController@blockMessage");
+    Route::post("chat/unblock-message", "ChatController@unBlockMessage");
+    Route::get("chat/detail-userchat", "ChatController@detailUserChat");
+    Route::post("chat/block-notify", "ChatController@blockNotify");
+    Route::post("chat/unblock-notify", "ChatController@unBlockNotify");
+    Route::post("chat/block-notify-group", "ChatController@blockNotifyGroup");
+    Route::post("chat/unblock-notify-group", "ChatController@unBlockNotifyGroup");
+    Route::get("chat/detail-group", "ChatController@detailGroup");
+    Route::post("chat/check-phone", "ChatController@checkPhone");
+    Route::post("chat/get-arruser-private", "ChatController@getArrUserPrivate");
+    Route::post("chat/accept-joinroom", "ChatController@acceptJoinRoom");
+    Route::post("chat/check-face", "ChatController@checkFace");
+    Route::get("chat/list-invite-chat", "ChatController@listInviteChat");
+    Route::get("chat/get-list-background", "ChatController@listBackgroundChat");
+    Route::post("chat/update-background", "ChatController@updateBackground");
+    Route::post("chat/update-background-upload", "ChatController@updateBackgroundUpload");
+    Route::post("chat/update-background-upload", "ChatController@updateBackgroundUpload");
+    Route::get("chat/user-notaccept", "ChatController@userNotAcceptGroup");
+    Route::post("chat/resend-requestjoin", "ChatController@resendRequestJoinGroup");
+    Route::post("chat/rename-user", "ChatController@renameUser");
+    Route::get("chat/listuser-notadmin", "ChatController@listUserNotAdmin");
+    Route::get("chat/listuser-isadmin", "ChatController@listUserIsAdmin");
+    Route::post("chat/adduser-toadmin", "ChatController@addUserToAdmin");
+    Route::post("chat/deleteuseradmin-ingroup", "ChatController@deleteUserAdminInGroup");
+    Route::get("chat/countmessage-notread", "ChatController@countMessageNotRead");
+    Route::post("chat/countmessage-notread", "ChatController@countMessageNotRead");
+    Route::get("chat/countinvite-notread", "ChatController@countInviteUnread");
+    Route::post("chat/countinvite-notread", "ChatController@countInviteUnread");
+    Route::get("chat/user-viewmessage-ingroup", "ChatController@userViewMessageIngroup");
+    Route::get("chat/user-unreadmessage-ingroup", "ChatController@userUnreadMessageIngroup");
+    Route::get("chat/user-answer-message", "ChatController@userAnswerMessage");
+    Route::get("chat/detailuser-replymessage", "ChatController@detailUserReplymessage");
+    Route::get("chat/all-detailuser-replymessage", "ChatController@allDetailUserReplymessage");
+    Route::get("chat/detailmessage-p2p", "ChatController@detailMessageP2P");
+    Route::get("chat/search-all", "ChatController@searchAll");
+    Route::post("chat/forward-message", "ChatController@forwardMessage");
+    Route::get("chat/list-emoij", "ChatController@listEmoij");
+    Route::post("chat/set-message-emoij", "ChatController@setMessageEmoij");
+    Route::get("chat/detail-message-emoij", "ChatController@detailMessageEmoij");
+    Route::post("chat/create-secret-chat", "ChatController@createSecretChat");
+    Route::get("chat/list-message-secret", "ChatController@listMessageSecret");
+    Route::post("chat/delete-chat-secret", "ChatController@deleteChatSecret");
+    Route::post("chat/update-caption", "ChatController@updateCaption");
+    Route::post("chat/update-alias-secret", "ChatController@updateAliasSecret");
+    Route::post("chat/update-avatar-secret", "ChatController@updateAvatarSecret");
+    Route::post("chat/add-info-browser", "ChatController@addInfoBrowser");
+    Route::post("chat/add-arrayinfo-browser", "ChatController@addArrayInfoBrowser");
+    Route::get("chat/list-infobrowser", "ChatController@listBrowser");
+    Route::post("chat/deleteall-infobrowser", "ChatController@deleteAllInfoBrowser");
+    Route::post("chat/delete-itembrowser", "ChatController@deleteItemBrowser");
+    Route::get("chat/info-turnserver", "ChatController@infoTurnServer");
+    Route::post("chat/update-info-thread", "ChatCallController@updateInfoThread");
+    Route::post("chat/update-info-threaduser", "ChatCallController@updateInfoThreadUser");
+    Route::post("chat/create-date-call", "ChatCallController@createDataCall");
+    Route::post("chat/detail-profile", "ChatController@detailProfile");
+    Route::get("chat/list-call", "ChatCallController@listCall");
+    Route::post("chat/update-info-call", "ChatCallController@updateInfoCall");
+    Route::post("chat/delete-history-call", "ChatCallController@deleteHistoryCall");
+
+    Route::get("chat/get-originmessage-reply", "ChatController@getOriginMessageReply");
+
+    /* API PROFILES*/
+    Route::post('user/update-profile', 'UserController@updateProfile');
+    Route::post('user/update-company', 'UserController@updateCompany');
+    Route::post('user/update-slogan', 'UserController@updateSlogan');
+    Route::post('user/update-service', 'UserController@updateService');
+    Route::post('user/update-statistic', 'UserController@updateStatistic');
+    Route::post('user/update-connect', 'UserController@updateConnect');
+    Route::post('user/update-certification', 'UserController@updateCertification');
+    Route::post('user/update-product', 'UserController@updateProduct');
+    Route::post('user/update-customer-say', 'UserController@updateCustomerSay');
+    Route::post('user/update-activity', 'UserController@updateActivity');
+    Route::post('user/updatemedia-profile', 'UserController@uploadMediaProfile');
+    Route::get('user/list-married', 'UserController@getListMarried');
+    Route::get('user/detail-profile', 'UserController@detailProfile');
+
+
+    Route::post("chat/update-timeoff", "ChatController@updateTimeOffline");
+    Route::post("chat/get-timeoff-user", "ChatController@getTimeOffUser");
+
+    Route::post("chat/detail-userjoingroup", "ChatController@detailUserJoinGroup");
+    Route::get("render-qrcode", "ChatController@renderQrcode");
+
+
+
+});

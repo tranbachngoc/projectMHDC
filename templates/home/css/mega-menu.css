@@ -1,0 +1,131 @@
+/* Vertical Mega Menu Styles */
+.mega-menu {
+	line-height: 16px;
+	position: relative; /* Required */
+	width:180px;
+	margin:0;
+}
+.mega-menu li {
+	list-style:none;
+	background:url(../images/slice01.png) no-repeat 0 -75px;
+}
+.mega-menu li.menu_item_top{
+	background-position:0 -50px;
+}
+.mega-menu li.menu_item_last{
+	background-position:0 -100px;
+}
+.mega-menu li li{
+	background:none;
+	width:210px;
+}
+.mega-menu li a {
+	display: block;
+	padding: 4px 0 4px 8px;
+	font-weight:bold;
+	color:#333333;
+}
+.mega-menu li.menu_item_top a {
+	padding: 3px 0 4px 8px;
+}
+.mega-menu li.menu_item_last a {
+	padding: 5px 0 5px 8px;
+}
+.mega-menu li a:hover{
+	text-decoration:none;
+}
+.mega-menu li.mega-hover a {
+	background:url(../images/slice01.png) no-repeat 0 -155px;
+}
+.mega-menu li a.dc-mega {
+	position: relative;
+}
+/* Add arrow icon to parent links */
+.mega-menu li a .dc-mega-icon {
+	display: block;
+	position: absolute;
+	top: 18px;
+	right: 15px;
+	width: 6px;
+	height: 8px;
+}
+/* Mega menu container */
+.mega-menu li .sub-container {
+	position: absolute; /* Required */
+	background: #fff;
+	padding: 10px 10px 0 10px;
+	overflow: hidden;
+	border: 1px solid #4b4b4b;
+	
+	border:2px #999999 solid;
+	border-radius:0em 0.5em 0.5em 0em;
+	border-left: none;
+	height: auto; 
+	margin-top: -25px; 
+	z-index: 999999 !important; 
+	width: auto; 
+	display: none; 
+	left: 180px;
+}
+.mega-menu li .sub .row {
+	width: 100%;
+	overflow: hidden; /* Clear floats */
+}
+.mega-menu li .sub li {
+	float: none;
+	width: 210px;
+	font-weight: normal;
+
+}
+.mega-menu li .sub li.mega-hdr {
+	float: left; /* Required */
+	margin: 0 5px 10px 5px;
+}
+.mega-menu li .sub a, .mega-menu.left li .sub a {
+	background: none;
+	border: none;
+	float: none;
+	padding: 7px 10px;
+	display: block;
+	text-decoration: none;
+}
+
+
+.mega-menu li .sub li.mega-hdr a.mega-hdr-a {
+	padding: 5px;
+	margin-bottom: 5px;
+	background: #b9d7ee;
+	font-weight: bold;
+}
+.mega-menu li .sub li.mega-hdr a.mega-hdr-a:hover {
+	color: #000;
+}
+.mega-menu .sub li.mega-hdr li a {
+	padding: 5px;
+	font-weight: normal;
+	color:#2460C4;
+}
+
+.mega-menu .sub li.mega-hdr li a:hover {
+	text-decoration:underline;
+	color:#E77E03;
+}
+.mega-menu .sub ul li {
+	padding-right: 0;
+}
+/* Styling for menu items with only 2 levels */
+.mega-menu li .sub-container.non-mega .sub {
+	padding: 10px;
+}
+.mega-menu li .sub-container.non-mega li {
+	padding: 0;
+	margin: 0;
+	width: 150px;
+}
+.mega-menu li .sub-container.non-mega li a {
+	padding: 7px 5px 7px 22px;
+}
+.mega-menu li .sub-container.non-mega li a:hover {
+	color: #a32403;
+	background: #efefef url(../images/arrow_on.png) no-repeat 7px 10px;
+}

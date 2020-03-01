@@ -1,0 +1,128 @@
+/*------------------------------------------------------------------
+SECTIONS
+
+* body
+  + Header / header
+  + Features Section / section
+    - Featured Items / .feature-items
+      - Feature Item / .feature-item
+        - Icon / i
+        - Title / .feature-item-title
+  + Team Section / section
+    - Team Members / .team-members
+      - Section Header / h2
+      - Team Member Name / h3
+      - Team Member / .team-member
+        - Image / img
+        - Hover Overlay / .team-member-overlay
+          - Social Icons / i
+  + Quote Background Section / section.bg-team
+  + Twitter Section / section [see twitter.css]
+  + Footer / footer [see footer.css]
+-------------------------------------------------------------------*/
+
+/* Features Section */
+section .feature-items .feature-item i {
+  margin-bottom: 15px;
+  font-size: 3.5em;
+
+  -webkit-transition: all 350ms ease;
+  -moz-transition: all 350ms ease;
+  -o-transition: all 350ms ease;
+  transition: all 350ms ease;
+}
+  section .feature-items .feature-item:hover i {
+    -webkit-transform: scale(1.25, 1.25);
+       -moz-transform: scale(1.25, 1.25);
+         -o-transform: scale(1.25, 1.25);
+            transform: scale(1.25, 1.25);
+  }
+  /* Title */
+  section .feature-items .feature-item .feature-item-title {
+    /*border-bottom: 1px solid #eee;*/
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+  }
+
+/* Team Members */
+section .team-members {
+  text-align: left;
+}
+  /* Section Header */
+  section .team-members h2 {
+    text-align: center;
+  }
+  /* Team Member Name */
+  section .team-members h3 {
+    text-transform: none;
+    margin-bottom: 0;
+  }
+  /* Team Member */
+  section .team-members .team-member {
+    position: relative;
+  }
+    section .team-members .team-member .team-member-image {
+      position: relative;
+    }
+    /* Image */
+    section .team-members .team-member img {
+      width: 100%;
+    }
+    /* Hover Overlay */
+    section .team-members .team-member .team-member-overlay {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0px;
+      background: rgba(81, 91, 112, .8);
+      text-align: center;
+      padding-top: 20%;
+      font-size: 3em;
+      opacity: 0;
+
+      -webkit-transition: opacity 350ms ease;
+          -moz-transition: opacity 350ms ease;
+            -o-transition: opacity 350ms ease;
+              transition: opacity 350ms ease;
+    }
+      section .team-members .team-member:hover .team-member-overlay {
+        opacity: 1;
+      }
+      /* Social Icons */
+      section .team-members .team-member .team-member-overlay i {
+        font-size: .8em;
+        margin: 0 5px;
+
+        filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+        opacity: 0;
+
+        -webkit-transform: scale(0);
+           -moz-transform: scale(0);
+             -o-transform: scale(0);
+                transform: scale(0);
+      }
+      section .team-members .team-member:hover .team-member-overlay i {
+        filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+        opacity: 1;
+
+        -webkit-transform: scale(1);
+           -moz-transform: scale(1);
+             -o-transform: scale(1);
+                transform: scale(1);
+
+        -webkit-transition: all 350ms ease;
+           -moz-transition: all 350ms ease;
+             -o-transition: all 350ms ease;
+                transition: all 350ms ease;
+      }
+    section .team-members .team-member-info {
+      padding: 10px 15px;
+      background: white;
+    }
+
+/* Quote Background Section */
+section.bg-team {
+  color: white;
+  /*background-image: url('../../demo/team.jpg');*/
+  text-shadow: 1px 1px 2px #333;
+}

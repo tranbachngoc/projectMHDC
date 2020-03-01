@@ -1,0 +1,5 @@
+.theme_table{width:97%;}
+.theme_table td{text-align:center;font-size:12px;font-weight:bold;padding:10px 20px 10px 20px;}
+.theme_table td img{margin-bottom:5px;}
+.transparent{filter:alpha(opacity=40);-moz-opacity:.40;-khtml-opacity:.40;opacity:.40;}
+.locked{background:url(../images/icon_locked.gif) no-repeat;position:absolute;width:32px;height:32px;}

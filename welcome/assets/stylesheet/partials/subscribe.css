@@ -1,0 +1,45 @@
+/*------------------------------------------------------------------
+SUBSCRIBE
+
+* body
+  + Header / header
+    - Header Content / .content
+      - Subscription / .subscribe
+        - Form Field / input
+        - Form Button / button
+        - Error Message / .error_alert
+        - Success Message / .success_alert
+  + Features Section / section
+  + Team Section / section
+  + Quote Background Section / section.bg-team
+  + Twitter Section / section [see twitter.css]
+  + Footer / footer [see footer.css]
+-------------------------------------------------------------------*/
+/* Form Field */
+header .subscribe input,
+header .subscribe button {
+  background: #515B70;
+  width: 100%;
+  padding: 14px 19px;
+  border: 0px;
+  font-size: 1.1em;
+  line-height: 2em;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  border-radius: 3px;
+  color: #FFFFFF;
+  outline: none;
+  margin: 0 0 10px;
+}
+/* Form Button */
+header .subscribe button:hover {
+  opacity: .7;
+}
+/**
+ * Error Message
+ * Success Message
+ */
+header .subscribe .error_alert,
+header .subscribe .success_alert {
+  display: none;
+}

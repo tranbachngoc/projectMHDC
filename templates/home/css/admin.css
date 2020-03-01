@@ -1,0 +1,1041 @@
+@charset "UTF-8";
+/* vietnamese */
+@font-face {
+  font-family: 'KoHo';
+  src: url("../font/KoHo-Medium.ttf") format("truetype"); }
+
+.btn-delete {
+  border: none;
+  border-radius: 5px;
+  padding: 3px 8px;
+  color: #fff !important;
+  font-size: 13px;
+  background: none;
+  cursor: pointer;
+  background: #A1A1A1;
+  margin-left: 20px; }
+  .btn-delete img {
+    margin-right: 5px;
+    margin-top: 3px; }
+
+.administrator {
+  min-height: 80vh; }
+  .administrator .title-admin {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 20px; }
+  .administrator-header {
+    height: 30px;
+    margin-bottom: 20px;
+    z-index: 98; }
+    .administrator-header-content {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      min-height: 30px; }
+      .administrator-header-content .admin-header {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        -moz-justify-content: space-between;
+        -ms-justify-content: space-between;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center;
+        padding: 10px 0; }
+        .administrator-header-content .admin-header .left {
+          width: 30px; }
+        .administrator-header-content .admin-header .center h1 {
+          font-weight: bold;
+          text-transform: uppercase;
+          font-size: 16px;
+          color: #000000; }
+        .administrator-header-content .admin-header .right a {
+          color: #737373; }
+  .administrator-menu .drawer-hamburger {
+    width: 25px;
+    display: block;
+    position: fixed;
+    left: 10px;
+    top: 5px;
+    z-index: 99; }
+    .administrator-menu .drawer-hamburger span {
+      display: inherit;
+      height: 1px;
+      border-top: 3px solid #454545;
+      margin: 5px 0;
+      -webkit-transition: 0.4s;
+      -o-transition: 0.4s;
+      transition: 0.4s;
+      width: 25px; }
+    .administrator-menu .drawer-hamburger.active span:first-child {
+      -webkit-transform: rotate(-45deg) translate(-7px, 4px);
+      -ms-transform: rotate(-45deg) translate(-7px, 4px);
+      transform: rotate(-45deg) translate(-7px, 4px); }
+    .administrator-menu .drawer-hamburger.active span:last-child {
+      -webkit-transform: rotate(45deg) translate(-8px, -4px);
+      -ms-transform: rotate(45deg) translate(-8px, -4px);
+      transform: rotate(45deg) translate(-8px, -4px); }
+    .administrator-menu .drawer-hamburger.active span:nth-child(2n) {
+      opacity: 0; }
+  .administrator-menu .sm-gnav {
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-left: -10px;
+    border-radius: 5px;
+    height: 80vh;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    position: fixed;
+    left: -100%;
+    top: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 99;
+    -webkit-transition: left 0.4s;
+    -o-transition: left 0.4s;
+    transition: left 0.4s; }
+    .administrator-menu .sm-gnav::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
+      border-radius: 35px;
+      background-color: #F2F2F2; }
+    .administrator-menu .sm-gnav::-webkit-scrollbar {
+      width: 5px;
+      background-color: #C4C4C4; }
+    .administrator-menu .sm-gnav::-webkit-scrollbar-thumb {
+      border-radius: 15px;
+      -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
+      background-color: #C4C4C4; }
+    .administrator-menu .sm-gnav.is-open {
+      left: 10px; }
+    .administrator-menu .sm-gnav li {
+      margin-bottom: 20px; }
+      .administrator-menu .sm-gnav li .icon-img {
+        margin-right: 10px; }
+      .administrator-menu .sm-gnav li.active a {
+        color: #FF1678; }
+  .administrator-login .tit {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -ms-justify-content: center;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -webkit-align-items: flex-start;
+    -moz-align-items: flex-start;
+    -ms-align-items: flex-start;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap; }
+    .administrator-login .tit .icon {
+      width: 50px;
+      height: 50px;
+      min-width: 50px;
+      border-radius: 50%;
+      background: #C4C4C4;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-justify-content: center;
+      -moz-justify-content: center;
+      -ms-justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      position: relative; }
+      .administrator-login .tit .icon:after {
+        position: absolute;
+        content: "";
+        left: -35px;
+        bottom: -10px;
+        width: 120px;
+        height: 1px;
+        background: #C4C4C4; }
+    .administrator-login .tit h2 {
+      text-align: center;
+      width: 100%;
+      margin: 20px 0;
+      font-size: 16px; }
+  .administrator-login .login-form .form-group {
+    margin-bottom: 30px;
+    position: relative; }
+    .administrator-login .login-form .form-group .form-control {
+      border: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      min-height: 35px; }
+  .administrator-login .login-form a {
+    color: #737373; }
+  .administrator-login .login-form .btn-login {
+    display: block;
+    width: 100%;
+    margin: 30px 0;
+    background: #454545;
+    min-height: 50px;
+    font-weight: bold;
+    border-radius: 20px;
+    border: none;
+    color: #fff; }
+  .administrator-login .login-form .show-pass {
+    position: absolute;
+    right: 0;
+    top: 5px; }
+  .administrator-bussinesspost .search {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+    -moz-justify-content: flex-start;
+    -ms-justify-content: flex-start;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    margin: 30px 0; }
+    .administrator-bussinesspost .search .form-control {
+      min-height: 35px; }
+    .administrator-bussinesspost .search-input {
+      position: relative;
+      width: 30%;
+      margin-right: 10px; }
+      .administrator-bussinesspost .search-input img {
+        position: absolute;
+        left: 5px;
+        top: 8px;
+        width: 20px; }
+      .administrator-bussinesspost .search-input .form-control {
+        padding-left: 30px; }
+    .administrator-bussinesspost .search-category, .administrator-bussinesspost .search-state, .administrator-bussinesspost .search-date {
+      width: 20%;
+      margin: 0 10px; }
+    .administrator-bussinesspost .search-date {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      width: 40%; }
+      .administrator-bussinesspost .search-date .txt {
+        white-space: nowrap;
+        margin: 0 10px; }
+    .administrator-bussinesspost .search .btn-search {
+      white-space: nowrap;
+      border-radius: 5px;
+      padding: 0 10px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-justify-content: center;
+      -moz-justify-content: center;
+      -ms-justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      color: #FF1678;
+      border: 1px solid #FF1678;
+      min-height: 35px;
+      margin-left: 10px;
+      background: #fff; }
+      .administrator-bussinesspost .search .btn-search:hover {
+        color: #FF1678; }
+  .administrator-bussinesspost .bussinesspost-table {
+    margin-bottom: 30px; }
+    .administrator-bussinesspost .bussinesspost-table table {
+      width: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.1); }
+      .administrator-bussinesspost .bussinesspost-table table th, .administrator-bussinesspost .bussinesspost-table table td {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 10px; }
+      .administrator-bussinesspost .bussinesspost-table table th {
+        font-weight: bold;
+        text-transform: inherit;
+        white-space: nowrap;
+        text-align: center; }
+      .administrator-bussinesspost .bussinesspost-table table td {
+        color: #A1A1A1;
+        text-align: center;
+        word-break: break-word; }
+      .administrator-bussinesspost .bussinesspost-table table .checkbox-style {
+        margin-bottom: -3px; }
+      .administrator-bussinesspost .bussinesspost-table table .image {
+        width: 70px;
+        height: 70px;
+        border-radius: 6px;
+        min-width: 70px;
+        -o-object-fit: cover;
+        object-fit: cover; }
+      .administrator-bussinesspost .bussinesspost-table table .checkbox {
+        padding: 0; }
+      .administrator-bussinesspost .bussinesspost-table table .id {
+        white-space: nowrap; }
+      .administrator-bussinesspost .bussinesspost-table table .title {
+        text-align: left; }
+        .administrator-bussinesspost .bussinesspost-table table .title .text {
+          color: #454545;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          display: -webkit-flex;
+          /* Safari */
+          display: -moz-flex;
+          /* Firefox */
+          display: -ms-flex;
+          /* IE */
+          -webkit-box-pack: start;
+          -ms-flex-pack: start;
+          justify-content: flex-start;
+          -webkit-justify-content: flex-start;
+          -moz-justify-content: flex-start;
+          -ms-justify-content: flex-start;
+          -webkit-box-align: start;
+          -ms-flex-align: start;
+          align-items: flex-start;
+          -webkit-align-items: flex-start;
+          -moz-align-items: flex-start;
+          -ms-align-items: flex-start; }
+          .administrator-bussinesspost .bussinesspost-table table .title .text .image.sm {
+            margin-right: 10px; }
+      .administrator-bussinesspost .bussinesspost-table table .setting {
+        color: #454545; }
+  .administrator-bussinesspost .selectArea {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+    -moz-justify-content: flex-start;
+    -ms-justify-content: flex-start;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center; }
+    .administrator-bussinesspost .selectArea-selecttype-icon {
+      margin-left: 5px; }
+    .administrator-bussinesspost .selectArea-selecttype-list {
+      font-size: 14px;
+      padding: 10px;
+      font-weight: normal; }
+      .administrator-bussinesspost .selectArea-selecttype-list li {
+        margin-bottom: 5px; }
+  .administrator-bussinesspost .btn-addlink {
+    background: #FF1678;
+    color: #fff;
+    padding: 5px 20px;
+    border-radius: 6px;
+    margin: 0 0 20px;
+    display: inline-block;
+    cursor: pointer; }
+    .administrator-bussinesspost .btn-addlink:not([href]):not([tabindex]) {
+      color: #fff; }
+  .administrator-settingpost .enter-notice-area {
+    height: 35px; }
+  .administrator-settingpost .settingpost-infor {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 3px; }
+    .administrator-settingpost .settingpost-infor-header {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      margin-bottom: 10px; }
+      .administrator-settingpost .settingpost-infor-header .avata {
+        width: 60px;
+        height: 60px;
+        margin-right: 60px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1); }
+        .administrator-settingpost .settingpost-infor-header .avata img {
+          width: 100%;
+          height: 100%;
+          -o-object-fit: cover;
+          object-fit: cover; }
+      .administrator-settingpost .settingpost-infor-header .name {
+        width: calc(100% - 70px); }
+        .administrator-settingpost .settingpost-infor-header .name .tt {
+          font-size: 16px;
+          font-weight: bold; }
+        .administrator-settingpost .settingpost-infor-header .name .small-text {
+          font-size: 12px;
+          color: #A1A1A1;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          display: -webkit-flex;
+          /* Safari */
+          display: -moz-flex;
+          /* Firefox */
+          display: -ms-flex;
+          /* IE */
+          -webkit-box-pack: start;
+          -ms-flex-pack: start;
+          justify-content: flex-start;
+          -webkit-justify-content: flex-start;
+          -moz-justify-content: flex-start;
+          -ms-justify-content: flex-start;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-align-items: center;
+          -moz-align-items: center;
+          -ms-align-items: center; }
+          .administrator-settingpost .settingpost-infor-header .name .small-text .views {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            display: -webkit-flex;
+            /* Safari */
+            display: -moz-flex;
+            /* Firefox */
+            display: -ms-flex;
+            /* IE */
+            -webkit-box-pack: start;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
+            -webkit-justify-content: flex-start;
+            -moz-justify-content: flex-start;
+            -ms-justify-content: flex-start;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-align-items: center;
+            -moz-align-items: center;
+            -ms-align-items: center;
+            border-left: 1px solid rgba(161, 161, 161, 0.5);
+            padding-left: 10px; }
+            .administrator-settingpost .settingpost-infor-header .name .small-text .views img {
+              width: 20px; }
+    .administrator-settingpost .settingpost-infor-body {
+      height: 375px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-justify-content: center;
+      -moz-justify-content: center;
+      -ms-justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      overflow: hidden;
+      border-radius: 5px; }
+      .administrator-settingpost .settingpost-infor-body img {
+        width: 100%;
+        height: 100%;
+        -o-object-fit: cover;
+        object-fit: cover; }
+    .administrator-settingpost .settingpost-infor-footer {
+      margin-top: 10px; }
+  .administrator-settingpost .settingpost-adddetails {
+    color: #454545; }
+    .administrator-settingpost .settingpost-adddetails .enter-notice {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      margin: 10px 0; }
+      .administrator-settingpost .settingpost-adddetails .enter-notice .btn-send {
+        min-height: 30px;
+        white-space: nowrap;
+        padding: 0 20px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center;
+        border: 1px solid #FF1678;
+        color: #FF1678;
+        border-radius: 5px;
+        margin-left: 20px;
+        cursor: pointer;
+        font-weight: bold; }
+    .administrator-settingpost .settingpost-adddetails .calender-notice .btn-calender-notice {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center; }
+    .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice {
+      background: none;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      min-height: 35px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      border-radius: 5px; }
+      .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice img {
+        margin-right: 5px; }
+    .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail {
+      margin: 10px 0; }
+      .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail .add-date {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        -moz-justify-content: space-between;
+        -ms-justify-content: space-between;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center;
+        margin: 10px 0; }
+        .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail .add-date .add-date-select {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          display: -webkit-flex;
+          /* Safari */
+          display: -moz-flex;
+          /* Firefox */
+          display: -ms-flex;
+          /* IE */
+          -webkit-box-pack: start;
+          -ms-flex-pack: start;
+          justify-content: flex-start;
+          -webkit-justify-content: flex-start;
+          -moz-justify-content: flex-start;
+          -ms-justify-content: flex-start;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-align-items: center;
+          -moz-align-items: center;
+          -ms-align-items: center;
+          white-space: nowrap; }
+          .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail .add-date .add-date-select .form-control {
+            margin: 0 5px; }
+        .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail .add-date .add-date-action {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          display: -webkit-flex;
+          /* Safari */
+          display: -moz-flex;
+          /* Firefox */
+          display: -ms-flex;
+          /* IE */
+          -webkit-box-pack: end;
+          -ms-flex-pack: end;
+          justify-content: flex-end;
+          -webkit-justify-content: flex-end;
+          -moz-justify-content: flex-end;
+          -ms-justify-content: flex-end;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-align-items: center;
+          -moz-align-items: center;
+          -ms-align-items: center; }
+          .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail .add-date .add-date-action .btn-cancle {
+            background: none;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 0 10px;
+            min-height: 30px;
+            min-width: 50px; }
+          .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail .add-date .add-date-action .btn-save {
+            background: #FF1678;
+            border: none;
+            border-radius: 5px;
+            padding: 0 10px;
+            min-width: 50px;
+            min-height: 30px;
+            color: #fff;
+            margin-left: 10px; }
+      .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail.added {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 10px 0;
+        margin: 20px 0; }
+        .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail.added .input-content {
+          background: #FFFEF0;
+          border: 1px solid rgba(0, 0, 0, 0.07);
+          border-radius: 3px;
+          padding: 10px;
+          margin: 10px 0; }
+  .administrator .more-notice .more-notice-btn {
+    white-space: nowrap;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #737373;
+    border: 1px solid #A1A1A1;
+    display: inline-block;
+    margin: 20px 0; }
+  .administrator .more-notice .form-control {
+    width: 60%;
+    height: 40px; }
+  .administrator .more-notice .more-notice-input {
+    margin-top: 10px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+    -moz-justify-content: flex-start;
+    -ms-justify-content: flex-start;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-bottom: 20px; }
+  .administrator .more-notice .btn-add {
+    white-space: nowrap;
+    border-radius: 5px;
+    padding: 0 10px;
+    display: inline-block;
+    color: #FF1678;
+    border: 1px solid #FF1678;
+    min-height: 35px;
+    margin-left: 20px;
+    min-width: 100px;
+    background: #fff; }
+    .administrator .more-notice .btn-add:hover {
+      color: #FF1678; }
+  .administrator .table-noti-azi-link {
+    width: 35%; }
+  .administrator .table-noti-azi-delete {
+    min-width: 60px; }
+
+.displayInformation-show li {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 20px 10px; }
+  .displayInformation-show li:last-child {
+    border-bottom: none; }
+
+.addLinks-content {
+  min-height: 300px; }
+  .addLinks-content .enter-input {
+    position: relative; }
+    .addLinks-content .enter-input img {
+      position: absolute;
+      right: 10px;
+      top: 5px; }
+    .addLinks-content .enter-input .form-control {
+      min-height: 40px;
+      border: none;
+      border-radius: 0;
+      border-bottom: 1px solid #F2F2F2; }
+  .addLinks-content-img {
+    border-radius: 6px;
+    position: relative;
+    height: 300px;
+    overflow: hidden; }
+    .addLinks-content-img .edit {
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      padding: 3px 5px;
+      border-radius: 6px; }
+  .addLinks-content-form .form-control {
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    min-height: 40px; }
+
+/* ▽ SP layout ========== */
+@media screen and (max-width: 767px) {
+  .administrator .sm-none {
+    display: none; }
+  .administrator-menu .sm-gnav {
+    width: 100%;
+    height: auto;
+    border-radius: 0; }
+  .administrator-bussinesspost .search {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center; }
+    .administrator-bussinesspost .search-input {
+      width: 100%;
+      margin: 5px 0; }
+    .administrator-bussinesspost .search-category, .administrator-bussinesspost .search-state {
+      width: 48%;
+      margin: 5px 0; }
+    .administrator-bussinesspost .search-state {
+      margin-left: 4%; }
+    .administrator-bussinesspost .search-date {
+      width: 100%;
+      margin: 5px 0; }
+      .administrator-bussinesspost .search-date .from, .administrator-bussinesspost .search-date .to {
+        width: 50%; }
+    .administrator-bussinesspost .search .btn-search {
+      margin-top: 10px; }
+  .administrator-bussinesspost .bussinesspost-table {
+    margin: 0 -3%; }
+    .administrator-bussinesspost .bussinesspost-table table {
+      width: 100%;
+      border: none; }
+      .administrator-bussinesspost .bussinesspost-table table td {
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+        vertical-align: top; }
+        .administrator-bussinesspost .bussinesspost-table table td.checkbox {
+          padding-top: 10px;
+          padding-left: 5px; }
+        .administrator-bussinesspost .bussinesspost-table table td .small-txt {
+          margin: 10px 0; }
+          .administrator-bussinesspost .bussinesspost-table table td .small-txt span {
+            border-right: 1px solid #A1A1A1;
+            display: inline-block;
+            padding-right: 10px;
+            margin-right: 10px;
+            line-height: 1;
+            color: #A1A1A1; }
+            .administrator-bussinesspost .bussinesspost-table table td .small-txt span:last-child {
+              border-right: 0;
+              margin-right: 0;
+              padding-right: 0; }
+        .administrator-bussinesspost .bussinesspost-table table td .small-btn {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -ms-flex-wrap: wrap;
+          flex-wrap: wrap; }
+          .administrator-bussinesspost .bussinesspost-table table td .small-btn .btn {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            display: -webkit-flex;
+            /* Safari */
+            display: -moz-flex;
+            /* Firefox */
+            display: -ms-flex;
+            /* IE */
+            -webkit-box-pack: start;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
+            -webkit-justify-content: flex-start;
+            -moz-justify-content: flex-start;
+            -ms-justify-content: flex-start;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-align-items: center;
+            -moz-align-items: center;
+            -ms-align-items: center;
+            padding: 5px 8px;
+            border-radius: 5px;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            margin-right: 10px;
+            white-space: nowrap;
+            margin-bottom: 10px; }
+            .administrator-bussinesspost .bussinesspost-table table td .small-btn .btn.bg-gray {
+              background: #A1A1A1;
+              color: #fff; }
+      .administrator-bussinesspost .bussinesspost-table table tr:nth-child(odd) {
+        background: #f2f2f2; }
+  .administrator-bussinesspost .selectArea {
+    padding: 5px; }
+  .administrator-settingpost .settingpost-infor {
+    border: none;
+    padding: 0;
+    border-radius: 0; }
+    .administrator-settingpost .settingpost-infor-body {
+      height: 350px; }
+  .administrator-settingpost .settingpost-adddetails {
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    margin-top: 0; }
+    .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail .add-date {
+      -webkit-box-align: end;
+      -ms-flex-align: end;
+      align-items: flex-end; }
+      .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail .add-date .add-date-select {
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap; }
+        .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail .add-date .add-date-select .txt {
+          width: 100%;
+          margin-bottom: 5px; }
+        .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail .add-date .add-date-select .form-control {
+          margin-left: 0;
+          width: 48%;
+          margin-right: 2%; }
+      .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail .add-date .add-date-action {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: end;
+        -ms-flex-pack: end;
+        justify-content: flex-end;
+        -webkit-justify-content: flex-end;
+        -moz-justify-content: flex-end;
+        -ms-justify-content: flex-end;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center; }
+        .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail .add-date .add-date-action .btn-cancle {
+          background: none;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          border-radius: 5px;
+          padding: 0 10px;
+          min-height: 30px;
+          min-width: 50px; }
+        .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail .add-date .add-date-action .btn-save {
+          background: #FF1678;
+          border: none;
+          border-radius: 5px;
+          padding: 0 10px;
+          min-width: 50px;
+          min-height: 30px;
+          color: #fff;
+          margin-left: 10px; }
+    .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail.added {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 10px 0;
+      margin: 20px 0; }
+      .administrator-settingpost .settingpost-adddetails .calender-notice .add-date-notice-detail.added .input-content {
+        background: #FFFEF0;
+        border: 1px solid rgba(0, 0, 0, 0.07);
+        border-radius: 3px;
+        padding: 10px;
+        margin: 10px 0; }
+  .administrator .pagination {
+    margin: 30px 0; }
+  .administrator .more-notice .form-control {
+    width: 100%; }
+  .administrator .more-notice .more-notice-input {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -ms-justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center; }
+  .administrator .more-notice .btn-add {
+    margin-left: 0;
+    margin-top: 10px; } }

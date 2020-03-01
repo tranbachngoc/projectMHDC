@@ -1,0 +1,77 @@
+.vjs-custom-skin .vjs-big-play-button, .video-inner .vjs-big-play-button {
+    position: absolute;
+    font-size: 2.5em;
+    line-height: 1.5em;
+    width: 2em;
+    height: 2em;
+    left: 50%;
+    top: 50%;
+    margin-left: -1em;
+    margin-top: -0.75em;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent!important;
+    outline: none;
+    cursor: pointer;
+}
+
+.vjs-custom-skin .vjs-big-play-button:focus {
+    border-color: transparent;
+    background-color: transparent;
+    transition: none;
+}
+
+.vjs-custom-skin .vjs-big-play-button .vjs-icon-placeholder:before {
+    content: "";
+    background-image: url('/templates/home/styles/plugins/videojs/images/play_video.svg');
+    background-repeat: no-repeat;
+    background-size: 46px;
+    background-position: 55% calc(50% - 0px);
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.vjs-custom-skin.vjs-playing .vjs-big-play-button .vjs-icon-placeholder:before {
+    background-image: url('/templates/home/styles/plugins/videojs/images/pause_video.svg');
+}
+
+.vjs-paused .vjs-big-play-button,
+.vjs-has-started .vjs-big-play-button,
+.vjs-paused.vjs-has-started .vjs-big-play-button {
+    display: block;
+}
+
+/*.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar{*/
+    /*opacity: 1;*/
+/*}*/
+.vjs-tech {
+    pointer-events: none;
+}
+
+.vjs-text-track-display{
+    pointer-events: all;
+}
+
+.video-js .vjs-progress-control:hover .vjs-time-tooltip, .video-js .vjs-progress-control:hover .vjs-progress-holder:focus .vjs-time-tooltip{
+    white-space: nowrap;
+}
+.vjs-custom-skin .video-js .vjs-fade-out {
+    /*visibility: visible;*/
+    opacity: 0;
+    /*transition: visibility 1s, opacity 1s;*/
+
+    /*transition: opacity .25s ease-in-out;*/
+    /*-moz-transition: opacity .25s ease-in-out;*/
+    /*-webkit-transition: opacity .25s ease-in-out;*/
+}
+.vjs-custom-skin.vjs-has-started .vjs-control-bar{
+    touch-action: none;
+    /*transition: visibility 0.5s, opacity 0.5s;*/
+    /*opacity: 1;*/
+    /*transition: opacity 1s;*/
+    /*-moz-transition: opacity 1s;*/
+    /*-webkit-transition: opacity 1s;*/
+}
+.vjs-custom-skin.video-js.vjs-user-inactive.vjs-playing .vjs-text-track-display{
+    bottom: 3em;
+}

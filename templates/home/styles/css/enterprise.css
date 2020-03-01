@@ -1,0 +1,162 @@
+.img-circle{
+    border-radius: 50%;
+}
+.cover-content .avata-part-left .avata-img > img{
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    max-width: 100%;
+}
+.cover-content .avata-part-left .avata-title{
+    min-height: 46px;
+    line-height: 46px;
+}
+.button-modify img.filter{
+    filter: invert(100%);
+}
+.avata-part-left .wrap-icon-edit{
+    height: 27px;
+    width: 27px;
+    display: inline-block;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.warp-crop-avatar{
+    margin: 0 auto;
+}
+.text-title{
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+.text-title img{
+    width: 18px;
+    margin-right: 5px;
+    vertical-align: -3px;
+}
+.cropper-image{
+    width: 100%;
+    height: 100%;
+}
+.close-pop-crop{
+    padding: 2px!important;
+}
+.show-squares-to-circle .cr-viewport.cr-vp-square{
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+.text-draw-crop{
+    width: 100%;
+}
+.gianhangcuaban-shopcuatoi .avata img {
+    border-radius: 50%;
+}
+.buttons-group button {
+    cursor: pointer;
+}
+img.error-image{
+    width: 100%;
+    max-width: 100%;
+}
+.hidden {
+    display: none;
+}
+.list-video ul li img{
+    max-height: 123px;
+}
+.bold_text{
+    font-weight: bold;
+}
+.title-border.bold{
+    color: #000000;
+    font-size: 16px;
+    font-weight: bold;
+}
+.sidebar .gioithieu li.active a {
+    color: #000000;
+    font-weight: bold;
+    position: relative;
+}
+.tindoanhnghiep-video .list-video-slider li .btn-volume {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    z-index: 222;
+    top: 5px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    padding: 5px;
+}
+
+video.detail-video::-webkit-media-controls-overlay-play-button {
+    display: none!important;
+}
+.warp-crop-avatar .croppie-container .cr-slider-wrap {
+    margin-bottom: 5px;
+}
+.cropper-tools{
+    width: 160px;
+    margin: 0 auto;
+    padding-top: 5px;
+    text-align: center;
+}
+.cropper-tools .btn-action img{
+    height: 35px;
+    cursor: pointer;
+}
+.dismiss-modal-4{
+    position: absolute;
+    z-index: 100;
+    right: 8px;
+    font-size: 1.7em;
+}
+.list-link-content .socials-logos .tag-column-parent{
+    margin-bottom: 20px;
+}
+.liet-ke-hinh-anh .grid.fullwidth .detail{
+    padding-top: 5px!important;
+}
+.liet-ke-hinh-anh .grid.fullwidth .detail .text h3 a {
+    color: #f1f1f1;
+}
+.__image-library-link{
+    min-height: 250px;
+    position: relative;
+}
+.__image-library-link .reviewImg{
+    display: inline-block;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    right: 50%;
+    margin-top: -24px;
+    margin-right: -24px;
+}
+.disable-pointer-event {
+    pointer-events: none;
+    opacity: 0.2;
+}
+.wrap-block-custom-link video{
+    width: 100%;
+}
+.buttons-group button.btn-bg-gray.disable{
+    background: #f6668f;
+}
+.liet-ke-hinh-anh .modal-show-detail.bosuutap-content-detail-modal{
+    min-height: 800px;
+}
+.wrap-edit-cover-image .button-modify img.filter{
+    vertical-align: -2px;
+}
+.wrap-edit-cover-part .croppie-container .cr-boundary{
+    z-index: 0;
+}
+.wrap-edit-cover-part .croppie-container .cr-slider-wrap{
+    margin: 0;
+}
+.wrap-edit-cover-part .croppie-container .cr-viewport{
+    border: 0;
+}

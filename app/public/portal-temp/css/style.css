@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-color: #e4e4e4;
+    color: #727272;
+    font-size: 14px;
+    line-height:23px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    color: #181818;
+}
+
+a, a:hover {
+    text-decoration: none;
+    color: #727272;
+}
+li {
+    list-style: none outside none;
+}
+ul {
+    margin: 0;
+}
+img {
+    border: 0 none;
+}
+.clear {
+    clear: both;
+}
+.box-white {
+    background: #fff;
+    border-radius: 3px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+.box-white h3 {
+    font-size:20px;
+    margin: 5px 0px;
+}
+.box-white h4 {
+    font-size: 16px;
+}
+.text-center {
+    text-align: center;
+}
+.div-overflow {
+    overflow: hidden;
+}
+.div-left {
+    float: left;
+    text-align: left;
+}
+.div-right {
+    float: right;
+    text-align: right;
+}
+.content {
+    padding: 10px;
+}
+.progress {
+    position: relative;
+    height: 6px;
+    background: #e4e4e4;
+    margin-top: 5px;
+    overflow: hidden;
+    border-radius: 3px;
+}
+.progress span {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 6px;
+    background: #f85007;
+    display: block;
+}

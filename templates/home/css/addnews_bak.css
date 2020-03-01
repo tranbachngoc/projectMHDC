@@ -1,0 +1,1486 @@
+#addNewsFrontEnd {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+#addNewsFrontEnd .contentNewsFrontEnd img {
+    float: left;
+    margin-right: 10px;
+}
+#addNewsFrontEnd .contentNewsFrontEnd textarea {
+    float: left;
+    border: none;
+    width: calc(100% - 120px);
+    line-height: 25px;
+}
+.title-add-new-content input {
+    border: none;
+    width: 100%;
+    margin-bottom: 10px;
+    background: transparent;
+}
+.have-bg-img .title-add-new-content input {
+    color: #fff;
+}
+#postContentPopup textarea {
+    border: none;
+    width: 100%;
+    background: transparent;
+}
+.have-bg-img #postContentPopup textarea {
+    color: #fff;
+}
+.have-bg-img .title-add-new-content input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #fff;
+    opacity: 1; /* Firefox */
+}
+
+.have-bg-img #postContentPopup textarea::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #fff;
+    opacity: 1; /* Firefox */
+}
+
+.have-bg-img .title-add-new-content input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #fff;
+}
+.have-bg-img #postContentPopup textarea:-ms-input-placeholder {
+    color: #fff;
+}
+
+.have-bg-img .title-add-new-content input::-ms-input-placeholder { /* Microsoft Edge */
+    color: #fff;
+}
+
+.have-bg-img #postContentPopup textarea::-ms-input-placeholder { /* Microsoft Edge */
+    color: #fff;
+}
+
+.boxupnew {
+    position: relative;
+}
+.boxaddnews {
+    position: relative;
+}
+.boxaddfunctionfooter {
+    display: none;
+}
+.addvideonews:before {
+    content: '';
+    background: url('../icons/boxaddnew/cut_film.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    float: left;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+#buttonaddnewhot:before, .addfeaturednews:before {
+    content: '';
+    background: url('../icons/boxaddnew/drawing_pen.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    float: left;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+#buttonaddcategories:before, .addcategoriesnews:before {
+    content: '';
+    background: url('../icons/boxaddnew/inventory_category.png') no-repeat;
+    width: 30px;
+    height: 25px;
+    float: left;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+#buttonaddnewhot, #buttonaddcategories {
+    float: left;
+    width: 50%;
+    padding-left: 40px;
+    position: relative;
+    line-height: 6px;
+    font-weight: bold;
+}
+#buttonaddfunction {
+    content: '';
+    background: url('../icons/boxaddnew/more_horizontal.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    float: right;
+    margin-right: 15px;
+    cursor: pointer;
+}
+.boxaddimagenew input[type=file] {
+    bottom: 0;
+    cursor: inherit;
+    font-size: 30px !important;
+    height: 46px;
+    width: 100%;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+}
+#contentNews .modal-title, #contentNews .boxaddimagenew {
+    float: left;
+    width: 48%;
+    border: 1px solid #ccc;
+    padding: 10px;
+    position: relative;
+}
+#contentNews .boxaddimagenew {
+    cursor: pointer;
+}
+.boxaddimagenew i.addnewcamera {
+    content: '';
+    background: url('../icons/boxaddnew/camera_new_icon.png') no-repeat;
+    width: 34px;
+    height: 25px;
+    float: left;
+    margin-right: 15px;
+}
+.boxaddimagegallerybox, .boxaddmoreimage {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 100px;
+    height: 100px;
+    position: relative;
+    margin: 2px;
+    white-space: nowrap;
+    display: inline-block;
+}
+.boxaddimagegallerybox:hover button.setbackground,
+.boxaddimagegallerybox:hover button.editimagegallary,
+.boxaddimagegallerybox:hover .backgroundfillter,
+.boxaddimagegallerybox:hover button.deleteimagegallary {
+    opacity: 1;
+    z-index: 2;
+}
+#boxaddimagegallery {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    overflow-x: scroll;
+    width: 100%;
+    white-space: nowrap;
+    display: none;
+}
+button.setbackground {
+    content: '';
+    background: url('../icons/boxaddnew/backgrounds.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    border: none;
+    opacity: 0;
+    filter: invert(100%);
+}
+button.editimagegallary {
+    content: '';
+    background: url('../icons/boxaddnew/button_edit_imge.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    border: none;
+    opacity: 0;
+    filter: invert(100%);
+}
+button.deleteimagegallary {
+    content: '';
+    background: url('../icons/boxaddnew/close.png') no-repeat;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: none;
+    opacity: 0;
+    filter: invert(100%);
+}
+button.setbackground:focus, button.editimagegallary:focus {
+    border: none;
+    outline: none;
+}
+.backgroundfillter {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    opacity: 0;
+}
+#boxaddnewsexample {
+    position: relative;
+    overflow-y: auto;
+    height: 180px;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    padding: 10px;
+    z-index: 1; 
+}
+.backgroundfillteraddnews {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    top: 0px;
+    left: 0px;
+}
+.boxaddmoreimage {
+    border: 2px dashed #dddfe2;
+    background-image: url(../icons/boxaddnew/addimage.png);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: 20px;
+}
+.boxaddmoreimage input[type=file] {
+    font-size: 0px;
+    width: 100px;
+    opacity: 0;
+    height: 100px;
+    cursor: pointer;
+}
+.boxaddimagecontent img, 
+.boxaddadsdetailfunction img,
+.boxaddtextadsfunctionimage img,
+.boxaddstaticdetailfunction img {
+    max-width: 100%;
+    max-height: 460px;
+}
+#boxEditImageNews, 
+#boxAdsNews, 
+#boxStaticNews, 
+#boxRelatedNews,
+#boxSliderNews {
+    z-index: 1051;
+}
+#myIconModal, #addcontentRelatedBox {
+    z-index: 1052;
+}
+#myIconOption {
+    z-index: 1053;
+}
+#myIconModal img {
+    margin: 5px;
+}
+#boxEditImageNews .modal-title:before {
+    content: '';
+    background: url('../icons/boxaddnew/button_edit_imge.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    float: left;
+    margin-right: 10px;
+}
+#boxAdsNews .modal-title:before {
+    content: '';
+    background: url('../icons/boxaddnew/advertising.png') no-repeat;
+    width: 30px;
+    height: 25px;
+    float: left;
+    margin-right: 10px;
+}
+#boxEditImageNews .modal-header, 
+#boxAdsNews .modal-header,
+#boxStaticNews .modal-header,
+#boxRelatedNews .modal-header,
+#boxSliderNews .modal-header {
+    text-align: center;
+}
+#boxEditImageNews .modal-title, 
+#boxAdsNews .modal-title,
+#boxStaticNews .modal-title,
+#boxRelatedNews .modal-title,
+#boxSliderNews .modal-title {
+    display: inline-block;
+}
+#boxEditImageNews .modal-body, 
+#boxAdsNews .modal-body,
+#boxStaticNews .modal-body,
+#boxRelatedNews .modal-body,
+#boxSliderNews .modal-body {
+    padding: 0px;
+    height: 500px;
+}
+#boxEditImageNews .modal-body .boxaddcontent,
+#boxAdsNews .modal-body .boxaddcontent,
+#boxStaticNews .modal-body .boxaddcontent,
+#boxRelatedNews .modal-body .boxaddcontent,
+#boxSliderNews .modal-body .boxaddcontent {
+    display: none;
+}
+#boxEditImageNews .modal-body .boxaddcontent.active,
+#boxAdsNews .modal-body .boxaddcontent.active,
+#boxStaticNews .modal-body .boxaddcontent.active,
+#boxRelatedNews .modal-body .boxaddcontent.active,
+#boxSliderNews .modal-body .boxaddcontent.active {
+    display: block;
+}
+.boxaddimagefunction, 
+.boxaddadsfunction, 
+.boxaddstaticfunction {
+    float: left;
+    width: 15%;
+    height: 500px;
+    background: #e9ebee;
+    border-right: 1px solid #e5e5e5;
+}
+.boxaddimagefunction ul, 
+.boxaddadsfunction ul,
+.boxaddstaticfunction ul {
+    padding-left: 0px;
+}
+.boxaddimagefunction ul li, 
+.boxaddadsfunction ul li,
+.boxaddstaticfunction ul li {
+    list-style: none;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+    position: relative;
+}
+.boxaddimagefunction ul li.active:before, 
+.boxaddadsfunction ul li.active:before,
+.boxaddstaticfunction ul li.active:before {
+    content: '';
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #f5f6f7;
+    border-top: 10px solid transparent;
+    right: -1px;
+    position: absolute;
+    top: 15px;
+}
+.boxaddimagefunction ul li p, 
+.boxaddadsfunction ul li p,
+.boxaddstaticfunction ul li p {
+    margin: 0px;
+    padding: 0px;
+}
+.icon_pen_image {
+    content: '';
+    background: url('../icons/boxaddnew/button_edit_imge.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+}
+.icon_crop_image {
+    content: '';
+    background: url('../icons/boxaddnew/cut_film.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+}
+.icon_text_image {
+    content: '';
+    background: url('../icons/boxaddnew/field_text.png') no-repeat;
+    width: 25px;
+    height: 22px;
+    display: inline-block;
+}
+.icon_link_image {
+    content: '';
+    background: url('../icons/boxaddnew/link.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+}
+.icon_show_image {
+    content: '';
+    background: url('../icons/boxaddnew/show_texture.png') no-repeat;
+    width: 25px;
+    height: 29px;
+    display: inline-block;
+}
+.icon_affect_image {
+    content: '';
+    background: url('../icons/boxaddnew/effects.png') no-repeat;
+    width: 25px;
+    height: 29px;
+    display: inline-block;
+}
+.icon_pen_image {
+    content: '';
+    background: url('../icons/boxaddnew/drawing_pen.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+}
+.icon_local_image {
+    content: '';
+    background: url('../icons/boxaddnew/location.png') no-repeat;
+    width: 23px;
+    height: 44px;
+    display: inline-block;
+}
+.icon_align_top_image {
+    content: '';
+    background: url('../icons/boxaddnew/text_align_top.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+}
+.icon_align_center_image {
+    content: '';
+    background: url('../icons/boxaddnew/text_align_center.png') no-repeat;
+    width: 22px;
+    height: 25px;
+    display: inline-block;
+}
+.icon_align_right_image {
+    content: '';
+    background: url('../icons/boxaddnew/text_align_bottom.png') no-repeat;
+    width: 22px;
+    height: 25px;
+    display: inline-block;
+}
+.icon_color_mix_image {
+    content: '';
+    background: url('../icons/boxaddnew/color_mixer.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+}
+.icon_font_image {
+    content: '';
+    background: url('../icons/boxaddnew/font.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+}
+.icon_effect2_image {
+    content: '';
+    background: url('../icons/boxaddnew/add_effect2.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+}
+.icon_clock_image {
+    content: '';
+    background: url('../icons/boxaddnew/clock.png') no-repeat;
+    width: 18px;
+    height: 25px;
+    display: inline-block;
+}
+.boxaddimagemorefunction, 
+.boxaddadsemorefunction, 
+.boxaddtimeadsfunction,
+.boxaddlinkadsfunction,
+.boxaddstaticemorefunction,
+.boxaddtextstaticfunction {
+    display: block;
+    padding-top: 20px;
+    float: left;
+    width: 35%;
+    background: #f5f6f7;
+    min-width: 40px;
+    border-radius: 2px;
+    white-space: nowrap;
+    height: 500px;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.boxaddimagedetailfunction, 
+.boxaddadsdetailfunction,
+.boxaddtimeadsdetailfunction,
+.boxaddlinkadsdetailfunction,
+.boxaddtextstaticfunctionimage,
+.boxaddstaticdetailfunction {
+    float: left;
+    width: 65%;
+    text-align: center;
+    overflow-y: auto;
+    height: 500px;
+}
+.boxaddimagedetailfunction img {
+    max-width: 100%;
+    
+}
+.boxaddimagedetailfunction img.imageadddes {
+    /*max-height: 200px;*/
+}
+.boxaddimagecontent ul {
+    padding-left: 0px;
+}
+.boxaddimagecontent ul li {
+    list-style: none;
+    cursor: pointer;
+}
+.tabdescontent {
+    margin-top: 20px;
+    text-align: left;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.tabdescontent input {
+    width: 100%;
+    border: none;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.tabdescontent textarea {
+    width: 100%;
+    border: none;
+    height: 100px;
+}
+.icon-item-featured {
+    width: 80%;
+    margin-bottom: 40px;
+}
+.icon-item-featured.center {
+    margin: 0 auto;
+    text-align: center;
+}
+.icon-item-featured.left {
+    float: left;
+}
+.icon-item-featured.right {
+    float: right;
+}
+.icon-item-featured .image {
+    position: relative;
+    display: inline-block;
+}
+.icon-item-featured .image .remove-icon-item {
+    position: absolute;
+    top: -10px;
+    right: 0px;
+    font-size: 35px;
+    opacity: 1;
+}
+.icon-item-featured.left .image {
+    float: left;
+    width: 25%;
+}
+.icon-item-featured.left .infomation {
+    float: left;
+    width: 75%;
+    text-align: left;
+}
+.icon-item-featured.right .image {
+    float: right;
+    width: 25%;
+}
+.icon-item-featured.right .infomation {
+    float: right;
+    width: 75%;
+    text-align: right;
+}
+.icon-item-featured .infomation .title {
+    font-weight: bold;
+}
+.boxaddtextimagefunction,
+.boxaddtextlinkfunction,
+.boxaddtextshowfunction,
+.boxaddtexteffectfunction,
+.boxaddtextadsfunction {
+    float: left;
+    width: 50%;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: relative;
+}
+.boxaddtextimagecontent, 
+.boxaddlinkimagecontent, 
+.boxaddshowimagecontent, 
+.boxaddeffectimagecontent,
+.boxaddtextadsfunctionimage {
+    margin-top: 20px;
+    float: left;
+    width: calc(50% - 10px);
+    margin-right: 10px;
+    position: relative;
+    height: 460px;
+}
+.boxaddtextimagefunction ul.text-image {
+    margin-top: 20px;
+}
+.boxaddtextimagefunction ul.text-image li {
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 20px;
+    position: relative;
+}
+.boxaddtextimagefunction ul.text-image li#textcolor input[type="color"],
+.boxaddtextimagefunction ul.text-image li#textbackground input[type="color"] {
+    position: absolute;
+    opacity: 0;
+    width: 80px;
+    height: 30px;
+    top: 0px;
+    left: 35px;
+    cursor: pointer;
+}
+.boxaddtextimagefunction ul.text-image li#tabtextadd i{
+    float: left;
+}
+.boxaddtextimagefunction ul.text-image li span {
+    float: left;
+    font-size: 18px;
+}
+.boxaddtextimagefunction ul.text-image li.text-align-local .icon_local_image {
+    float: left;
+    margin-right: 10px;
+}
+.boxaddtextimagefunction ul.text-image li.text-align-local .align-horizontal,
+.boxaddtextimagefunction ul.text-image li.text-align-local .align-vertical {
+    float: left;
+    border: 1px solid #000;
+    padding: 5px;
+}
+.boxaddtextimagefunction ul.text-image li.text-align-local .align-horizontal {
+    margin-right: 15px;
+}
+.boxaddtextimagefunction ul.text-image li.text-align-local .align-horizontal i {
+    font-size: 25px;
+    padding: 5px 5px 0px 5px;
+}
+.boxaddtextimagefunction ul.text-image li.text-align-local .align-vertical i {
+    margin: 3.5px 6px;
+    float: left;
+    display: block;
+}
+.boxaddtextimagefunction ul.text-image li#textbackground i,
+.boxaddtextimagefunction ul.text-image li#textcolor i {
+    float: left;
+    margin-right: 10px;
+}
+.boxaddtextimagefunction ul.text-image li#textfont i,
+.boxaddtextimagefunction ul.text-image li#texteffect i {
+    float: left;
+    margin-right: 10px;
+}
+.boxaddtextimagefunction ul.text-image li#textfont select,
+.boxaddtextimagefunction ul.text-image li#texteffect select {
+    float: left;
+    height: 25px;
+}
+.boxaddtextimagecontent .text-image-item {
+    position: relative;
+}
+.boxaddtextimagecontent .text-image-item input[type="text"] {
+    background: transparent;
+}
+.boxaddtextimagecontent .text-image-item .remove-text-item {
+    position: absolute;
+    top: -20px;
+    right: -18px;
+    font-size: 30px;
+    background: rgba(0,0,0,0.5);
+    height: 20px;
+    line-height: 15px;
+}
+#tabdescontentfeatured {
+    word-break: normal;
+}
+/*********** box add link ****************/
+#list_products {
+    border-radius: 10px;
+    width: 100%;
+    height: 35px;
+    margin-top: 20px;
+}
+.item-link-image {
+    margin-top: 20px;
+}
+.item-link-image label {
+    width: 100%;
+}
+.item-link-image input[name="link_more_image"] {
+    width: 100%;
+    border-radius: 5px; 
+}
+/*********** show image *******************/
+.boxaddtextshowfunction {
+    margin-top: 20px;
+    text-align: center;
+}
+.boxaddshowimagecontent.default {
+    color: #000 !important;
+    background: #fff !important;
+}
+.boxaddshowimagecontent {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    z-index: 1;
+    color: #fff;
+    overflow-y: auto;
+}
+.boxaddshowimagecontentinner {
+    padding: 10px;
+    position: relative;
+    z-index: 1;
+}
+.boxaddtextshowfunction button {
+    display: block;
+    border-radius: 5px;
+    font-size: 18px;
+    border: 2px solid #8c80f3;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    width: 100px;
+    padding: 5px 10px;
+    background: transparent;
+}
+.boxaddtextshowfunction button.active {
+    background: #8c80f3;
+    color: #fff;
+}
+.boxaddshowimagecontent .image-main,
+.boxaddeffectimagecontent .image-main {
+    height: 200px;
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.boxshowimagecontent {
+    margin-top: 20px;
+    word-break: break-all;
+}
+.boxshowimagecontent .title {
+    width: 100%;
+    border: none;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.boxshowimagecontent .list_icon {
+    margin-top: 20px;
+}
+.boxshowimagecontent .list_icon .icon-item-featured {
+    width: 100%;
+}
+#boxaddtextshowfunctionmore {
+    width: 100%;
+    border-radius: 5px;
+    padding: 5px;
+    border: 1px solid #8c80f3;
+    display: none;
+}
+#boxaddtextshowfunctionmore h3 {
+    margin-top: 0px;
+    font-size: 20px;
+    text-align: left;
+    border-bottom: 1px solid #8c80f3;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+#boxaddtextshowfunctionmore label {
+    float: left;
+}
+.overlay_bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background: #000;
+    z-index: -1;
+    opacity: 0.5;
+}
+#boxaddtextshowfunctionmore input[type=range] {
+    outline: none;
+}
+/************* effect *********************/
+.boxaddtexteffectfunction {
+    padding-top: 20px;
+}
+.boxaddtexteffectfunction h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 0px;
+    border-bottom: 1px solid #8c80f3;
+    padding-bottom: 10px;
+}
+.boxaddtexteffectfunction select {
+    width: 100%;
+    border-radius: 5px;
+    height: 34px;
+}
+.boxaddeffectimagecontent {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    z-index: 1;
+    overflow: hidden;
+}
+.boxaddeffectimagecontentinner {
+    z-index: 1;
+    padding: 10px;
+}
+.boxeffectcontent {
+
+}
+.boxeffectcontent .title {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+.boxeffectcontent .des {
+    font-size: 12px;
+}
+.boxeffectcontent ul.list-button-link {
+    position: absolute;
+    left: 0px;
+    bottom: 10px;
+    width: 100%
+}
+.boxeffectcontent ul.list-button-link li {
+    width: 25%;
+    float: left;
+    color: #fff;
+    text-align: center;
+}
+/**********  List function  **********/
+.boxaddfunction {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+#boxaddfunction {
+    width: 80%;
+    float: left;
+}
+#boxaddfunction select {
+    width: 100%;
+    border-radius: 5px;
+    height: 35px; 
+}
+#boxaddfunction input {
+    width: 100%;
+    border-radius: 5px;
+    height: 35px; 
+}
+ul.list-function {
+    padding-left: 0px;
+    margin-left: 0px;
+}
+ul.list-function li {
+    width: 50%;
+    float: left;
+    position: relative;
+    list-style: none;
+    padding-left: 40px;
+    line-height: 6px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.adddesnews:before {
+    content: '';
+    background: url('../icons/boxaddnew/drawing.png') no-repeat;
+    width: 26px;
+    height: 25px;
+    float: left;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.addkeywordnews:before {
+    content: '';
+    background: url('../icons/boxaddnew/key.png') no-repeat;
+    width: 27px;
+    height: 25px;
+    float: left;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.addlinkextendnews:before {
+    content: '';
+    background: url('../icons/boxaddnew/link.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    float: left;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.addadsnews:before {
+    content: '';
+    background: url('../icons/boxaddnew/advertising.png') no-repeat;
+    width: 30px;
+    height: 25px;
+    float: left;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.addeffectnews:before {
+    content: '';
+    background: url('../icons/boxaddnew/effects.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    float: left;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.addshowtypenews:before {
+    content: '';
+    background: url('../icons/boxaddnew/show_texture.png') no-repeat;
+    width: 25px;
+    height: 29px;
+    float: left;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.addstaticnews:before {
+    content: '';
+    background: url('../icons/boxaddnew/static.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    float: left;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.addrelatednews:before {
+    content: '';
+    background: url('../icons/boxaddnew/related.png') no-repeat;
+    width: 25px;
+    height: 25px;
+    float: left;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+/************* ads *****************/
+.boxaddadsemorefunction h3,
+.boxaddtimeadsfunction h3,
+.boxaddlinkadsfunction h3,
+.boxaddstaticemorefunction h3 {
+    font-size: 16px;
+    text-align: left;
+    font-weight: bold;
+    margin-top: 0px;
+}
+.buttonaddbgadsinner, .buttonaddbgstaticinner {
+    cursor: pointer;
+    position: relative;
+    background: #8c80f3;
+    width: 60%;
+    margin: 0 auto;
+    height: 40px;
+    color: #fff;
+    padding-top: 8px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+.buttonaddbgadsinner input[type=file],
+.buttonaddbgstaticinner input[type=file]{
+    bottom: 0;
+    cursor: pointer;
+    font-size: 30px !important;
+    height: 40px;
+    width: 100%;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+}
+.boxaddadsdetailfunction, .boxaddstaticdetailfunction {
+    margin-top: 20px;
+}
+.textaddads-item {
+
+}
+.textaddads-item h4 {
+    font-weight: bold;
+}
+.textaddads-item .textaddads-item-content input,
+.textaddads-item .textaddads-item-content textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    border: none;
+    text-align: center;
+}
+.textaddads-item .textaddads-item-content input {
+    font-weight: bold;
+}
+.boxaddtimeadsfunction input[type="date"] {
+    float: left;
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+.boxaddtimeadsfunction .radio {
+    float: left;
+    margin-top: 0px;
+}
+.boxaddtimeadsdetailfunction,
+.boxaddlinkadsdetailfunction {
+    padding-top: 20px;
+}
+.boxaddtimeadsdetailfunction .boxaddtimeadsdetailfunctioninner,
+.boxaddlinkadsdetailfunction .boxaddlinkadsdetailfunctioninner {
+    width: 50%;
+    margin: 0 auto;
+    height: 460px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    padding: 10px;
+    position: relative;
+    z-index: 1;
+}
+.boxaddtimeadsdetailfunction .boxaddtimeadsdetailfunctioninner .adtext h2,
+.boxaddlinkadsdetailfunction .boxaddlinkadsdetailfunctioninner .adtext h2 {
+    font-size: 16px;
+    margin-top: 0px;
+}
+.boxaddtimeadsdetailfunctioninner .slider,
+.boxaddlinkadsdetailfunctioninner .slider {
+    margin-bottom: 20px;
+}
+.boxaddtimeadsdetailfunctioninner button.readmore,
+.boxaddlinkadsdetailfunctioninner button.readmore {
+    background: transparent;
+    padding: 5px 15px;
+    border: 1px solid #ffff;
+    border-radius: 5px;
+    color: #fff;
+    margin-top: 35px;
+}
+.boxaddlinkadsfunction input {
+    width: 100%;
+}
+.anaclock {
+    position: relative;
+    min-width: 115px;
+    width: 320px;
+    max-width: 800px;
+    margin: auto;
+}
+.clock { width: 30em; height: 30em; border-radius: 50%; border: solid 2px white; margin: auto; position: relative; }
+.clock div, .faceBox { border: 0; background-color: white; position: absolute; transform-origin: center bottom; -webkit-transform-origin: center bottom; -moz-transform-origin: center bottom; -o-transform-origin: center bottom; transform: rotate(0deg); }
+.clock .hour { border-radius: 0.75em 0.75em 0 0; width: .5em; height: 6em; top: 9em; left: 14.75em; z-index: 30; } 
+.clock .minute { border-radius: 0.5em; width: .3em; height: 11em; top: 4em; left: 14.85em; z-index: 20; } 
+.clock .second { border-radius: 0.25em; width: 0.25em; height: 14em; top: 1em; left: 14.75em; z-index: 10; background-color: red; } 
+.clock .center { height:2em; width: 2em; border-radius:50%; top:14em; left:14em; z-index:50; transform:rotate(0deg); } 
+/************* Static **************/
+.boxaddtextstaticfunctionimage {
+    margin-top: 20px;
+}
+.boxaddtextstaticfunctionimageinner {
+    width: 80%;
+    margin: 0 auto;
+    height: 460px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    padding: 10px;
+    position: relative;
+    z-index: 1;
+}
+.textaddstatic-item {
+    float: left;
+    width: 50%;
+    height: 220px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.textaddstatic-item-content {
+    border: 1px solid #fff;
+    padding: 5px;
+}
+.textaddstatic-item input {
+    background: transparent;
+    text-align: center;
+    color: #fff;
+}
+.textaddstatic-item input::placeholder,
+.textaddstatic-item input:-ms-input-placeholder,
+.textaddstatic-item input::-ms-input-placeholder {
+    color: #fff;
+}
+.textaddstatic-item input[type="number"] {
+    margin-bottom: 10px;
+    width: 120px;
+    height: 80px;
+    text-align: center;
+    color: #fff;
+    font-size: 30px;
+    border-radius: 10px;
+}
+.textaddstatic-item input[type="text"] {
+    width: 100%;
+    margin-bottom: 10px;
+    border: none;
+}
+.textaddstatic-item textarea {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: center;
+    border-radius: 10px;
+    color: #fff;
+}
+#showerror {
+    margin-bottom: 10px;
+}
+#showerror p {
+    color: red;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+/***************** video ******************/
+.addvideonews {
+    position: relative;
+}
+#videonews {
+    bottom: 0;
+    cursor: inherit;
+    font-size: 30px !important;
+    height: 46px;
+    width: 100%;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+}
+.dloadding {
+  position: relative;
+  height: 30px;
+  display: none;
+  margin: 0 auto;
+  text-align: center;
+  width: 168px;
+}
+#fountainG{
+    position: absolute;
+    top: 0px;
+    width: 168px;
+    height: 20px;
+    margin: 0 auto;
+}
+.fountainG{
+position:absolute;
+top:0;
+background-color:rgba(0,0,0,0);
+width:20px;
+height:20px;
+animation-name:bounce_fountainG;
+-o-animation-name:bounce_fountainG;
+-ms-animation-name:bounce_fountainG;
+-webkit-animation-name:bounce_fountainG;
+-moz-animation-name:bounce_fountainG;
+animation-duration:1.3s;
+-o-animation-duration:1.3s;
+-ms-animation-duration:1.3s;
+-webkit-animation-duration:1.3s;
+-moz-animation-duration:1.3s;
+animation-iteration-count:infinite;
+-o-animation-iteration-count:infinite;
+-ms-animation-iteration-count:infinite;
+-webkit-animation-iteration-count:infinite;
+-moz-animation-iteration-count:infinite;
+animation-direction:normal;
+-o-animation-direction:normal;
+-ms-animation-direction:normal;
+-webkit-animation-direction:normal;
+-moz-animation-direction:normal;
+transform:scale(.3);
+-o-transform:scale(.3);
+-ms-transform:scale(.3);
+-webkit-transform:scale(.3);
+-moz-transform:scale(.3);
+border-radius:13px;
+-o-border-radius:13px;
+-ms-border-radius:13px;
+-webkit-border-radius:13px;
+-moz-border-radius:13px;
+}
+
+#fountainG_1{
+left:0;
+animation-delay:0.52s;
+-o-animation-delay:0.52s;
+-ms-animation-delay:0.52s;
+-webkit-animation-delay:0.52s;
+-moz-animation-delay:0.52s;
+}
+
+#fountainG_2{
+left:21px;
+animation-delay:0.65s;
+-o-animation-delay:0.65s;
+-ms-animation-delay:0.65s;
+-webkit-animation-delay:0.65s;
+-moz-animation-delay:0.65s;
+}
+
+#fountainG_3{
+left:42px;
+animation-delay:0.78s;
+-o-animation-delay:0.78s;
+-ms-animation-delay:0.78s;
+-webkit-animation-delay:0.78s;
+-moz-animation-delay:0.78s;
+}
+
+#fountainG_4{
+left:63px;
+animation-delay:0.91s;
+-o-animation-delay:0.91s;
+-ms-animation-delay:0.91s;
+-webkit-animation-delay:0.91s;
+-moz-animation-delay:0.91s;
+}
+
+#fountainG_5{
+left:84px;
+animation-delay:1.04s;
+-o-animation-delay:1.04s;
+-ms-animation-delay:1.04s;
+-webkit-animation-delay:1.04s;
+-moz-animation-delay:1.04s;
+}
+
+#fountainG_6{
+left:105px;
+animation-delay:1.17s;
+-o-animation-delay:1.17s;
+-ms-animation-delay:1.17s;
+-webkit-animation-delay:1.17s;
+-moz-animation-delay:1.17s;
+}
+
+#fountainG_7{
+left:126px;
+animation-delay:1.3s;
+-o-animation-delay:1.3s;
+-ms-animation-delay:1.3s;
+-webkit-animation-delay:1.3s;
+-moz-animation-delay:1.3s;
+}
+
+#fountainG_8{
+left:147px;
+animation-delay:1.43s;
+-o-animation-delay:1.43s;
+-ms-animation-delay:1.43s;
+-webkit-animation-delay:1.43s;
+-moz-animation-delay:1.43s;
+}
+@keyframes bounce_fountainG{
+0%{
+transform:scale(1);
+background-color:#000000;
+}
+
+100%{
+transform:scale(.3);
+background-color:rgba(0,0,0,0.33);
+}
+}
+
+@-o-keyframes bounce_fountainG{
+0%{
+-o-transform:scale(1);
+background-color:#000000;
+}
+
+100%{
+-o-transform:scale(.3);
+background-color:rgba(0,0,0,0.33);
+}
+}
+
+@-ms-keyframes bounce_fountainG{
+0%{
+-ms-transform:scale(1);
+background-color:#000000;
+}
+
+100%{
+-ms-transform:scale(.3);
+background-color:rgba(0,0,0,0.33);
+}
+}
+
+@-webkit-keyframes bounce_fountainG{
+0%{
+-webkit-transform:scale(1);
+background-color:#000000;
+}
+
+100%{
+-webkit-transform:scale(.3);
+background-color:rgba(0,0,0,0.33);
+}
+}
+
+@-moz-keyframes bounce_fountainG{
+0%{
+-moz-transform:scale(1);
+background-color:#000000;
+}
+
+100%{
+-moz-transform:scale(.3);
+background-color:rgba(0,0,0,0.33);
+}
+}
+/**************** Video home *********************/
+.videohome {
+    position: relative;
+}
+.videohome .owl-nav {
+    
+}
+.videohome .owl-nav .owl-prev,
+.videohome .owl-nav .owl-next {
+    position: absolute;
+    top: 40%;
+}
+.videohome .owl-nav .owl-prev:focus,
+.videohome .owl-nav .owl-next:focus {
+    outline: none;
+}
+.videohome .owl-nav .owl-prev {
+    left: 0px;
+}
+.videohome .owl-nav .owl-next {
+    right: 0px;
+}
+.videohome .owl-nav button.owl-prev i ,
+.videohome .owl-nav button.owl-next i {
+    color: #fff;
+    background-color: rgba(0,140,140,0.6);
+    border-radius: 10px;
+}
+/************ Box liên quan *****************/
+.boxaddrelatedfunction, .boxaddsliderfunction {
+    float: left;
+    width: 40%;
+    padding: 15px;
+    height: 500px;
+    background: #e9ebee;
+    border-right: 1px solid #e5e5e5;
+}
+.boxaddrelatedfunction h3, .boxaddsliderfunction h3 {
+    font-size: 17px;
+    text-align: left;
+    font-weight: bold;
+    margin-top: 0px;
+    color: #8c80f3;
+    border-bottom: 1px solid #8c80f3;
+    padding-bottom: 5px;
+}
+.boxaddrelatedfunction input, .boxaddsliderfunction select {
+    margin-bottom: 20px;
+}
+.boxaddrelatedfunction input#related_title {
+    width: 100%;
+    height: 34px;
+    box-shadow: none;
+    padding: 5px;
+    background: none;
+    border: none;
+    border-bottom: 1px dotted;
+}
+#boxrelatednews {
+    width: 60%;
+    margin: 20px auto;
+    height: 460px;
+    padding: 30px 20px 30px;
+    background: #808080;
+    color: #ffffff; 
+}
+#boxslidernews {
+    width: 60%;
+    margin: 20px auto;
+    height: 450px;
+    background: #808080;
+    color: #ffffff; 
+}
+#boxrelatednews h4 {
+    text-transform: uppercase;
+    color: #fff;
+}
+.boxaddrelatedcontent {
+    float: left;
+    width: 60%;
+}
+#addcontentRelatedBox input[name="cus_avatar"] {
+    bottom: 0;
+    cursor: pointer;
+    font-size: 30px !important;
+    height: 116px;
+    width: 116px;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+}
+.relative-item {
+    text-align: center;
+    color: #fff;
+}
+.relative-item button, .relative-item a {
+    color: #fff;
+}
+.owl-carousel .owl-item .relative-item img {
+    height: 100px;
+    object-fit: cover;
+}
+#boxSliderNews .wowslider-container img {
+    height: 450px;
+    object-fit: cover;
+}
+#boxSliderNews .wowslider-container .ws_bullets div {
+    top: -20px;
+}
+#boxSliderNews .wowslider-container .ws-title {
+    word-break: break-all;
+}
+#buttonaddcategories, #buttonaddnewhot {
+    cursor: pointer;
+}
+@media (min-width: 768px) {
+    #boxEditImageNews .modal-dialog,
+    #boxAdsNews .modal-dialog,
+    #boxStaticNews .modal-dialog,
+    #boxRelatedNews .modal-dialog,
+    #addcontentRelatedBox .modal-dialog,
+    #boxSliderNews .modal-dialog {
+        width: 80%;
+    }
+    #boxEditImageNews .modal-dialog .modal-content,
+    #boxAdsNews .modal-dialog .modal-content,
+    #boxStaticNews .modal-dialog .modal-content,
+    #boxRelatedNews .modal-dialog .modal-content,
+    #addcontentRelatedBox .modal-dialog .modal-content,
+    #boxSliderNews .modal-dialog .modal-content {
+        width: 100%;
+    }
+    .boxaddimagecontent, .boxaddadscontent, .boxaddstaticcontent {
+        float: left;
+        width: 85%;
+    }
+}

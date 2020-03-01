@@ -1,0 +1,150 @@
+/*------------------------------------------------------------------
+HEADER
+
+* body
+  + Header / header
+    - Background / .background
+    - Background Overlay / .overlay
+    - Header Content / .content
+      - Logo / .logo
+      - Social Icons / .social
+      - Headline / h2
+      - Countdown / .countdown [see countdown.css]
+      - Subscription / .subscribe [see subscribe.css]
+      - Learn More / .learn-more
+  + Features Section / section
+  + Team Section / section
+  + Quote Background Section / section.bg-team
+  + Twitter Section / section [see twitter.css]
+  + Footer / footer [see footer.css]
+-------------------------------------------------------------------*/
+header {
+  color: #fff;
+  padding:0;
+  position: relative;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+  /* Background */
+  header .background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    overflow: hidden;
+  }
+    header .background img,
+    header .background video {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+    }
+
+
+  /* Logo */
+  header h1.logo {margin-left:60px;}
+  header h1.logo img{ border:0; max-width:220px; opacity:3;}
+
+  /* Social Icons */
+  header .social {
+    text-align: right; margin-top:15px; padding-right:100px;
+  }
+    header .social a {
+      font-size: 1.3em;
+      text-align: center;
+      line-height: 40px;
+      margin: 10px 15px 10px 0;
+      border-radius: 100%;
+      height: 40px;
+      width: 40px;
+      display: inline-block;
+    }
+
+  header .push-down {
+    margin-top: 15%;
+  }
+.subscribe input,
+.subscribe button {
+  background: #515B70;
+  width: 100%;
+  padding: 14px 19px;
+  border: 0px;
+  font-size: 1.1em;
+  line-height: 2em;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 3px;
+  color: #FFFFFF;
+  outline: none;
+  margin: 0 0 10px;
+}
+.subscribe button:hover {
+  opacity: .7;
+}
+.subscribe button {
+  background: #31CCB0;
+}
+/**
+ * Error Message
+ * Success Message
+ */
+ 
+  /* Learn More */
+  div .learn-more {
+    text-align: center;
+  }
+    div .learn-more a {
+      margin: 50px 0;
+      padding: 20px 30px;
+      border: 2px solid white;
+      font-size: 1.2em;
+      color: white;
+      font-weight: bold;
+      border-radius: 3px;
+    }
+      div .learn-more a:hover {
+        opacity: 1;
+      }
+header .social .icon-t{}
+/* new user */
+  div .new-user {
+    text-align: center; float:left;
+  }
+    div .new-user a {
+      margin: 0px 30px;
+      padding: 20px 35px;
+      border: 2px solid #999;
+      font-size: 1.2em;
+      color: #333;
+      font-weight: bold;
+      border-radius: 3px;
+    }
+      div .new-user a:hover {
+        opacity: 1;
+      }
+@media only screen and (max-width:1024px){
+	div.new-user a {margin:10px; padding:20px;}
+}
+@media only screen and (max-width:480px){
+	header h1.logo img{ width:135px; height:auto; padding-bottom:5px;}
+  	header .social .icon-t{display:none;}	
+  	header .social {margin-top:0; padding-right:0;}
+	header .social {margin-top:10px;}
+	
+}
+
+@media only screen and (max-width:360px){
+	header h1 {padding: 0; margin:0; text-align:center;}
+	header h1.logo {margin:3px 0;}
+	header h1.logo img{ width:135px; height:auto;}
+  	header .social .icon-t{display:none;}	
+  	header .social {margin-top:0; padding-right:0;}
+
+	
+}

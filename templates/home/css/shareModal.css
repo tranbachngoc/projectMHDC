@@ -1,0 +1,712 @@
+/* vietnamese */
+@font-face {
+  font-family: 'KoHo';
+  src: url("../font/KoHo-Medium.ttf") format("truetype"); }
+
+#modal-creat-new-group {
+  z-index: 1052; }
+
+.bg-overlay {
+  background: rgba(0, 0, 0, 0); }
+
+.shareModal {
+  z-index: 1052; }
+  .shareModal .btn-send-pink {
+    background: #ff2462;
+    padding: 0 10px;
+    min-height: 30px;
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    border-radius: 5px; }
+  .shareModal .button-addfriend {
+    min-height: 30px;
+    padding: 0 5px;
+    border: 1px solid #ff2462;
+    border-radius: 5px;
+    color: #ff2462;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+    -moz-justify-content: flex-start;
+    -ms-justify-content: flex-start;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    font-weight: bold;
+    white-space: nowrap; }
+    .shareModal .button-addfriend img {
+      margin-right: 5px; }
+  .shareModal-title-content {
+    position: relative;
+    width: 100%; }
+  .shareModal-title-shareto {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 222;
+    background: #fff;
+    width: 100%;
+    float: none;
+    font-size: 15px;
+    border: none; }
+    .shareModal-title-shareto .shareto-pages {
+      border-bottom: 1px solid #F2F2F2;
+      padding-bottom: 10px; }
+    .shareModal-title-shareto a.item {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-justify-content: flex-start;
+      -moz-justify-content: flex-start;
+      -ms-justify-content: flex-start;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      margin-top: 10px; }
+      .shareModal-title-shareto a.item img {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        margin-right: 10px; }
+  .shareModal-addnewcomment-typing {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+    -moz-justify-content: flex-start;
+    -ms-justify-content: flex-start;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    margin-bottom: 10px; }
+    .shareModal-addnewcomment-typing .avata {
+      width: 45px;
+      height: 45px;
+      min-width: 45px;
+      overflow: hidden;
+      border-radius: 50%;
+      margin-right: 20px; }
+      .shareModal-addnewcomment-typing .avata img {
+        width: 100%;
+        height: 100%;
+        -o-object-fit: cover;
+        object-fit: cover; }
+    .shareModal-addnewcomment-typing .typearea {
+      width: calc(100% - 45px);
+      position: relative; }
+      .shareModal-addnewcomment-typing .typearea textarea.yourcomment {
+        border: none;
+        border-bottom: 1px solid #A1A1A1;
+        max-height: 45px;
+        border-radius: 0;
+        width: 100%; }
+      .shareModal-addnewcomment-typing .typearea .typearea-btnaddimg {
+        position: absolute;
+        right: 0;
+        top: 5px;
+        background: none;
+        border: none; }
+        .shareModal-addnewcomment-typing .typearea .typearea-btnaddimg .icon {
+          width: 24px; }
+        .shareModal-addnewcomment-typing .typearea .typearea-btnaddimg .buttonAddImage {
+          bottom: 0;
+          cursor: inherit;
+          font-size: 30px !important;
+          height: 35px;
+          width: 100%;
+          margin: 0;
+          opacity: 0;
+          padding: 0;
+          position: absolute;
+          right: 0;
+          top: 0px; }
+  .shareModal-addnewcomment-gallery {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+    -moz-justify-content: flex-start;
+    -ms-justify-content: flex-start;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -webkit-align-items: flex-start;
+    -moz-align-items: flex-start;
+    -ms-align-items: flex-start;
+    margin: 20px 0;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap; }
+    .shareModal-addnewcomment-gallery .insert-img {
+      width: 30%;
+      margin-right: 3%;
+      height: 100px;
+      position: relative;
+      z-index: 1;
+      margin-top: 3%; }
+      .shareModal-addnewcomment-gallery .insert-img:nth-child(3n) {
+        margin-right: 0; }
+      .shareModal-addnewcomment-gallery .insert-img img, .shareModal-addnewcomment-gallery .insert-img video {
+        width: 100%;
+        height: 100%;
+        -o-object-fit: cover;
+        object-fit: cover; }
+      .shareModal-addnewcomment-gallery .insert-img .close {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        z-index: 22;
+        background: #000000;
+        width: 20px;
+        height: 20px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center;
+        border-radius: 50%; }
+        .shareModal-addnewcomment-gallery .insert-img .close img {
+          width: 10px; }
+    .shareModal-addnewcomment-gallery .insert-video {
+      overflow: hidden;
+      position: relative; }
+      .shareModal-addnewcomment-gallery .insert-video .play-video {
+        position: absolute;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0; }
+        .shareModal-addnewcomment-gallery .insert-video .play-video img {
+          width: 30px;
+          height: auto; }
+      .shareModal-addnewcomment-gallery .insert-video video {
+        height: 95px; }
+  .shareModal-contentwasshared .shareModal-uncollapse {
+    height: 250px;
+    overflow: hidden;
+    position: relative; }
+    .shareModal-contentwasshared .shareModal-uncollapse .button-showmore {
+      position: absolute;
+      top: 200px;
+      left: 0;
+      text-align: center;
+      width: 100%; }
+      .shareModal-contentwasshared .shareModal-uncollapse .button-showmore .text {
+        display: inline-block;
+        background: #fff;
+        padding: 5px 20px;
+        border-radius: 20px;
+        border: none; }
+    .shareModal-contentwasshared .shareModal-uncollapse.shareModal-collapse {
+      height: 100%; }
+  .shareModal-contentwasshared-header {
+    border-left: 3px solid #737373;
+    padding-left: 15px; }
+    .shareModal-contentwasshared-header .header-nameuser {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      -webkit-justify-content: space-between;
+      -moz-justify-content: space-between;
+      -ms-justify-content: space-between;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center;
+      margin-bottom: 20px; }
+      .shareModal-contentwasshared-header .header-nameuser .header-name {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: start;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+        -webkit-justify-content: flex-start;
+        -moz-justify-content: flex-start;
+        -ms-justify-content: flex-start;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center;
+        width: calc(100% - 120px); }
+        .shareModal-contentwasshared-header .header-nameuser .header-name .avata {
+          width: 50px;
+          height: 50px;
+          margin-right: 10px;
+          min-width: 50px; }
+        .shareModal-contentwasshared-header .header-nameuser .header-name .title span {
+          font-size: 13px;
+          color: #737373;
+          font-weight: normal; }
+        .shareModal-contentwasshared-header .header-nameuser .header-name .title-nameuser {
+          font-size: 18px;
+          font-weight: bold; }
+  .shareModal-contentwasshared-body .video video {
+    width: 100%; }
+  .shareModal-footer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    -ms-justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    padding: 0;
+    width: 100%; }
+    .shareModal-footer .permision {
+      position: relative; }
+      .shareModal-footer .permision:hover .permision-list {
+        display: block; }
+      .shareModal-footer .permision-list {
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        font-size: 14px;
+        padding: 10px;
+        border: 1px solid #F2F2F2;
+        -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 5px;
+        background: #fff;
+        display: none; }
+        .shareModal-footer .permision-list li {
+          margin-bottom: 10px;
+          width: -webkit-max-content;
+          width: -moz-max-content;
+          width: max-content; }
+          .shareModal-footer .permision-list li:last-child {
+            margin-bottom: 0; }
+    .shareModal-footer .buttons-direct {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      /* Safari */
+      display: -moz-flex;
+      /* Firefox */
+      display: -ms-flex;
+      /* IE */
+      -webkit-box-pack: end;
+      -ms-flex-pack: end;
+      justify-content: flex-end;
+      -webkit-justify-content: flex-end;
+      -moz-justify-content: flex-end;
+      -ms-justify-content: flex-end;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-align-items: center;
+      -moz-align-items: center;
+      -ms-align-items: center; }
+      .shareModal-footer .buttons-direct .btn-cancle {
+        border: 0.5px solid #ff2462;
+        border-radius: 5px;
+        min-height: 30px;
+        padding: 0 10px;
+        color: #ff2462;
+        font-size: 16px;
+        background: none;
+        cursor: pointer; }
+      .shareModal-footer .buttons-direct .btn-share {
+        border: 0.5px solid #ff2462;
+        background: #ff2462;
+        border-radius: 5px;
+        min-height: 30px;
+        padding: 0 10px;
+        color: #fff;
+        font-size: 16px;
+        margin-left: 20px;
+        cursor: pointer; }
+  .shareModal-azichat-content {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+    -moz-justify-content: flex-start;
+    -ms-justify-content: flex-start;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -webkit-align-items: flex-start;
+    -moz-align-items: flex-start;
+    -ms-align-items: flex-start;
+    color: #454545; }
+    .shareModal-azichat-content .img {
+      width: 100px;
+      height: 100px;
+      overflow: hidden;
+      margin-right: 20px;
+      min-width: 100px;
+      border-radius: 5px; }
+      .shareModal-azichat-content .img img {
+        -o-object-fit: cover;
+        object-fit: cover;
+        width: 100%;
+        height: 100%; }
+    .shareModal-azichat-content .name-shop {
+      color: #A1A1A1;
+      font-weight: bold; }
+  .shareModal-azichat-friends {
+    margin: 20px 0; }
+    .shareModal-azichat-friends .search {
+      background: #F2F2F2;
+      padding: 10px;
+      margin: 0 -10px; }
+      .shareModal-azichat-friends .search input {
+        border: 1px solid #c4c4c4;
+        padding: 5px 10px;
+        border-radius: 5px;
+        min-height: 40px; }
+    .shareModal-azichat-friends-sendgroup {
+      margin: 0 -10px;
+      padding: 0 10px;
+      margin-top: 20px;
+      max-height: 500px;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch; }
+      .shareModal-azichat-friends-sendgroup::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
+        border-radius: 35px;
+        background-color: #F2F2F2; }
+      .shareModal-azichat-friends-sendgroup::-webkit-scrollbar {
+        width: 5px;
+        background-color: #C4C4C4; }
+      .shareModal-azichat-friends-sendgroup::-webkit-scrollbar-thumb {
+        border-radius: 15px;
+        -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
+        background-color: #C4C4C4; }
+      .shareModal-azichat-friends-sendgroup .tit {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        -moz-justify-content: space-between;
+        -ms-justify-content: space-between;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center;
+        color: #A1A1A1;
+        font-weight: bold;
+        margin: 10px 0; }
+        .shareModal-azichat-friends-sendgroup .tit .creat-new-group {
+          background: #F2F2F2;
+          border: none;
+          padding: 0 10px;
+          border-radius: 5px;
+          color: #737373;
+          min-height: 30px; }
+      .shareModal-azichat-friends-sendgroup .list-friends li {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        -moz-justify-content: space-between;
+        -ms-justify-content: space-between;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center;
+        margin-bottom: 10px; }
+        .shareModal-azichat-friends-sendgroup .list-friends li .name {
+          color: #454545;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          display: -webkit-flex;
+          /* Safari */
+          display: -moz-flex;
+          /* Firefox */
+          display: -ms-flex;
+          /* IE */
+          -webkit-box-pack: start;
+          -ms-flex-pack: start;
+          justify-content: flex-start;
+          -webkit-justify-content: flex-start;
+          -moz-justify-content: flex-start;
+          -ms-justify-content: flex-start;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-align-items: center;
+          -moz-align-items: center;
+          -ms-align-items: center; }
+          .shareModal-azichat-friends-sendgroup .list-friends li .name img {
+            min-width: 35px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-right: 10px; }
+        .shareModal-azichat-friends-sendgroup .list-friends li .btn-send {
+          background: #ff2462;
+          border: none;
+          padding: 2px 10px;
+          color: #fff;
+          border-radius: 5px;
+          cursor: pointer; }
+  .shareModal .creat-new-group-popup .search {
+    position: relative;
+    margin: 10px 0; }
+    .shareModal .creat-new-group-popup .search input {
+      min-height: 35px;
+      padding: 5px;
+      padding-left: 25px; }
+    .shareModal .creat-new-group-popup .search img.search-icon {
+      position: absolute;
+      left: 5px;
+      top: 10px;
+      width: 15px; }
+  .shareModal .creat-new-group-popup .friends {
+    overflow: auto;
+    max-height: 300px;
+    -webkit-overflow-scrolling: touch; }
+    .shareModal .creat-new-group-popup .friends::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
+      border-radius: 35px;
+      background-color: #F2F2F2; }
+    .shareModal .creat-new-group-popup .friends::-webkit-scrollbar {
+      width: 5px;
+      background-color: #C4C4C4; }
+    .shareModal .creat-new-group-popup .friends::-webkit-scrollbar-thumb {
+      border-radius: 15px;
+      -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
+      background-color: #C4C4C4; }
+    .shareModal .creat-new-group-popup .friends li {
+      margin-top: 15px; }
+      .shareModal .creat-new-group-popup .friends li .checkbox-style {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        -moz-justify-content: space-between;
+        -ms-justify-content: space-between;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center; }
+        .shareModal .creat-new-group-popup .friends li .checkbox-style span {
+          background-size: 20px;
+          min-height: 20px; }
+      .shareModal .creat-new-group-popup .friends li .name {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        /* Safari */
+        display: -moz-flex;
+        /* Firefox */
+        display: -ms-flex;
+        /* IE */
+        -webkit-box-pack: start;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+        -webkit-justify-content: flex-start;
+        -moz-justify-content: flex-start;
+        -ms-justify-content: flex-start;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center; }
+        .shareModal .creat-new-group-popup .friends li .name .avata {
+          width: 40px;
+          height: 40px;
+          min-width: 40px;
+          margin-right: 10px;
+          border-radius: 50%; }
+  .shareModal-flashsale {
+    border: 0.5px solid #C4C4C4;
+    -webkit-box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.25);
+    padding: 10px; }
+
+@media screen and (max-width: 767px) {
+  .shareModal .button-addfriend {
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    display: -moz-flex;
+    /* Firefox */
+    display: -ms-flex;
+    /* IE */
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -ms-justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center; }
+    .shareModal .button-addfriend img {
+      margin-right: 0;
+      width: 20px; }
+  .shareModal-contentwasshared-header .header-nameuser .header-name {
+    width: calc(100% - 40px); } }
