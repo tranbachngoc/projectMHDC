@@ -1,0 +1,102 @@
+Header add Access-Control-Allow-Origin "*"
+Header add Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"
+
+RewriteEngine On
+
+### https
+
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} ^azibai.com
+RewriteRule (.*)  https://azibai.com/$1 [R=301,L]
+
+### https end
+RewriteCond %{HTTP_HOST} ^www\.(.*)$
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php/$1 [L,QSA]
+
+###Start Kloxo PHP config Area
+###Please Don't edit these comments or the content in between. kloxo uses this to recognize the lines it writes to the the file. If the above line is corrupted, it may fail to recognize them, leading to multiple lines.
+
+RewriteCond %{HTTP_HOST} ^(((?!khachweb).)*)$
+RewriteRule ^(.*) http://${domainMap:%1|NOTFOUND}.azibai.com/$1 [P]
+
+# BEGIN ImageResizing
+<ifmodule mod_rewrite.c>
+	RewriteEngine on
+	RewriteBase /
+	# scaling with
+	RewriteRule ^media/([A-Za-z0-9/_-]+).(jpg|gif|png|jpeg|JPG|PNG|GIF|JPEG)$ resize.php?imgfile=$1.$2&%{QUERY_STRING}
+
+</ifmodule>
+# END ImageResizing
+
+<Limit GET POST PUT DELETE OPTIONS>
+ 	Allow from all
+	# Require all granted
+</Limit>
+
+<IfModule mod_expires.c>
+	ExpiresActive On
+	ExpiresByType text/css A31536000
+	ExpiresByType text/x-component A31536000
+	ExpiresByType application/x-javascript A31536000
+	ExpiresByType application/javascript A31536000
+	ExpiresByType text/javascript A31536000
+	ExpiresByType text/x-js A31536000
+	ExpiresByType text/html A3600
+	ExpiresByType text/richtext A3600
+	ExpiresByType image/svg+xml A3600
+	ExpiresByType text/plain A3600
+	ExpiresByType text/xsd A3600
+	ExpiresByType text/xsl A3600
+	ExpiresByType text/xml A3600
+	ExpiresByType video/asf A31536000
+	ExpiresByType video/avi A31536000
+	ExpiresByType image/bmp A31536000
+	ExpiresByType application/java A31536000
+	ExpiresByType video/divx A31536000
+	ExpiresByType application/msword A31536000
+	ExpiresByType application/vnd.ms-fontobject A31536000
+	ExpiresByType application/x-msdownload A31536000
+	ExpiresByType image/gif A31536000
+	ExpiresByType application/x-gzip A31536000
+	ExpiresByType image/x-icon A31536000
+	ExpiresByType image/jpeg A31536000
+	ExpiresByType application/json A31536000
+	ExpiresByType application/vnd.ms-access A31536000
+	ExpiresByType audio/midi A31536000
+	ExpiresByType video/quicktime A31536000
+	ExpiresByType audio/mpeg A31536000
+	ExpiresByType video/mp4 A31536000
+	ExpiresByType video/mpeg A31536000
+	ExpiresByType application/vnd.ms-project A31536000
+	ExpiresByType application/x-font-otf A31536000
+	ExpiresByType application/vnd.ms-opentype A31536000
+	ExpiresByType application/vnd.oasis.opendocument.database A31536000
+	ExpiresByType application/vnd.oasis.opendocument.chart A31536000
+	ExpiresByType application/vnd.oasis.opendocument.formula A31536000
+	ExpiresByType application/vnd.oasis.opendocument.graphics A31536000
+	ExpiresByType application/vnd.oasis.opendocument.presentation A31536000
+	ExpiresByType application/vnd.oasis.opendocument.spreadsheet A31536000
+	ExpiresByType application/vnd.oasis.opendocument.text A31536000
+	ExpiresByType audio/ogg A31536000
+	ExpiresByType application/pdf A31536000
+	ExpiresByType image/png A31536000
+	ExpiresByType application/vnd.ms-powerpoint A31536000
+	ExpiresByType audio/x-realaudio A31536000
+	ExpiresByType image/svg+xml A31536000
+	ExpiresByType application/x-shockwave-flash A31536000
+	ExpiresByType application/x-tar A31536000
+	ExpiresByType image/tiff A31536000
+	ExpiresByType application/x-font-ttf A31536000
+	ExpiresByType application/vnd.ms-opentype A31536000
+	ExpiresByType audio/wav A31536000
+	ExpiresByType audio/wma A31536000
+	ExpiresByType application/vnd.ms-write A31536000
+	ExpiresByType application/font-woff A31536000
+	ExpiresByType application/vnd.ms-excel A31536000
+	ExpiresByType application/zip A31536000
+</IfModule>
