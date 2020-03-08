@@ -3793,7 +3793,7 @@
           var error_add_product = false;
           $('.error_all_data').hide();
           // validate tab image
-          if ( data_product.product.pro_image.length == 0)
+          /*if ( data_product.product.pro_image.length == 0)
           {
             $('.show-photo-main').addClass('border_red');
             error_add_product = true;
@@ -3826,7 +3826,7 @@
             error_add_product = true;
           } else {
             $('.modal-pro-detail').removeClass('background_red');
-          }
+          }*/
           
           if (error_add_product === false) {
             $('.load-wrapp').show();

@@ -5921,6 +5921,9 @@ class Product extends MY_Controller
             }
         }
 
+        $data['province'] = $this->get_provice();
+        $data['district'] = $this->get_provice();
+
         $data['checkPackageAff'] = $this->checkPackageAff($user_id, '40,41,42,43', 'id');
 
         $data['products'] = $this->product_model->fetch("pro_category, pro_id, pro_name, pro_image, pro_dir, pro_type", "pro_type IN (0,2) AND pro_status = 1 AND pro_user=" . $user_id, "pro_type", "ASC", null, null);
@@ -5930,19 +5933,9 @@ class Product extends MY_Controller
         $this->load->view('home/product/add_product', $data);
     }
 
-
-    /**
-     ***************************************************************************
-     * Created: 2018/11/26
-     * Add Product
-     ***************************************************************************
-     * @author: Thuan<thuanthuan0907@gmail.com>
-     * @return: html
-     *  
-     ***************************************************************************
-    */
     public function ajaxAddProduct() {
-        $result = ['error' => true];
+
+        $error = true;
 
         if (!$this->check->is_logined($this->session->userdata('sessionUser'), $this->session->userdata('sessionGroup'), 'home'))
         {
@@ -5950,325 +5943,295 @@ class Product extends MY_Controller
             die();
         }
 
-        $group_id = $this->session->userdata('sessionGroup');
+        $group_id = $this->session->userdata('sessionGroup'); //16: Admin, 3: store, 1: user thuong
         if(!checkPerProduct($group_id)) {
             echo json_encode($result);
             die();
         }
 
-        if ($this->input->post('product')) {
-            $use_param = $this->input->post('use_param');
-            $data_post = $this->input->post('product');
-            // dd($data_post);die;
-            $this->load->model('user_model');
-            $user_check = $this->user_model->get("use_id, use_fullname, use_address, use_email, use_phone, use_mobile, use_yahoo, use_skype", "use_id = " . (int)$this->session->userdata('sessionUser'));
+        $pro_user = $this->session->userdata('sessionUser');
 
-            if($group_id == StaffStoreUser) {
-                $user = $this->user_model->get("use_id, use_fullname, use_address, use_email, use_phone, use_mobile, use_yahoo, use_skype", "use_id = " . $user_check->parent_id);
-                $pro_user       = $user_check->parent_id;
-            } else {
-                $user = $user_check;
-                $pro_user = (int)$this->session->userdata('sessionUser');
-                if($use_param != $this->session->userdata('sessionUser')){
-                    $is_bran = $this->user_model->get('*', 'use_status = 1 AND use_group = 14 AND use_id = '.(int)$use_param.' AND parent_id = '.(int)$this->session->userdata('sessionUser'));
-                    if(!empty($is_bran))
-                    {
-                        $pro_user = (int)$use_param;
-                    }
-                }
-            }
-            $pro_user_up = (int)$this->session->userdata('sessionUser');
+        $pro_name = $this->input->post('pro_name');
+        $pro_sku = $this->input->post('pro_sku');
+        $pro_brand = $this->input->post('pro_brand');
+        $pro_descr = $this->input->post('pro_descr');
+        $pro_cost = $this->input->post('pro_cost');
+        $pro_instock = $this->input->post('pro_instock');
+        $pro_minsale = $this->input->post('pro_minsale');
+        $pro_province = $this->input->post('pro_province');
+        $pro_district = $this->input->post('pro_district');
+        $pro_weight = $this->input->post('pro_weight');
+        $pro_category = $this->input->post('pro_category');
+        $pro_detail = $this->input->post('pro_detail');
+        $imageFile = $_FILES['pro_image'];
 
-            $this->load->model('shop_model');
-            $get_pro_province = $this->shop_model->get("sho_province", "sho_user  = " . (int) $user->use_id);
-            $pro_province = $get_pro_province->sho_province;
+        $data = array(
+            'pro_name' => $pro_name,
+            'pro_sku' => $pro_sku,
+            'pro_brand' => $pro_brand,
+            'pro_descr' => $pro_descr,
+            'pro_cost' => $pro_cost,
+            'pro_instock' => $pro_instock,
+            'pro_minsale' => $pro_minsale,
+            'pro_province' => $pro_province,
+            'pro_district' => $pro_district,
+            'pro_weight' => $pro_weight,
+            'pro_category' => $pro_category,
+            'pro_detail' => $pro_detail,
+            'pro_user' => $pro_user,
+            'pro_status' => 1,
+            'pro_type' => $pro_type,
+            'created_date' => date('Y-m-d h:i:s')
+        );
 
-            $reliable = 0;
-            if ((int)$this->session->userdata('sessionGroup') == 3) {
-                $reliable = 1;
-            }
-
-
-            $af_amt = 0;
-            $af_rate = 0;
-            $af_dc_amt = 0;
-            $af_dc_rate = 0;
-            $apply = 0;
-            if ($data_post['product']['is_product_affiliate'] == 0) 
-            {
-                $af_amt = 0;
-                $af_rate = 0;
-            } 
-            else 
-            {   
-                $apply = !empty($data_post['product']["apply"]) ? $data_post['product']["apply"] : 0;
-
-                if ($data_post['product']['pro_dc_affiliate_type'] == 1) 
-                {
-                    $af_dc_amt = 0;
-                    $af_dc_rate = $data_post['product']['pro_dc_affiliate_value'];
-                } 
-                else 
-                {
-                    $af_dc_amt = $data_post['product']['pro_dc_affiliate_value'];
-                    $af_dc_rate = 0;
-                }
-            }
-
-            $condition_use = null;
-            if (!empty($data_post['product']["pro_type"]) && $data_post['product']["pro_type"] == 2 && !empty($data_post['product']["condition_use"])) 
-            {
-                $condition_use = json_encode($data_post['product']["condition_use"]);
-            }
-
-
-            $pathImage = "media/images/product/";
-            $dir_image = date('dmY');
-            $image = 'none.gif';
-            if (!empty($data_post['product']['pro_image'])) {
-                $image_upload = array(); 
-                foreach ($data_post['product']['pro_image'] as $key => $value) {
-                    $image_upload[] = $this->add_photo_qc($value, $dir_image);
-                }
-
-                if (count($image_upload) > 0) {
-                    $image = implode(',', $image_upload);
-                }
-            }
-            if ($image == 'none.gif') {
-                $dir_image = 'default';
-            }
-
-            // @@
-            $currentDate = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-
-
-            $dataPost = array(
-                    'pro_name' => trim($data_post['product']['pro_name']), // done
-                    'pro_sku' => trim($data_post['product']['pro_sku']), // done
-                    'pro_descr' => trim($data_post['product']['pro_descr']), // done
-                    'pro_keyword' => trim($data_post['product']['pro_keyword']), // done
-                    'pro_cost' => (int) $data_post['product']['pro_cost'], // done
-                    'pro_currency' => trim(strtoupper($data_post['product']['pro_currency'])), // done
-                    'pro_hondle' => (int) $data_post['product']['pro_hondle'], // done giá thương lượng
-                    'pro_province' => (int) $pro_province,
-                    'pro_category' => (int) $data_post['product']['pro_category'], // done
-                    'pro_begindate' => $currentDate,
-                    'pro_enddate' => $currentDate, // default time 
-                    'pro_detail' => trim($data_post['product']['pro_detail']), // done
-                    'pro_image' => $image,
-                    'pro_dir' => $dir_image,
-                    'pro_user' => $pro_user, // done
-                    'pro_post_by' => 'web',  // done
-                    'pro_user_up' => (isset($pro_user_up)) ? $pro_user_up : 0, // done
-                    'pro_poster' => trim($user->use_fullname), // done
-                    'pro_address' => trim($user->use_address), // done
-                    'pro_phone' => trim($user->use_phone), // done
-                    'pro_mobile' => trim($user->use_mobile), // done
-                    'pro_email' => trim($user->use_email), // done
-                    'pro_yahoo' => trim($user->use_yahoo), // done
-                    'pro_skype' => trim($user->use_skype), // done
-                    'pro_status' => 1, // done gian hang va nhan vien cua gian hang = 1
-                    'pro_view' => 0, // done
-                    'pro_buy' => 0,  // done
-                    'pro_comment' => 0, // done
-                    'pro_vote_cost' => 0, // done
-                    'pro_vote_quanlity' => 0, // done
-                    'pro_vote_model' => 0, // done
-                    'pro_vote_service' => 0, // done
-                    'pro_vote_total' => 0, // done
-                    'pro_vote' => 0, // done
-                    'pro_reliable' => $reliable, // done
-                    'pro_saleoff' => (int)$data_post['product']['pro_saleoff'], // done
-                    'pro_saleoff_value' => ($data_post['product']['pro_saleoff_value'] != '') ? $data_post['product']['pro_saleoff_value'] : 0, // done
-                    'pro_type_saleoff' => (int)$data_post['product']['pro_saleoff_type'], // done
-                    'begin_date_sale' => strtotime($data_post['product']['begin_date_sale']), // done
-                    'end_date_sale' => strtotime($data_post['product']['end_date_sale']), // done
-                    'pro_hot' => (int)$data_post['product']['pro_hot'], // done
-                    'is_product_affiliate' => (int) $data_post['product']['is_product_affiliate'], // done
-                    'af_amt' => $af_amt,
-                    'af_rate' => $af_rate,
-                    'af_dc_amt' => $af_dc_amt,
-                    'af_dc_rate' => $af_dc_rate,
-                    'pro_show' => 0, // done
-                    'pro_manufacturer_id' => -1, // done
-                    'pro_manufacturer' => trim($data_post['product']['pro_mannufacurer']), // done
-                    'pro_instock' => (int) $data_post['product']['pro_instock'], // done
-                    'pro_unit' => trim($data_post['product']['pro_unit']), // done
-                    'pro_weight' => (int) $data_post['product']['pro_weight'], // done
-                    'pro_length' => 0,  // done
-                    'pro_width' => 0,   // done
-                    'pro_height' =>  0, // done
-                    'pro_minsale' => (int)$data_post['product']['pro_minsale'], // done
-                    'pro_vat' => (int)$data_post['product']['pro_vat'], // done
-                    'pro_quality' => (int) $data_post['product']['pro_quality'], // done
-                    'pro_made_from' => (int) $data_post['product']['pro_made_from'], // done
-                    'pro_warranty_period' => (int) $data_post['product']['pro_warranty_period'],
-                    'pro_video' => trim($data_post['product']['pro_video']), // done
-                    'created_date' => date("Y-m-d"), // done
-                    'pro_type' => (int) $data_post['product']['pro_type'], // done
-                    'pro_brand' => trim($data_post['product']['pro_brand']), // done
-                    'pro_protection'    => (int) $data_post['product']['pro_protection'], // done
-                    'pro_specification' => !empty($data_post['product']['pro_specification']) ? json_encode($data_post['product']['pro_specification']) : null, // done
-                    'pro_attach'        => !empty($data_post['product']['pro_attach']) ? json_encode($data_post['product']['pro_attach']) : null, // done
-                    'pro_made_in'       => trim($data_post['product']['pro_made_in']), // done
-                    'condition_use' => $condition_use,
-                    'apply' => $apply,
-                );
-
-
-            if ($id = $this->product_model->add($dataPost)) {
-                
-                $pro_id = (int) mysql_insert_id();
-
-                // Add gallery 
-                $this->load->model('cate_galleries_model');
-                $this->load->model('galleries_model');
-
-                if (!empty($data_post['pro_gallegy'])) {
-                    foreach ($data_post['pro_gallegy'] as $k_gallegy => $v_gallegy) {
-                        if ($v_gallegy['hidden'] == 'false') {                            
-                            $dataInsert = array(
-                                'user_id' => $pro_user,
-                                'pro_id'  => $pro_id,
-                                'name'    => $v_gallegy['content']
-                            );
-                            $id_insert = $this->cate_galleries_model->add($dataInsert);
-
-                            if ($id_insert > 0 && !empty($v_gallegy['list_pro']))
-                            {
-                                foreach ($v_gallegy['list_pro'] as $k_list_pro => $v_list_pro)
-                                {
-
-                                    if ($v_list_pro['delete'] == 'false') {
-
-                                        $this->galleries_model->update(array('gallery_id' => $id_insert, 'pro_id' => $pro_id, 'caption' => $v_list_pro['caption']), "id = " . $v_list_pro['id']);
-                                    }
-                                    
-                                }
-                            }
-                        }
-                    }
-                }
-                // Add promotion                       
-                $promotions = array();
-                if (!empty($data_post['pro_promotion']['promotion_list']) && (int) $data_post['pro_promotion']['limit_type'] == 1) {
-                    // $limit_type = (int) $data_post['pro_promotion']['limit_type'];
-                    foreach ($data_post['pro_promotion']['promotion_list'] as $row) {
-                        $promotion = array();
-                        $promotion['limit_from'] = $row['limit_from'];
-                        $promotion['limit_to'] = $row['limit_to'];
-                        $promotion['limit_type'] = 1;
-                        if ($row['type'] == 1) {
-                            $promotion['dc_amt'] = $row['amount'];
-                            $promotion['dc_rate'] = 0;
-                        } else {
-                            $promotion['dc_rate'] = $row['amount'];
-                            $promotion['dc_amt'] = 0;
-                        }
-                        $promotion['pro_id'] = $id;
-                        array_push($promotions, $promotion);
-                    }
-                    $this->product_promotion_model->add($promotions);
-                }
-
-                if (!empty($data_post['pro_promotion']['promotion_price']) && (int) $data_post['pro_promotion']['limit_type'] == 2) {
-                    // $limit_type = (int) $data_post['pro_promotion']['limit_type'];
-                    foreach ($data_post['pro_promotion']['promotion_price'] as $row) {
-                        $promotion = array();
-                        $promotion['limit_from'] = $row['limit_from'];
-                        $promotion['limit_to'] = $row['limit_to'];
-                        $promotion['limit_type'] = 2;
-                        if ($row['type'] == 1) {
-                            $promotion['dc_amt'] = $row['amount'];
-                            $promotion['dc_rate'] = 0;
-                        } else {
-                            $promotion['dc_rate'] = $row['amount'];
-                            $promotion['dc_amt'] = 0;
-                        }
-                        $promotion['pro_id'] = $id;
-                        array_push($promotions, $promotion);
-                    }
-                    $this->product_promotion_model->add($promotions);
-                }
-                //Lưu trữ trường quy cách                       
-                $standards = array();
-                if (!empty($data_post['pro_qc'])) {
-
-                    foreach ($data_post['pro_qc'] as $key => $rowqc) {
-                       
-                        if ($rowqc['dp_cost'] != '' && $rowqc['dp_instock'] != '' && ($rowqc['dp_size'] != '' || $rowqc['dp_color'] != '' || $rowqc['dp_material'] != '')) {
-                            $standard = array();
-                            $standard['dp_pro_id'] = $id;
-                            $standard['dp_size'] = $rowqc['dp_size'];
-                            $standard['dp_color'] = $rowqc['dp_color'];
-                            $standard['dp_material'] = $rowqc['dp_material'];
-                            $standard['dp_cost'] = $rowqc['dp_cost'];
-                            $standard['dp_instock'] = $rowqc['dp_instock'];
-                            $standard['dp_createdate'] = date('Y-m-d');
-                            $standard['dp_weight'] = !empty($rowqc['dp_weight']) ? $rowqc['dp_weight'] : null;
-                            $standard['dp_images'] = $this->add_photo_qc($rowqc['dp_image'], $dir_image);
-                            array_push($standards, $standard);
-
-                            $this->detail_product_model->add($standard);
-                        }
-                        $t++;
-                    }
-
-                    if ($standards && $this->session->userdata('image_name_qc')) {
-                        $this->session->unset_userdata('image_name_qc');
-                    }
-                }
-
-
-                // get list user and add affiliate
-                $list_user_affiliate = $this->user_model->get_list_user("use_id", "parent_id = " . (int)$pro_user.' OR parent_shop = ' .(int)$pro_user );
-
-                if (!empty($list_user_affiliate)) 
-                {
-                    $this->load->model('product_affiliate_user_model');
-                    $dataAffiliate = array();
-                    foreach ($list_user_affiliate as $key => $value) {
-                        $dataAffiliate[] = array('use_id' => $value->use_id, 'pro_id' => $pro_id, 'homepage' => 1, 'date_added' => time(), 'kind_of_aff' => 1);
-                    }
-                    if (!empty($dataAffiliate)) {
-                        $this->product_affiliate_user_model->add_all($dataAffiliate);
-                    }
-                }
-
-
-                // aff mutiple level
-                if (isset($data_post['product']['is_product_affiliate']) && $data_post['product']['is_product_affiliate'] == 1) 
-                {
-                    for ($i=1; $i < 4; $i++) { 
-                        $iAffiliateValue = !empty($data_post['product']["affiliate_value_".$i]) ? $data_post['product']["affiliate_value_".$i] : 0;
-                        $this->db->insert("tbtt_affiliate_price",array(
-                            'service_id'        => $pro_id,
-                            'cost'              => $dataPost["pro_cost"],
-                            'discount_price'    => 0,
-                            'discount_value'    => $iAffiliateValue,
-                            'discount_type'     => $data_post['product']["pro_affiliate_type"],
-                            'user_set'          => $pro_user,
-                            'user_app'          => 0,
-                            'id_level'          => $i,
-                            'type'              => 2,
-                            'created_at' => date('Y-m-d H:i:s'), 
-                            'updated_at' => date('Y-m-d H:i:s')
-                        ));
-                    }
-                }
-
-
-                $result = ['error' => false];
-                //create or update view on azibai-ecommerce
-                // $this->createViewProduct();
-            }
+        $pro_type = 0; // sp hoàn vốn
+        if($group_id == 16)
+        {
             
+            $pro_type = 2; //sp thông minh (của Admin)
         }
 
-        echo json_encode($result);
-        die();
+        $limit_type = $this->input->post('limit_type');
+        if ($limit_type) {
+            $addPromotion = [];
+            $amount = (int)$this->input->post('amount');
+            $chenhlech = (1 - ($amount / $pro_cost)) * 100;
+            if( $chenhlech >= 20 )
+            {
+                $pro_type = 2;
+            }
+            else
+            {
+                $pro_type = 0;
+            }
+        }
 
+        $data['pro_type'] = $pro_type;
+
+        $isUpload = $this->uploadImg($imageFile, 'product');
+        if($isUpload['error'] == false)
+        {
+            $data['pro_dir'] = $isUpload['dir'];
+            $data['pro_image'] = $isUpload['img_name'];
+        }
+
+        if($this->product_model->add($data))
+        {
+            // Add promotion
+            if ($limit_type) {
+                $addPromotion['pro_id'] = (int)$pro_id;
+                $addPromotion['limit_type'] = $limit_type;
+                $addPromotion['limit_to'] = $this->input->post('limit_to');
+                $addPromotion['amount'] = $this->input->post('amount');
+
+                if( $this->product_promotion_model->addPromo($addPromotion))
+                {
+                    $error = false;
+                }
+            }
+            else
+            {
+                $error = false;
+            }
+        }
+
+        return $error;
+
+    }
+
+    public function editProduct($productID) {
+        
+        #BEGIN: kiểm tra product by $productID
+        $product = $this->product_model->get("*, (af_rate) AS aff_rate", "pro_id = " . (int)$productID);
+        $user = $this->session->userdata('sessionUser');
+        if ($user && $user == $product->pro_user) {
+        } else {
+            redirect(base_url() . $product->pro_category.'/'.$product->pro_id.'/'.RemoveSign($product->pro_name), 'location');
+            die();
+        }
+        if ($product && $product->pro_id <= 0) {
+            redirect($this->subURL, 'location');
+            die();
+        }
+        if (count($product) > 0) {
+            $user_product = $this->user_model->get("*", "use_id = " . $product->pro_user);
+        }
+
+        if ($product->pro_user == "") {
+            redirect(base_url(), 'location');
+        }
+
+        $data['user_product'] = $user_product->use_username;
+
+        #END kiểm tra product by $productID
+        // if ($product->pro_user != $this->session->userdata('sessionUser')) {
+        // }
+            $data['promotion'] = $this->product_promotion_model->get('*', 'pro_id = '.(int)$product->pro_id);
+        
+        //danh mục sản phẩm
+        $data['category_root'] = $this->category_model->fetch("*", "cat_status = 1 and cat_level = 0 and cate_type = 2 and parent_id = 0", "cat_name", "ASC");
+        if (isset($data['category_root'])) {
+            foreach ($data['category_root'] as $key => $item) {
+                $cat_level_next = $this->category_model->fetch("*", "parent_id = ". (int)$item->cat_id ." AND cat_status = 1");
+                $data['category_root'][$key]->child_count = count($cat_level_next);
+            }
+        }
+
+        //cat of pro
+        $categoryID = $product->pro_category;
+        $category = $this->category_model->get("cat_id, cat_name, parent_id, cat_level", "cat_id = " . (int)$categoryID . " AND cat_status = 1");
+        // get list category parent
+        $retArray = array();
+        $this->treeCategory($category->parent_id, $category->cat_level, $retArray, 0, $category->cat_id);
+        ksort($retArray);
+
+        //end danh mục sản phảm
+        $data['products'] = $product;
+        $data['category'] = $category;
+        $data['list_get_category'] = $retArray;
+        $this->load->view('home/product/edit_product', $data);
+    }
+
+    public function ajaxEditProduct() {
+
+        $error = true;
+        // $result['message'] = 'Sửa sản phẩm thất bại';
+
+        if (!$this->check->is_logined($this->session->userdata('sessionUser'), $this->session->userdata('sessionGroup'), 'home'))
+        {
+            echo json_encode($result);
+            die();
+        }
+
+        $group_id = $this->session->userdata('sessionGroup'); //16: Admin, 3: store, 1: user thuong
+        if(!checkPerProduct($group_id)) {
+            echo json_encode($result);
+            die();
+        }
+
+        $pro_user = $this->session->userdata('sessionUser');
+
+        $pro_id = $this->input->post('pro_id');
+        $pro_name = $this->input->post('pro_name');
+        $pro_sku = $this->input->post('pro_sku');
+        $pro_brand = $this->input->post('pro_brand');
+        $pro_descr = $this->input->post('pro_descr');
+        $pro_cost = $this->input->post('pro_cost');
+        $pro_instock = $this->input->post('pro_instock');
+        $pro_minsale = $this->input->post('pro_minsale');
+        $pro_province = $this->input->post('pro_province');
+        $pro_district = $this->input->post('pro_district');
+        $pro_weight = $this->input->post('pro_weight');
+        $pro_category = $this->input->post('pro_category');
+        $pro_detail = $this->input->post('pro_detail');
+        $imageFile = $_FILES['pro_image'];
+
+        $data = array(
+            'pro_name' => $pro_name,
+            'pro_sku' => $pro_sku,
+            'pro_brand' => $pro_brand,
+            'pro_descr' => $pro_descr,
+            'pro_cost' => $pro_cost,
+            'pro_instock' => $pro_instock,
+            'pro_minsale' => $pro_minsale,
+            'pro_province' => $pro_province,
+            'pro_district' => $pro_district,
+            'pro_weight' => $pro_weight,
+            'pro_category' => $pro_category,
+            'pro_detail' => $pro_detail,
+            'pro_user' => $pro_user,
+            'pro_status' => 1
+        );
+
+        if(!empty($imageFile))
+        {
+            $isUpload = $this->uploadImg($imageFile, 'product', 'edit');
+            if($isUpload['error'] == false)
+            {
+                $data['pro_dir'] = $isUpload['dir'];
+                $data['pro_image'] = $isUpload['img_name'];
+            }
+        }
+
+        // $isUpload = $this->uploadImg($imageFile, 'product', 'edit');
+        // if($isUpload['error'] == false)
+        // {
+        //     $data['pro_dir'] = $isUpload['dir'];
+        //     $data['pro_image'] = $isUpload['img_name'];
+        // }
+
+        $pro_type = 0; // sp hoàn vốn
+        if($group_id == 16)
+        {
+            
+            $pro_type = 2; //sp thông minh (của Admin)
+        }
+
+        $limit_type = $this->input->post('limit_type');
+        if ($limit_type) {
+            $addPromotion = [];
+            $amount = (int)$this->input->post('amount');
+            $chenhlech = (1 - ($amount / $pro_cost)) * 100;
+            if( $chenhlech >= 20 )
+            {
+                $pro_type = 2;
+            }
+            else
+            {
+                $pro_type = 0;
+            }
+        }
+
+        $data['pro_type'] = $pro_type;
+
+        if($this->product_model->update($data, 'pro_id = '.(int)$pro_id))
+        {
+            // Add promotion
+            if ($limit_type) {
+                $addPromotion['pro_id'] = (int)$pro_id;
+                $addPromotion['limit_type'] = $limit_type;
+                $addPromotion['limit_to'] = $this->input->post('limit_to');
+                $addPromotion['amount'] = $amount;
+
+                $getPromotion = $this->product_promotion_model->get('pro_id', 'pro_id = '.(int)$pro_id);
+                if(!empty($getPromotion))
+                {
+                    if( $this->product_promotion_model->update($addPromotion, 'pro_id = '.(int)$pro_id))
+                    {
+                        $error = false;
+                    }
+                }
+                else
+                {
+                    if( $this->product_promotion_model->addPromo($addPromotion))
+                    {
+                        $error = false;
+                    }
+                }
+            }
+            else
+            {
+                $this->product_promotion_model->deleteRow('pro_id = '.(int)$pro_id);
+                $error = false;
+            }
+        }
+
+        return $error;
+    }
+
+    public function ajaxDistrict()
+    {
+        $province = $this->input->post('province');
+        $result = $this->district_model->find_by(array('ProvinceCode' => (int)$province, 'pre_status' => 1), 'DistrictCode, DistrictName');
+        if ($result) {
+            foreach ($result as $vals) {
+                $district[$vals->DistrictCode] = $vals->DistrictName;
+            }
+            echo json_encode($district);
+            exit;
+        } else {
+            die("");
+        }
     }
 
 
@@ -7114,7 +7077,7 @@ class Product extends MY_Controller
         $this->load->view('home/product/gallery', $data);
     }
 
-    function display_parent($parent = 0, $level, &$retArray, $cate_type = 0, $cat_id)
+    function treeCategory($parent = 0, $level, &$retArray, $cate_type = 0, $cat_id)
     {
         $sql = "SELECT * from `tbtt_category` WHERE parent_id = " . $parent . " and cat_status = 1 order by cat_order";
         $query = $this->db->query($sql);
@@ -7137,7 +7100,7 @@ class Product extends MY_Controller
         $query->free_result();
 
         if ($result->cat_level > 0) {
-            $this->display_parent($result->parent_id, $result->cat_level , $retArray, $cate_type, $parent);
+            $this->treeCategory($result->parent_id, $result->cat_level , $retArray, $cate_type, $parent);
         } else if ($result->cat_level == 0) {
             $sql = "SELECT * from `tbtt_category` WHERE parent_id = 0 and cat_status = 1 and cate_type = ". $cate_type ." order by cat_order";
             $query = $this->db->query($sql);
@@ -7154,707 +7117,5 @@ class Product extends MY_Controller
             }
         }
         
-    }
-
-    public function editProduct($productID) {
-        
-        #BEGIN: kiểm tra product by $productID
-        $product = $this->product_model->get("*, (af_rate) AS aff_rate", "pro_id = " . (int)$productID);
-        $user = $this->session->userdata('sessionUser');
-        if ($user && $user == $product->pro_user) {
-
-        } else {
-            redirect(base_url() . $product->pro_category.'/'.$product->pro_id.'/'.RemoveSign($product->pro_name), 'location');
-            die();
-        }
-        if ($product && $product->pro_id <= 0) {
-            redirect($this->subURL, 'location');
-            die();
-        }
-        if (count($product) > 0) {
-            $user_product = $this->user_model->get("*", "use_id = " . $product->pro_user);
-        }
-
-        if ($product->pro_user == "") {
-            redirect(base_url(), 'location');
-        }
-
-        $data['user_product'] = $user_product->use_username;
-        #END kiểm tra product by $productID
-        
-        //danh mục sản phẩm
-        $categoryID = $product->pro_category;
-        $category = $this->category_model->get("cat_id, cat_name, parent_id, cat_level", "cat_id = " . (int)$categoryID . " AND cat_status = 1");
-        if (count($category) != 1 || !$this->check->is_id($categoryID)) {
-            redirect(base_url(), 'location');
-            die();
-        }
-
-        
-        
-        //end danh mục sản phảm
-
-        //Check exist Truong Qui Cach of product, by Bao Tran
-        $list_style = $this->detail_product_model->fetch("*", "dp_pro_id = " . (int)$productID);
-        
-        if ($list_style) {
-            $product = $this->product_model->getProAndDetail("*, (af_rate) AS aff_rate, (T2.`dp_cost`) AS pro_cost_qc" . DISCOUNT_DP_QUERY . " , count(*) as dem, T2.*", "pro_id = " . (int)$productID, (int)$productID);
-        }
-        
-        $list_style = array_reverse($list_style);
-
-        $list_qc = [];
-        $pro_qc_checkbox = [
-            'qc_color' => false,
-            'qc_size' => false,
-            'qc_material' => false,
-        ];
-        foreach ($list_style as $k_qc => $v_qc) {
-
-            if ($k_qc == 0) {
-                if ($v_qc->dp_color != '') {
-                    $pro_qc_checkbox['qc_color'] = true;
-                }
-                if ($v_qc->dp_size != '') {
-                    $pro_qc_checkbox['qc_size'] = true;
-                }
-                if ($v_qc->dp_material != '') {
-                    $pro_qc_checkbox['qc_material'] = true;
-                }
-            }
-
-            $list_qc[$k_qc]['dp_image'] = DOMAIN_CLOUDSERVER . 'media/images/product/' . $product->pro_dir . '/'. $v_qc->dp_images;
-            $list_qc[$k_qc]['dp_color'] = $v_qc->dp_color;
-            $list_qc[$k_qc]['dp_size']  = $v_qc->dp_size;
-            $list_qc[$k_qc]['dp_material'] = $v_qc->dp_material;
-            $list_qc[$k_qc]['dp_cost']  = $v_qc->dp_cost;
-            $list_qc[$k_qc]['dp_instock'] = $v_qc->dp_instock;
-            $list_qc[$k_qc]['dp_weight']  = $v_qc->dp_weight === null ? '' : $v_qc->dp_weight;
-        }        
-        //product attached
-        $product_attached = [];
-        if($product->pro_attach != 'null' && $product->pro_attach != null) {
-            $list_pro = json_decode($product->pro_attach);
-            if (!empty($list_pro)) 
-            {
-                $list_pro = implode(",", $list_pro);
-                $product_attached = $this->product_model->fetch('pro_id, pro_name, pro_cost, pro_image, pro_dir, pro_saleoff, pro_type_saleoff, pro_saleoff_value','pro_id IN (' . $list_pro . ')');
-            }
-        }
-        
-        $data['product'] = $product;
-        $data['category'] = $category;
-        $data['product_attached'] = $product_attached;
-        
-        
-        $this->load->model('cate_galleries_model');
-        $this->load->model('galleries_model');
-        $data['cate_galleries'] = $this->cate_galleries_model->get("*", "pro_id = " . $productID );
-        $data['pro_gallegy'] = [];
-        if (!empty($data['cate_galleries'])) {
-            foreach ($data['cate_galleries'] as $k_galleries => $v_galleries) {
-                $data['pro_gallegy'][$k_galleries]['id'] = $v_galleries->id;
-                $data['pro_gallegy'][$k_galleries]['content'] = $v_galleries->name;
-                $data['pro_gallegy'][$k_galleries]['hidden'] = false;
-                $data['pro_gallegy'][$k_galleries]['list_pro'] = [];
-                $gallery_detail = $this->galleries_model->get("*", "gallery_id = " . $v_galleries->id . " AND pro_id = " . $productID);
-                if (!empty($gallery_detail)) {
-                    foreach ($gallery_detail as $k_gallery_detail => $v_gallery_detail) {
-                        $data['pro_gallegy'][$k_galleries]['list_pro'][$k_gallery_detail] = array(
-                            'id' => $v_gallery_detail->id,
-                            'link' => DOMAIN_CLOUDSERVER . 'media/images/galleries/' . $v_gallery_detail->img_dir . '/'. $v_gallery_detail->link,
-                            'detail_w' => $v_gallery_detail->detail_w,
-                            'detail_h' => $v_gallery_detail->detail_h,
-                            'delete'    => false,
-                            'caption'   => $v_gallery_detail->caption
-                        );
-                    }
-                }
-            }
-        }
-
-
-        
-        // get list category parent
-        $retArray = array();
-        $this->display_parent($category->parent_id, $category->cat_level, $retArray, 0, $category->cat_id);
-        ksort($retArray);
-
-        //product attached
-        $get_promo_pro = $this->product_promotion_model->fetch('*', 'pro_id = '. $productID);
-        $limit_type = 1;
-        $promotion_price = [];
-        $promotion_list  = [];
-        foreach ($get_promo_pro as $k_promo_pro => $v_promo_pro)
-        {
-            $promo_pro_type = 1;
-            $promo_pro_amount = $v_promo_pro->dc_amt;
-            if (!empty($v_promo_pro->dc_rate)) {
-                $promo_pro_type = 2;
-                $promo_pro_amount = $v_promo_pro->dc_rate;
-            }
-
-            if ($v_promo_pro->limit_type == 2)
-            {
-                $limit_type = 2;
-                $promotion_price[] = (object) [
-                    'limit_from' => $v_promo_pro->limit_from,
-                    'limit_to' => $v_promo_pro->limit_to,
-                    'amount' => $promo_pro_amount,
-                    'type' => $promo_pro_type
-                ];
-            }
-            else
-            {
-                $promotion_list[] = (object) [
-                    'limit_from' => $v_promo_pro->limit_from,
-                    'limit_to' => $v_promo_pro->limit_to,
-                    'amount' => $promo_pro_amount,
-                    'type' => $promo_pro_type
-                ];
-            }            
-        }
-
-        // var_dump($get_promo_pro);
-        // die;
-        
-        if ($product->is_product_affiliate == 0) 
-        {
-            $pro_affiliate_type = 1;
-            $affiliate_value_1 = 0;
-            $affiliate_value_2 = 0;
-            $affiliate_value_3 = 0;
-
-            $dc_affiliate_value = 0;
-            $dc_affiliate_type = 1;
-        } 
-        else 
-        {
-
-            $list_aff = $this->aff_price_model->gets('*', 'service_id = '.$product->pro_id .' AND type = 2');
-            if (!empty($list_aff)) 
-            {
-                foreach ($list_aff as $k_aff => $v_aff) 
-                {
-                    $pro_affiliate_type = $v_aff->discount_type;
-                    if ($v_aff->id_level == 1) 
-                    {
-                        $affiliate_value_1 = $v_aff->discount_value;
-                    }
-                    else if ($v_aff->id_level == 2) 
-                    {
-                        $affiliate_value_2 = $v_aff->discount_value;
-                    }
-                    else if ($v_aff->id_level == 3)
-                    {
-                        $affiliate_value_3 = $v_aff->discount_value;
-                    }
-                }
-            }
-
-
-            if ($product->af_dc_amt > 0) 
-            {
-                $dc_affiliate_value = $product->af_dc_amt;
-                $dc_affiliate_type = 2;
-            } 
-            else 
-            {
-                if ($product->af_dc_rate > 0) 
-                {
-                    $dc_affiliate_value = $product->af_dc_rate;
-                    $dc_affiliate_type = 1;
-                }
-            }
-        }
-        
-        $list_img_cover = [];
-        if (!empty($product->pro_image)) {
-            $list_img = explode(",",$product->pro_image);
-            foreach ($list_img as $k_img => $v_img)
-            {
-                $list_img_cover[] = DOMAIN_CLOUDSERVER . 'media/images/product/' . $product->pro_dir . '/'. $v_img;
-            }
-        }
-        $text = 'sản phẩm';
-        $pro_type = 0;
-        if($product->pro_type == 2){
-          $text = 'dịch vụ';
-          $pro_type = 2;
-        }
-
-        if ($product->pro_saleoff != 1) {
-            $product->begin_date_sale = time();
-            $product->end_date_sale = time(); 
-        }
-
-        $data['checkPackageAff'] = $this->checkPackageAff($product->pro_user, '40,41,42,43', 'id');
-        
-        $data['result'] = (object) [
-            'product'=> (object) [
-                'pro_id'    => $product->pro_id, // id product
-                'pro_video' => (date('Y-m-d', strtotime($product->up_date)) < date('Y-m-d', strtotime('2019-03-18'))) ? $product->pro_video : $this->filter->injection_html($product->pro_video), // video (link youtube or vimeo)
-                'pro_image' => $list_img_cover, // * list image
-                'pro_name'  => (date('Y-m-d', strtotime($product->up_date)) < date('Y-m-d', strtotime('2019-03-18'))) ? $product->pro_name : $this->filter->injection_html($product->pro_name),  // * tên sản phẩm
-                'pro_sku'   => (date('Y-m-d', strtotime($product->up_date)) < date('Y-m-d', strtotime('2019-03-18'))) ? $product->pro_sku : $this->filter->injection_html($product->pro_sku),   // * mã sản phẩm
-                'pro_brand' => (date('Y-m-d', strtotime($product->up_date)) < date('Y-m-d', strtotime('2019-03-18'))) ? $product->pro_brand : $this->filter->injection_html($product->pro_brand), //   thương hiệu
-                'pro_cost'  => $product->pro_cost,  // * giá bán
-                'pro_currency'    => (date('Y-m-d', strtotime($product->up_date)) < date('Y-m-d', strtotime('2019-03-18'))) ? $product->pro_currency : $this->filter->injection_html($product->pro_currency),  // * loại tiền tệ
-                'pro_unit'        => (date('Y-m-d', strtotime($product->up_date)) < date('Y-m-d', strtotime('2019-03-18'))) ? $product->pro_unit : $this->filter->injection_html($product->pro_unit),   // đơn vị bán 
-                'pro_instock'     => $product->pro_instock,    // * số lượng trong kho
-                'pro_minsale'     => $product->pro_minsale,    // * số lượng bán tối thiểu
-                'pro_hot'       => $product->pro_hot,    // * sản phẩm hot
-                'pro_weight'      => $product->pro_weight,    // * trọng lượng sản phẩm
-                'pro_descr'       => (date('Y-m-d', strtotime($product->up_date)) < date('Y-m-d', strtotime('2019-03-18'))) ? $product->pro_descr : $this->filter->injection_html($product->pro_descr),  // wait
-                'pro_keyword'     => (date('Y-m-d', strtotime($product->up_date)) < date('Y-m-d', strtotime('2019-03-18'))) ? $product->pro_keyword : $this->filter->injection_html($product->pro_keyword),  // wait
-                'pro_hondle'        => $product->pro_hondle, // wait
-                'pro_type' => $product->pro_type,
-
-
-                'pro_saleoff'     => $product->pro_saleoff,    //  sản phẩm có giảm giá
-                'pro_saleoff_value'   => $product->pro_saleoff_value,    //  giá trị giảm giá
-                'pro_saleoff_type'    => $product->pro_type_saleoff,    //  loại giảm giá (1 - %, 2 - VND)
-                'begin_date_sale'   => $product->begin_date_sale,   //  ngày bắt đầu giảm giá
-                'end_date_sale'     => $product->end_date_sale,   //  ngày kết thúc giảm giá
-
-
-                'apply'             => $product->apply,
-                'condition_use'     => (object) json_decode($product->condition_use,true),
-                'is_product_affiliate'  => $product->is_product_affiliate,    //  sản phẩm có Affiliate hay không
-                'pro_affiliate_type'  => $pro_affiliate_type,    //  loại hoa hồng cho người giới thiệu (2 -VND or 1 - %)
-                'affiliate_value_1' => $affiliate_value_1, //  giá trị hoa hồng cho người giới thiệu (1 - nhà phân phối )
-                'affiliate_value_2' => $affiliate_value_2, //  giá trị hoa hồng cho người giới thiệu (2 - tổng đại lý)
-                'affiliate_value_3' => $affiliate_value_3, //  giá trị hoa hồng cho người giới thiệu (3 - đại lý )
-                
-                'pro_dc_affiliate_value'=> $dc_affiliate_value,    //  giá trị người mua được giảm
-                'pro_dc_affiliate_type' => $dc_affiliate_type,    //  loại giá trị người mua được giảm (2 -VND or 1 - %)
-
-
-                'pro_category'      => $product->pro_category,    // * danh mục sản phẩm
-                'pro_category_name'      => $category->cat_name,    // tên danh mục sản phẩm
-                'pro_mannufacurer'    => (date('Y-m-d', strtotime($product->up_date)) < date('Y-m-d', strtotime('2019-03-18'))) ? $product->pro_manufacturer : $this->filter->injection_html($product->pro_manufacturer),   // nhà sản xuất
-                'pro_made_from'     => $product->pro_made_from,   // xuất xứ (1 - chính hãng, 2 - xách tay, 3 - hàng công ty)
-                'pro_made_in'     => (date('Y-m-d', strtotime($product->up_date)) < date('Y-m-d', strtotime('2019-03-18'))) ? $product->pro_made_in : $this->filter->injection_html($product->pro_made_in),   // sản xuất tại
-                'pro_vat'       => $product->pro_vat,   // * VAT (1 - có , 2 không)
-                'pro_quality'     =>  $product->pro_quality,   // tình trạng (0 - mới, 1 - cũ)
-                'pro_warranty_period' => $product->pro_warranty_period,    // thời hạn bảo hành
-                'pro_protection'    => $product->pro_protection,    // bảo hộ người mua (0 - không, 1 - có) - (non database)
-                'pro_detail'      => (date('Y-m-d', strtotime($product->up_date))  < date('Y-m-d', strtotime('2019-03-18'))) ? $product->pro_detail : $product->pro_detail,   // * mô tả chi tiết
-                'pro_specification'   => (!empty($product->pro_specification) && $product->pro_specification != 'null') ? json_decode($product->pro_specification) : [],   // đặc điểm kỹ thuật (non database, key - value)
-                'pro_attach'      => ($product->pro_attach && $product->pro_attach != 'null') ? json_decode($product->pro_attach) : [],   // sản phẩm thường mua kèm
-                'pro_attach_temp'      => (!empty($product->pro_attach) && $product->pro_attach != 'null') ? json_decode($product->pro_attach) : [],   // sản phẩm thường mua kèm tem
-            ],
-            'list_name_category'    => '',   // get list category choose show preview
-            'list_get_category'    => $retArray,   // get list category choose show preview
-            'pro_promotion'       => (object) [
-              'limit_type'      => $limit_type,    //  loại giá sỉ (1 - số lượng, 2 - số tiền) 
-              'promotion_price'    => $promotion_price,   //  list giá sỉ cho thành viên (giá tiền)
-              'promotion_list'    => $promotion_list,   //  list giá sỉ cho thành viên (số lượng )
-            ],
-            'pro_qc'          => $list_qc,   // list trường quy cách nếu có
-            'pro_qc_checkbox'          => $pro_qc_checkbox,   // list checkbox qc
-            'pro_gallegy' => $data['pro_gallegy'],
-            'text' => $text,
-            'pro_type' => $pro_type
-        ];
-        $data['pro_type'] = $pro_type;
-        $data['products'] = $this->product_model->fetch("pro_category, pro_id, pro_name, pro_image, pro_dir, pro_type", "pro_type IN (0,2) AND pro_status = 1 AND pro_user=" . $user, "pro_type", "ASC", null, null);
-        $this->load->view('home/product/edit_product', $data);
-    }
-
-    public function ajaxEditProduct($productID) {
-        $result = ['error' => true];
-
-        if (!$this->check->is_logined($this->session->userdata('sessionUser'), $this->session->userdata('sessionGroup'), 'home'))
-        {
-            echo json_encode($result);
-            die();
-        }
-
-        $group_id = $this->session->userdata('sessionGroup');
-        if(!checkPerProduct($group_id)) {
-            echo json_encode($result);
-            die();
-        }
-
-        $product = $this->product_model->get("* , (af_rate) as aff_rate" . DISCOUNT_QUERY, "pro_id = " . (int)$productID);
-        
-        if ($product && $product->pro_id <= 0) {
-            echo json_encode($result);
-            die();
-        }
-        if (count($product) > 0) {
-            $user_product = $this->user_model->get("*", "use_id = " . $product->pro_user);
-        }
-
-        if ($product->pro_user == "") {
-            echo json_encode($result);
-        }
-
-        $data['user_product'] = $user_product->use_username;
-        #END kiểm tra product by $productID
-        
-        //danh mục sản phẩm
-        $categoryID = $product->pro_category;
-        $category = $this->category_model->get("cat_id, cat_name, parent_id, cat_level", "cat_id = " . (int)$categoryID . " AND cat_status = 1");
-        if (count($category) != 1 || !$this->check->is_id($categoryID)) {
-            echo json_encode($result);
-            die();
-        }
-
-        if ($this->input->post('product')) {
-            $data_post = $this->input->post('product');
-            
-            $this->load->model('user_model');
-            $user_check = $this->user_model->get("use_id, use_fullname, use_address, use_email, use_phone, use_mobile, use_yahoo, use_skype", "use_id = " . (int)$this->session->userdata('sessionUser'));
-
-            if($group_id == StaffStoreUser) {
-                $user = $this->user_model->get("use_id, use_fullname, use_address, use_email, use_phone, use_mobile, use_yahoo, use_skype", "use_id = " . $user_check->parent_id);
-                $pro_user       = $user_check->parent_id;
-                $pro_user_up    = $this->session->userdata('sessionUser');
-            } else {
-                $user = $user_check;
-                $pro_user = (int)$this->session->userdata('sessionUser');
-            }
-
-            $this->load->model('shop_model');
-            $get_pro_province = $this->shop_model->get("sho_province", "sho_user  = " . (int) $user->use_id);
-            $pro_province = $get_pro_province->sho_province;
-
-            $reliable = 0;
-            if ((int)$this->session->userdata('sessionGroup') == 3) {
-                $reliable = 1;
-            }
-
-
-            $af_amt = 0;
-            $af_rate = 0;
-            $af_dc_amt = 0;
-            $af_dc_rate = 0;
-            $apply = 0;
-
-            if ($data_post['product']['is_product_affiliate'] == 0) {
-                $af_amt = 0;
-                $af_rate = 0;
-            } else {
-                $apply = !empty($data_post['product']["apply"]) ? $data_post['product']["apply"] : 0;
-
-                if ($data_post['product']['pro_dc_affiliate_type'] == 1) {
-                    $af_dc_amt = 0;
-                    $af_dc_rate = !empty($data_post['product']['pro_dc_affiliate_value']) ? $data_post['product']['pro_dc_affiliate_value'] : 0;
-                } else {
-                    $af_dc_amt = !empty($data_post['product']['pro_dc_affiliate_value']) ? $data_post['product']['pro_dc_affiliate_value'] : 0 ;
-                    $af_dc_rate = 0;
-                }
-            }
-
-            $condition_use = null;
-            if (!empty($product->pro_type) && $product->pro_type == 2 && !empty($data_post['product']["condition_use"])) 
-            {
-                $condition_use = json_encode($data_post['product']["condition_use"]);
-            }
-
-
-            $list_img_cover = [];
-            if (!empty($product->pro_image)) {
-                $list_img = explode(",",$product->pro_image);
-                foreach ($list_img as $k_img => $v_img)
-                {
-                    $list_img_cover[] = DOMAIN_CLOUDSERVER . 'media/images/product/' . $product->pro_dir . '/'. $v_img;
-                }
-            }
-
-
-            $pathImage = "media/images/product/";
-            $dir_image = $product->pro_dir;
-            $image = 'none.gif';
-            if (!empty($data_post['product']['pro_image'])) {
-                $image_upload = array(); 
-                foreach ($data_post['product']['pro_image'] as $key => $value) {
-
-                    if (in_array($value, $list_img_cover)) {
-                        $image_upload[] = str_replace(DOMAIN_CLOUDSERVER . 'media/images/product/' . $product->pro_dir . '/',"",$value); 
-                    } else {
-                       $image_upload[] = $this->add_photo_qc($value, $dir_image); 
-                    }
-
-                    
-                }
-
-                if (count($image_upload) > 0) {
-                    $image = implode(',', $image_upload);
-                }
-            }
-            if ($image == 'none.gif') {
-                $dir_image = 'default';
-            }
-
-            // @@
-            $currentDate = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-            
-            $dataPost = array(
-                    'pro_name' => trim($data_post['product']['pro_name']), // done
-                    'pro_sku' => trim($data_post['product']['pro_sku']), // done
-                    'pro_descr' => trim($data_post['product']['pro_descr']), // done
-                    'pro_keyword' => trim($data_post['product']['pro_keyword']), // done
-                    'pro_cost' => (int) $data_post['product']['pro_cost'], // done
-                    'pro_currency' => trim(strtoupper($data_post['product']['pro_currency'])), // done
-                    'pro_hondle' => (int) $data_post['product']['pro_hondle'], // done giá thương lượng
-                    'pro_province' => (int) $pro_province,
-                    'pro_category' => (int) $data_post['product']['pro_category'], // done
-                    'pro_begindate' => $currentDate,
-                    'pro_enddate' => $currentDate, // default time 
-                    'pro_detail' => trim($data_post['product']['pro_detail']), // done
-                    'pro_image' => $image,
-                    'pro_dir' => $dir_image,
-                    'pro_user' => $pro_user, // done
-                    'pro_post_by' => 'web',  // done
-                    'pro_user_up' => (isset($pro_user_up)) ? $pro_user_up : 0, // done
-                    'pro_poster' => trim($user->use_fullname), // done
-                    'pro_address' => trim($user->use_address), // done
-                    'pro_phone' => trim($user->use_phone), // done
-                    'pro_mobile' => trim($user->use_mobile), // done
-                    'pro_email' => trim($user->use_email), // done
-                    'pro_yahoo' => trim($user->use_yahoo), // done
-                    'pro_skype' => trim($user->use_skype), // done
-                    // 'pro_status' => 1, // done gian hang va nhan vien cua gian hang = 1
-                    // 'pro_view' => 0, // done
-                    // 'pro_buy' => 0,  // done
-                    // 'pro_comment' => 0, // done
-                    // 'pro_vote_cost' => 0, // done
-                    // 'pro_vote_quanlity' => 0, // done
-                    // 'pro_vote_model' => 0, // done
-                    // 'pro_vote_service' => 0, // done
-                    // 'pro_vote_total' => 0, // done
-                    // 'pro_vote' => 0, // done
-                    'pro_reliable' => $reliable, // done
-                    'pro_saleoff' => (int)$data_post['product']['pro_saleoff'], // done
-                    'pro_saleoff_value' => $data_post['product']['pro_saleoff_value'], // done
-                    'pro_type_saleoff' => (int)$data_post['product']['pro_saleoff_type'], // done
-                    'begin_date_sale' => strtotime($data_post['product']['begin_date_sale']), // done
-                    'end_date_sale' => strtotime($data_post['product']['end_date_sale']), // done
-                    'pro_hot' => (int)$data_post['product']['pro_hot'], // done
-                    'is_product_affiliate' => (int) $data_post['product']['is_product_affiliate'], // done
-                    'af_amt' => $af_amt,
-                    'af_rate' => $af_rate,
-                    'af_dc_amt' => $af_dc_amt,
-                    'af_dc_rate' => $af_dc_rate,
-                    // 'pro_show' => 0, // done
-                    'pro_manufacturer_id' => -1, // done
-                    'pro_manufacturer' => trim($data_post['product']['pro_mannufacurer']), // done
-                    'pro_instock' => (int) $data_post['product']['pro_instock'], // done
-                    'pro_unit' => trim($data_post['product']['pro_unit']), // done
-                    'pro_weight' => (int) $data_post['product']['pro_weight'], // done
-                    'pro_length' => 0,  // done
-                    'pro_width' => 0,   // done
-                    'pro_height' =>  0, // done
-                    'pro_minsale' => (int)$data_post['product']['pro_minsale'], // done
-                    'pro_vat' => (int)$data_post['product']['pro_vat'], // done
-                    'pro_quality' => (int) $data_post['product']['pro_quality'], // done
-                    'pro_made_from' => (int) $data_post['product']['pro_made_from'], // done
-                    'pro_warranty_period' => (int) $data_post['product']['pro_warranty_period'],
-                    'pro_video' => trim($data_post['product']['pro_video']), // done
-                    // 'created_date' => date("Y-m-d"), // done
-                    // 'pro_type' => 0, // done
-                    'pro_brand' => trim($data_post['product']['pro_brand']), // done
-                    'pro_protection'    => (int) $data_post['product']['pro_protection'], // done
-                    'pro_specification' => !empty($data_post['product']['pro_specification']) ? json_encode($data_post['product']['pro_specification']) : null, // done
-                    'pro_attach'        => !empty($data_post['product']['pro_attach']) ? json_encode($data_post['product']['pro_attach']) : null, // done
-                    'pro_made_in'       => trim($data_post['product']['pro_made_in']), // done
-                    'condition_use' => $condition_use,
-                    'apply' => $apply,
-                );
-
-
-            if ($this->product_model->update($dataPost, "pro_id = " . (int) $productID)) {
-                
-                $pro_id = (int) $productID;
-
-                // get list user and add affiliate
-                
-                if ($product->is_product_affiliate != $dataPost['is_product_affiliate']) {
-                    $this->load->model('product_affiliate_user_model');
-                    if ($dataPost['is_product_affiliate'] == 0) {
-                        $this->product_affiliate_user_model->delete(array('pro_id' => $pro_id));
-                    } 
-                    else 
-                    {
-                        $list_user_affiliate = $this->user_model->get_list_user("use_id", "parent_id = " . (int)$pro_user.' OR parent_shop = ' .(int)$pro_user );
-                        
-                        $dataAffiliate = array();
-                        foreach ($list_user_affiliate as $key => $value) {
-                            $dataAffiliate[] = array('use_id' => $value->use_id, 'pro_id' => $pro_id, 'homepage' => 1, 'date_added' => time(), 'kind_of_aff' => 1);
-                        }
-                        if (!empty($dataAffiliate)) {
-                            $this->product_affiliate_user_model->add_all($dataAffiliate);
-                        }
-                    }  
-                } 
-                
-                
-
-                // Add gallery 
-                $this->load->model('cate_galleries_model');
-                $this->load->model('galleries_model');
-
-                if (!empty($data_post['pro_gallegy'])) {
-                    foreach ($data_post['pro_gallegy'] as $k_gallegy => $v_gallegy) {
-                        if ($v_gallegy['hidden'] == 'false') {                            
-                            $dataInsert = array(
-                                'user_id' => $pro_user,
-                                'pro_id'  => $pro_id,
-                                'name'    => $v_gallegy['content']
-                            );
-
-                            $id_insert = 0;
-
-                            if (!isset($v_gallegy['id']))
-                            {
-                                $id_insert = $this->cate_galleries_model->add($dataInsert);
-                            } 
-                            else if ($this->cate_galleries_model->update($dataInsert, ['id' => $v_gallegy['id']])) 
-                            {
-                               $id_insert = $v_gallegy['id'];
-                            }
-
-                            if ($id_insert > 0 && !empty($v_gallegy['list_pro']))
-                            {
-                                foreach ($v_gallegy['list_pro'] as $k_list_pro => $v_list_pro)
-                                {
-
-                                    if ($v_list_pro['delete'] == 'false') {
-
-                                        $this->galleries_model->update(array('gallery_id' => $id_insert, 'pro_id' => $pro_id, 'caption'=> $v_list_pro['caption']), "id = " . $v_list_pro['id']);
-                                    } else {
-                                        $this->galleries_model->delete(['id' => $v_list_pro['id']]);
-                                    }
-                                    
-                                }
-                            }
-                        }
-                        else if (($v_gallegy['hidden'] == 'true') && isset($v_gallegy['id']))
-                        {
-                            if ($this->cate_galleries_model->delete(['id' => $v_gallegy['id']])) {
-                                $this->galleries_model->delete(['gallery_id' =>$v_list_pro['id']], 'gallery_id');
-                            }
-                        }
-                    }
-                }
-                // aff mutiple level
-                if (isset($data_post['product']['is_product_affiliate']) && $data_post['product']['is_product_affiliate'] == 1) 
-                {
-                    $this->aff_price_model->delete('service_id = '.$product->pro_id .' AND type = 2');
-                    for ($i=1; $i < 4; $i++) { 
-                        $iAffiliateValue = !empty($data_post['product']["affiliate_value_".$i]) ? $data_post['product']["affiliate_value_".$i] : 0;
-                        $this->db->insert("tbtt_affiliate_price",array(
-                            'service_id'        => $pro_id,
-                            'cost'              => $dataPost["pro_cost"],
-                            'discount_price'    => 0,
-                            'discount_value'    => $iAffiliateValue,
-                            'discount_type'     => $data_post['product']["pro_affiliate_type"],
-                            'user_set'          => $pro_user,
-                            'user_app'          => 0,
-                            'id_level'          => $i,
-                            'type'              => 2,
-                            'created_at' => date('Y-m-d H:i:s'), 
-                            'updated_at' => date('Y-m-d H:i:s')
-                        ));
-                    }
-                }
-
-
-                // Add promotion
-                $this->product_promotion_model->deleteRow(array('pro_id' => $pro_id));
-                $promotions = array();
-                if (!empty($data_post['pro_promotion']['promotion_list']) && (int) $data_post['pro_promotion']['limit_type'] == 1) {
-                    foreach ($data_post['pro_promotion']['promotion_list'] as $row) {
-                        $promotion = array();
-                        $promotion['limit_from'] = $row['limit_from'];
-                        $promotion['limit_to'] = $row['limit_to'];
-                        $promotion['limit_type'] = 1;
-                        if ($row['type'] == 1) {
-                            $promotion['dc_amt'] = $row['amount'];
-                            $promotion['dc_rate'] = 0;
-                        } else {
-                            $promotion['dc_rate'] = $row['amount'];
-                            $promotion['dc_amt'] = 0;
-                        }
-                        $promotion['pro_id'] = $pro_id;
-                        array_push($promotions, $promotion);
-                    }
-                    $this->product_promotion_model->add($promotions);
-                }
-
-                if (!empty($data_post['pro_promotion']['promotion_price']) && (int) $data_post['pro_promotion']['limit_type'] == 2) {
-                    foreach ($data_post['pro_promotion']['promotion_price'] as $row) {
-                        $promotion = array();
-                        $promotion['limit_from'] = $row['limit_from'];
-                        $promotion['limit_to'] = $row['limit_to'];
-                        $promotion['limit_type'] = 2;
-                        if ($row['type'] == 1) {
-                            $promotion['dc_amt'] = $row['amount'];
-                            $promotion['dc_rate'] = 0;
-                        } else {
-                            $promotion['dc_rate'] = $row['amount'];
-                            $promotion['dc_amt'] = 0;
-                        }
-                        $promotion['pro_id'] = $pro_id;
-                        array_push($promotions, $promotion);
-                    }
-                    $this->product_promotion_model->add($promotions);
-                }
-                //Lưu trữ trường quy cách                       
-                $standards = array();
-
-                $list_style = $this->detail_product_model->fetch("*", "dp_pro_id = " . (int)$productID);
-                $list_style_cover = [];
-                if (!empty($list_style)) {
-                    foreach ($list_style as $k_style => $v_style)
-                    {
-                        $list_style_cover[] = DOMAIN_CLOUDSERVER . 'media/images/product/' . $product->pro_dir . '/'. $v_style->dp_images;
-                    }
-                }
-
-                // dd($list_style_cover);die;
-                $this->detail_product_model->delete([$productID], 'dp_pro_id');
-
-                if (!empty($data_post['pro_qc'])) {
-                    foreach ($data_post['pro_qc'] as $key => $rowqc) {
-                        if ($rowqc['dp_cost'] != '' && $rowqc['dp_instock'] != '' && ($rowqc['dp_size'] != '' || $rowqc['dp_color'] != '' || $rowqc['dp_material'] != '')) {
-                            $standard = array();
-                            $standard['dp_pro_id'] = $pro_id;
-                            $standard['dp_size'] = $rowqc['dp_size'];
-                            $standard['dp_color'] = $rowqc['dp_color'];
-                            $standard['dp_material'] = $rowqc['dp_material'];
-                            $standard['dp_cost'] = $rowqc['dp_cost'];
-                            $standard['dp_instock'] = $rowqc['dp_instock'];
-                            $standard['dp_weight'] = !empty($rowqc['dp_weight']) ? $rowqc['dp_weight'] : null;
-                            $standard['dp_createdate'] = date('Y-m-d');
-
-                            if (in_array($rowqc['dp_image'], $list_style_cover)) {
-                                $standard['dp_images'] = str_replace(DOMAIN_CLOUDSERVER . 'media/images/product/' . $product->pro_dir . '/',"",$rowqc['dp_image']);
-                            } else {
-                               $standard['dp_images'] = $this->add_photo_qc($rowqc['dp_image'], $dir_image);
-                            }
-                            
-                            array_push($standards, $standard);
-
-                            $this->detail_product_model->add($standard);
-                        }
-                        $t++;
-                    }
-
-                    if ($standards && $this->session->userdata('image_name_qc')) {
-                        $this->session->unset_userdata('image_name_qc');
-                    }
-                }
-            }
-            $result = ['error' => false];
-            //create or update view on azibai-ecommerce
-            // $this->createViewProduct();
-        }
-
-        echo json_encode($result);
-        die();
     }
 }

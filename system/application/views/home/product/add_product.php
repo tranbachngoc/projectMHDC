@@ -1,157 +1,17 @@
-<?php
-$this->load->view('home/common/header_new');
-$group_id = (int) $this->session->userdata('sessionGroup');
-$user_id = (int) $this->session->userdata('sessionUser');
-?>
-<link rel="stylesheet" href="/templates/home/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="/templates/home/styles/css/coupon.css" rel="stylesheet" type="text/css">
-<script src="/templates/home/darkroomjs/js/fabric.js"></script>
-<link href="/templates/home/darkroomjs/css/darkroom.css" type="text/css" rel="stylesheet" />
-<script src="/templates/home/darkroomjs/js/darkroom.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
-<script src="/templates/home/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 
+<?php $this->load->view('home/product/header_product'); ?>
 
-
-<script src="/templates/home/styles/js/common.js"></script>
-<script src="/templates/home/styles/js/slick.js"></script>
-<script src="/templates/home/styles/js/slick-slider.js"></script>  
-<script src="/templates/home/styles/js/countdown.js"></script>
-<script src="/templates/home/styles/js/jquery-scrolltofixed.js"></script>
-<script src="/templates/home/styles/js/fixed_sidebar.js"></script>
-<style type="text/css">
- 	.error_all_data {display: none; color: red}
-	.box-no-value {
-		padding-top: 30px;
-	}
-	.thongso {
-	    padding-top: 0 !important;
-	}
-	.thongso .title {
-	    font-weight: bold;
-	    font-size: 16px;
-	    display: flex;
-	    align-items: center;
-	    padding-top: 7px;
-	}
-	.pro-qc-content {
-	    padding-top: 10px;
-	}
-</style>
 <main class="sanphamchitiet add_product">      
   	<section class="main-content">
-	    <!-- <div class="breadcrumb">
-	      <div class="container">
-	        <ul>
-	          <li><a href="">azibai</a></li>
-	          <li><a href="">Thời Trang Nữ</a></li>
-	          <li><a href=""></a>Áo thun</li>
-	          <li><a href=""></a>Ngắn tay</li>
-	          <li><a href=""></a>Áo thun màu T23456 - Hàng Chính Hãng</li>
-	        </ul>
-	      </div>
-	    </div> -->
     	<div class="container">
-      <!-- <div class="info-shop">
-        <div class="left">
-          <div class="logo"><img src="asset/images/product/avata/mi.svg" alt=""></div>
-          <div class="name">
-            <h3>Cửa hàng áo thun<br><span>Online 15 phút trước</span></h3>
-            <p><strong>456</strong> Người theo dõi</p>
-          </div>
-        </div>
-        <div class="right">
-          <p>
-            <span class="theodoi">Theo dõi</span>
-            <img class="mt05" src="/templates/home/styles/images/svg/CTV.svg" alt="">
-          </p>
-          <ul class="sanpham-danhgia">
-            <li><span>29</span><br><?php echo $text; ?></li>
-            <li><span>4.5</span><br>Đánh giá</li>
-          </ul>
-        </div>
-      </div> -->
-      		<div class="sanphamchitiet-content">
-		      	<div class="col-md-5">
-			        <div class="sanphamchitiet-content-gallery">
-			          <div class="show-photo">
-			            <div class="show-photo-nav">
-							<ul id="gallery_01" class="slider gallery_01">
-								<li class="">
-									<a class="is-active" href="#">
-			                        	<img src="/templates/home/styles/images/default/error_image_400x400.jpg" />
-			                        </a>
-								</li>
-								<li>
-								  	<a class="" href="#">
-			                        	<img src="/templates/home/styles/images/default/error_image_400x400.jpg" />
-			                        </a>
-								</li>
-								<li>
-								  	<a class="" href="#">
-			                        	<img src="/templates/home/styles/images/default/error_image_400x400.jpg" />
-			                        </a>
-								</li>
-								<li>
-								  	<a class="" href="#">
-			                        	<img src="/templates/home/styles/images/default/error_image_400x400.jpg" />
-			                        </a>
-								</li>
-							</ul>
-							<div class="btn-video-img">
-								<p class="video-img video">
-									<img src="/templates/home/styles/images/svg/pause.svg" alt=""><br>
-									<label class="sm">Video</label>
-				                </p>
-				                <p class="video-img video gallery_add_product">
-			                        <a href="#">
-			                          <img src="/templates/home/styles/images/svg/thuvienanh.svg" class="" alt="">
-			                          <label class="sm">Thư viện ảnh</label>
-			                        </a>
-		                      	</p>
-	                      	</div>
-
-			            </div>
-			            <div class="show-photo-main">
-			              <img id="zoom_03" src="/templates/home/styles/images/default/error_image_400x400.jpg" alt="">
-			              <div class="popup-image-list hover-add">
-			                <img  src="/templates/home/styles/images/svg/add_circle.svg" alt="">
-			              </div>
-			            </div>
-			          </div>
-			          <div class="show-info-product">
-			            <div class="action">
-			              <div class="action-left show-number-action">
-			                <ul class="action-left-listaction">
-			                  <li class="like">
-			                  	<img class="icon-img" src="/templates/home/styles/images/svg/like.svg" alt="like">
-			                  </li>
-			                  <li class="comment">
-			                  	<img class="icon-img" src="/templates/home/styles/images/svg/comment.svg" alt="comment">
-			                  </li>
-			                  <li class="share">
-			                  	<img class="icon-img" src="/templates/home/styles/images/svg/share.svg" alt="share">
-			                  </li>
-			                </ul>
-			              </div>
-			              <div class="action-right">
-			                <ul>
-			                  <li>
-			                  	<img class="icon-img" src="/templates/home/styles/images/svg/bookmark.svg" alt="bookmark">
-			                  </li>
-			                </ul>
-			              </div>
-			            </div>
-			            <!-- <div class="show-number-action">
-			              <ul>
-			                <li>43<p class="md"> lượt thích</p></li>
-			                <li>15<p class="md"> bình luận</p></li>
-			                <li>5<p class="md"> chia sẻ</p></li>
-			              </ul>
-			            </div> -->
-
-			          </div>
+      		<form action="" class="form">
+	      		<div class="sanphamchitiet-content">
+			      	<div class="col-md-5">
+				        <div class="sanphamchitiet-content-gallery">
+							<input type="file" name="imgPro" id="imgPro" style="height: auto;" name="pro_image">
+							<div class="avatar">
+								<img src="/templates/home/styles/images/default/error_image_400x400.jpg" id="avatarPro"/>
+							</div>
 			        </div>
 		        </div>
 	        	<div class="col-md-7">
@@ -162,318 +22,262 @@ $user_id = (int) $this->session->userdata('sessionUser');
 			            <!-- thông tin chung -->
 			            <div class="thong-tin-chung">
 			            	<div class="error_all_data">Bạn vui lòng nhập đầy đủ thông tin (*)</div>
-			                <div class="button-chinh-sua modal-pro-basic">
+			                <!-- <div class="button-chinh-sua modal-pro-basic">
 			                  <img src="/templates/home/styles/images/svg/pen.svg" class="mr00" alt="">
-			                </div>
-
+			                </div> -->
 			                <div class="box-no-value">
-				                <p class="flash-sale style-no-value"><img src="/templates/home/styles/images/svg/flashsale_pink.svg" alt=""> <span>2 ngày&#12288;2: 12: 60</span></p>
-				                <h3 class="tit style-no-value">Áo thun màu T23456 - Hàng Chính Hãng</h3>
-				                <p class="small-text style-no-value">
-				                	<span>Thương hiệu: no brand</span>
-				                	<span>Mã <?php echo $text; ?>: R6543156</span>
-				                </p>
-				                <ul class="list-number">
-				                  <li class="style-no-value">
-				                  	<img src="/templates/home/styles/images/svg/gioxach.svg" width="11" alt="">23
-				                  </li>
-				                  <li class="style-no-value">
-				                  	<img src="/templates/home/styles/images/svg/eyes.svg" width="15" alt="">1092
-				                  </li>
-				                  <li class="style-no-value">
-				                  	<img src="/templates/home/styles/images/svg/help_black.svg" width="15" alt="">
-				                  	<span class="baocao">Báo cáo</span>
-				                  </li>
-				                </ul>
-				                <div class="price style-no-value">
-				                  <div class="no-sale">
-				                  	<strong class="dong">đ</strong>
-				                  	<span>1.000.000</span>
-				                  </div>
-				                  <div class="sale">
-				                  	<strong class="dong">đ</strong>850.000
-				                  </div>
-				                  <p>Bộ</p>
-				                </div>
-				                <div class="style-no-value">
-				                  <div class="gia-uu-dai">
-				                    <img src="/templates/home/styles/images/svg/dola_circle.svg" class="mr10" alt="">
-				                    Giá ưu đãi khi mua số lượng
-				                  </div>
-				                </div>
+			                	<div class="tab-content">
+          <!-- thông tin cơ bản -->
+						          <div class="p20" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+						          
+						            <div class="form-group row">
+						              <div class="col-sm-4 col-xs-12 control-label">
+						                  <font color="#FF0000"><b>*</b></font> Tên <?php echo $text; ?> :
+						              </div>
+						              <div class="col-sm-8 col-xs-12 control-label">
+						                  <input class="pro_name" maxlength="100" name="pro_name" type="text" placeholder="Nhập Tên <?php echo $text; ?> (tối đa 100 ký tự)" required="required">
+						                  <!-- <p class="error_input error_pro_name">Vui lòng nhập tên <?php echo $text; ?>.</p> -->
+						              </div>
+						            </div>
+						            
+						            <div class="form-group row">
+						              <div class="col-sm-4 col-xs-12 control-label">
+						                  <font color="#FF0000"><b>*</b></font> Mã <?php echo $text; ?> :
+						              </div>
+						              <div class="col-sm-8 col-xs-12">
+						                  <input class="pro_sku" maxlength="35" name="pro_sku" type="text" placeholder="Nhập Mã <?php echo $text; ?> (tối đa 35 ký tự)" required>
+						                  <!-- <p class="error_input error_pro_sku">Vui lòng nhập mã <?php echo $text; ?>.</p> -->
+						              </div>
+						            </div>
+
+						            <div class="form-group row">
+						              <div class="col-sm-4 col-xs-12 control-label">
+						                  <font color="#FF0000"></font> Thương hiệu :
+						              </div>
+						              <div class="col-sm-8 col-xs-12">
+						                  <input class="pro_brand" name="pro_brand" maxlength="255" type="text" placeholder="Nhập Thương hiệu (tối đa 255 ký tự)">
+						              </div>
+						            </div>
+
+						            <div class="form-group row">
+						              <div class="col-sm-4 col-xs-12 control-label">
+						                  <font color="#FF0000"><b>*</b></font> Giá bán :
+						              </div>
+						              <div class="col-sm-8 col-xs-12 row">
+						                <div class="col-sm-3 col-xs-12 wp10">
+						                    <input class="pro_cost" name="pro_cost" type="text" onkeypress="return isNumberKey(event);" placeholder="Giá bán" required>
+						                </div>
+						                <div class="col-sm-3 col-xs-12 wp10">
+						                    <input class="pro_unit" name="pro_unit" maxlength="50" type="text" placeholder="Nhập đơn vị bán">
+						                </div>
+						                <div class="col-sm-3 col-xs-12 wp10">
+						                    <select name="pro_currency" class="pro_currency select-style">
+						                      <option value="VND">VND</option>
+						                    </select>
+						                </div>
+						                <!-- <div class="col-sm-12 col-xs-12">
+						                  <p class="error_input error_pro_cost">Vui lòng nhập giá <?php echo $text; ?>.</p>
+						                </div> -->
+						              </div>
+						            </div>
+
+			                        <div class="form-group row">
+			                          <div class="col-sm-4 col-xs-12 control-label">
+			                              Bán sỉ :
+			                          </div>
+			                          <div class="col-sm-8 col-xs-12 row">
+			                            <div class="col-sm-12">
+			                              <input class="" id="isPromotion" type="checkbox" onkeypress="return isNumberKey(event);"value="1">
+			                            </div>
+
+			                            <div class="box-promotion col-sm-12 wp10 hidden">
+			                              <div class="col-sm-6 col-xs-12 wp10">
+			                                  <label>
+			                                    <input class="pro_cost" name="limit_type" type="radio" onkeypress="return isNumberKey(event);" placeholder="Giá bán" value="1" checked>
+			                                    Theo số lượng
+			                                  </label>
+			                              </div>
+			                              <div class="col-sm-6 col-xs-12 wp10">
+			                                  <label>
+			                                    <input class="pro_cost" name="limit_type" type="radio" onkeypress="return isNumberKey(event);" placeholder="Giá bán" value="2" >
+			                                    Theo giá tiền
+			                                  </label>
+			                              </div>
+
+			                              <div class="col-sm-12 wp10" style="padding-right: 0; margin-top: 10px;">
+			                                <label>Trên</label>
+			                                <input class="pro_cost col-sm-6 col-xs-12" name="limit_to" type="text" onkeypress="return isNumberKey(event);" placeholder="số lượng hoặc số tiền áp dụng bán sỉ" value="<?php echo $limit_to; ?>">
+			                                <span class="text_typePro">Sản phẩm</span>
+			                              </div>
+			                              <div class="col-sm-12 col-xs-12 wp10">
+			                                  <!-- <p style="margin-top: 10px;"> -->
+			                                    <!-- <div class="" style="display: flex;"> -->
+			                                      <!-- <div class="col-sm-6 wp10" style="padding-left: 0;">
+			                                        <input class="pro_unit col-xs-6" onkeypress="return isNumberKey(event);" name="promotion_list[1][limit_from]" value="<?php echo $pro_unit; ?>" maxlength="50" type="text" placeholder="Từ">
+			                                      </div>
+			                                      <div class="col-sm-6 wp10" style="padding-right: 0;">
+			                                        <input class="pro_unit col-xs-6" name="pro_unit" value="<?php echo $pro_unit; ?>" maxlength="50" type="text" placeholder="Đến">
+			                                      </div> -->
+			                                    <!-- </div> -->
+			                                  <!-- </p> -->
+			                                  <p style="<?php echo 'margin-top: 10px;'; ?>">
+			                                    <input class="amount" name="amount" value="" maxlength="50" type="text" placeholder="Giá bán sỉ">
+			                                  </p>
+			                              </div>
+			                              <!-- <div class="col-sm-12 col-xs-12">
+			                                <p class="error_input error_pro_cost">Vui lòng nhập giá <?php echo $text; ?>.</p>
+			                              </div> -->
+			                              </div>
+			                          </div>
+			                        </div>
+
+						            <div class="form-group row">
+						              <div class="col-sm-4 col-xs-12 control-label">
+						                  <font color="#FF0000">*</font> Số lượng :
+						              </div>
+						              <div class="col-sm-8 col-xs-12">
+						                  <input class="pro_instock" name="pro_instock" type="text" onkeypress="return isNumberKey(event);" placeholder="Số lượng">
+						                  <!-- <p class="error_input error_pro_instock">Vui lòng nhập số lượng <?php echo $text; ?>.</p> -->
+						              </div>
+						            </div>
+
+
+						            <div class="form-group row">
+						              <div class="col-sm-4 col-xs-12 control-label">
+						                  <font color="#FF0000">*</font> Số lượng bán tối thiểu :
+						              </div>
+						              <div class="col-sm-8 col-xs-12">
+						                  <input class="pro_minsale" name="pro_minsale" type="text" onkeypress="return isNumberKey(event);" placeholder="Số lượng bán tối thiểu" value="1">
+						                  <!-- <p class="error_input error_pro_minsale">Vui lòng nhập số lượng <?php echo $text; ?>.</p> -->
+						              </div>
+						            </div>
+						            <?php
+						            if($pro_type == 0){
+						            ?>
+						            <div class="form-group row">
+						              <div class="col-sm-4 col-xs-12 control-label">
+						                  <font color="#FF0000">*</font> Trọng lượng :
+						              </div>
+						              <div class="col-sm-8 col-xs-12">
+						                  <input class="pro_weight w80pc" name="pro_weight" onkeypress="return isNumberKey(event);" type="text" placeholder="Trọng lượng"> gram
+						                  <!-- <p class="error_input error_pro_weight">Vui lòng nhập trọng lượng <?php echo $text; ?>.</p> -->
+						              </div>
+						            </div>
+						            <?php
+						            }
+						            ?>
+
+						            <div class="form-group row">
+					                  <div class="col-sm-4 col-xs-12 control-label">
+					                      <font color="#FF0000"><b>*</b></font> Danh mục :
+					                  </div>
+					                  <div class="col-sm-8 col-xs-12">
+					                      <input type="hidden" value="0" data-title="" class="pro_category" name="pro_category">
+					                      <div class="swap_category">
+					                        <select class="root_category select-style w50pc">
+					                          <option value="0" data-title="">--Chọn danh mục cho <?php echo $text; ?>--</option>
+					                          <?php 
+					                          if (!empty($category_root)) { 
+					                            foreach ($category_root as $item) {
+					                          ?>
+					                          <option data-title="<?php echo $item->cat_name; ?>" value="<?php echo $item->cat_id; ?>">
+					                            <?php 
+					                              echo $item->cat_name;
+					                              if ($item->child_count > 0)
+					                              {
+					                                echo ' >';
+					                              }
+					                            ?>
+					                          </option>
+					                          <?php } }?>
+					                        </select>
+					                      </div>
+					                      <!-- <p class="error_input error_pro_category">Vui lòng chọn danh mục.</p> -->
+					                  </div>
+					                </div>
+                    
+				                    <div class="form-group row">
+					                  <div class="col-sm-4 col-xs-12 control-label">
+					                      <font color="#FF0000"></font> Tỉnh/thành :
+					                  </div>
+					                  <div class="col-sm-8 col-xs-12">
+						                  	<div class="swap_category">
+					                            <select name="sho_province" id="provice" class="root_category select-category select-style w50pc">
+					                                <option value="">Chọn Tỉnh/Thành</option>
+					                                <?php foreach ($province as $vals):?>
+					                                    <option value="<?php echo $vals->pre_id; ?>" <?php echo ($vals->pre_id == $shop->sho_province)?"selected='selected'":""; ?> ><?php echo $vals->pre_name; ?></option>
+					                                <?php endforeach;?>
+					                            </select>
+					                        </div>
+				                    	</div>
+				                    </div>
+				                    
+				                    <div class="form-group row">
+					                  <div class="col-sm-4 col-xs-12 control-label">
+					                      <font color="#FF0000"></font> Quận/huyện :
+					                  </div>
+					                  	<div class="col-sm-8 col-xs-12">
+						                  	<div class="swap_category">
+					                            <select name="sho_district" id="district" class="root_category select-category select-style w50pc">
+					                                <option value="">Chọn Quận/Huyện</option>
+					                                <?php 
+					                                if(!empty($district))
+					                                {
+					                                foreach ($district as $vals): ?>
+					                                    <option value="<?php echo $vals->DistrictCode; ?>" <?php echo ($vals->DistrictCode == $shop->sho_district)?"selected='selected'":""; ?> ><?php echo $vals->DistrictName; ?></option>
+					                                <?php endforeach;
+					                            }?>
+					                            </select>
+					                        </div>
+				                    	</div>
+				                    </div>
+						          </div>
+						          <!-- end thông tin cơ bản -->
+						        </div>
 			                </div>
 			            </div>
 			            <!-- end thông tin chung -->
-
-			            <!-- CTV -->
-			            <?php
-			            if( !empty($checkPackageAff))
-			            {
-			            ?>
-						<div class="thongso">
-							<div class="title">
-								<p>Bán qua cộng tác viên</p>
-								<div class="button-chinh-sua modal-pro-ctv">
-								  <img src="/templates/home/styles/images/svg/pen.svg" class="mr00" alt="">
-								</div>
-							</div>
-						</div>
-						<?php
-						}
-						?>
-						<!-- End CTV -->
-
-
-			            <!-- thông tin quy cách -->
-						<div class="thongso">
-							<div class="title">
-								<p>Phân loại sản phẩm (Màu sắc, kích thước, chất liệu)</p>
-								<div class="button-chinh-sua modal-pro-qc">
-								  <img src="/templates/home/styles/images/svg/pen.svg" class="mr00" alt="">
-								</div>
-							</div>
-							<div class="pro-qc-content">
-								<dl class="style-no-value">
-								  <dt><span class="dot">&#9679;</span>Màu sắc</dt>
-								  <dl></dl>
-								</dl>
-								<dl class="style-no-value">
-								  <dt><span class="dot">&#9679;</span>Chất liệu</dt>
-								  <dl></dl>
-								</dl>
-								<dl class="style-no-value">
-								  <dt><span class="dot">&#9679;</span>Kích thước</dt>
-								  <dl></dl>
-								</dl>
-							</div>
-						</div>
-						<!-- end thông tin quy cách -->
-
-			            <div class="thong-tin-cua-hang">
-
-			                <div class="title">
-			                  <h3>THÔNG TIN CỬA HÀNG</h3>
-			                  <ul class="right">
-			                    <li><img src="/templates/home/styles/images/svg/shop.svg" width="24" class="mr10" alt="Cửa hàng azibai "></li>
-			                    <li><img src="/templates/home/styles/images/svg/tel.svg" width="15" alt=""></li>
-			                    <li><img src="/templates/home/styles/images/svg/message.svg" width="15" alt=""></li>
-			                  </ul>
-			                </div>
-
-			                <div class="info">
-
-						<!-- Condition Voucher -->
-						<?php if (!empty($pro_type) && $pro_type == 2){ ?>
-                            <div class="item">
-                              <div class="button-chinh-sua modal-pro-info">
-                                <img src="/templates/home/styles/images/svg/pen.svg" class="mr00" alt="">
-                              </div>
-                              <!-- Condition Voucher -->
-                              <!-- <div class="thongso">
-                                <div class="title"> -->
-                                  <h4>Điều kiện sử dụng dịch vụ</h4>
-                                  <div class="button-chinh-sua modal-pro-condition">
-                                    <img src="/templates/home/styles/images/svg/pen.svg" class="mr00" alt="">
-                                  </div>
-                                <!-- </div>
-                              </div> -->
-                              <!-- Condition Voucher -->
-                          </div>
-						<?php } ?>
-						<!-- Condition Voucher -->
-
-								<!-- thông tin <?php echo $text; ?> -->
-				                <div class="item">
-				                    <div class="button-chinh-sua modal-pro-info">
-				                      <img src="/templates/home/styles/images/svg/pen.svg" class="mr00" alt="">
-				                    </div>
-				                    <h4>Nguồn gốc <?php echo $text; ?></h4>
-				                    <table class="table01 template-info">
-				                      <tr>
-				                        <th class="style-no-value">Danh mục</th>
-				                        <td class="style-no-value">azibai   Thời trang nữ    áo thun </td>
-				                      </tr>
-				                      <tr>
-				                        <th class="style-no-value">VAT</th>
-				                        <td class="style-no-value">Đã có VAT</td>
-				                      </tr>
-				                      <tr>
-				                        <th class="style-no-value">Tình trạng</th>
-				                        <td class="style-no-value">Mới</td>
-				                      </tr>
-				                      <tr>
-				                        <th class="style-no-value">Xuất xứ</th>
-				                        <td class="style-no-value">Hàng công ty Trung Quốc</td>
-				                      </tr>
-				                      <tr>
-				                        <th class="style-no-value">Nhà sản xuất</th>
-				                        <td class="style-no-value">Bitis China</td>
-				                      </tr>
-				                      <tr>
-				                        <th class="style-no-value">Sản xuất tại</th>
-				                        <td class="style-no-value">Trung Quốc</td>
-				                      </tr>
-				                      <tr>
-				                        <th class="style-no-value">Bảo hành</th>
-				                        <td class="style-no-value">12 tháng</td>
-				                      </tr>
-				                      <tr>
-				                        <th class="style-no-value">Bảo hộ người mua</th>
-				                        <td class="style-no-value">Có <img src="/templates/home/styles/images/svg/icon_question.svg" alt=""></td>
-				                      </tr>
-				                    </table>
-				                </div>
-				                <!-- end thông tin <?php echo $text; ?> -->
-
-								<!-- đặc điểm kỹ thuật -->
-				                <div class="item">
-				                    <div class="button-chinh-sua modal-pro-specification">
-				                      <img src="/templates/home/styles/images/svg/pen.svg" class="mr00" alt="">
-				                    </div>
-				                    <h4>Đặc điểm kỹ thuật</h4>
-				                    <table class="table01 table02 template-specification">
-				                      <tr>
-				                        <th class="style-no-value">Đặc điểm kĩ thuật</th>
-				                        <td class="style-no-value">áo co giãn abc</td>
-				                      </tr>
-				                      <tr>
-				                        <th class="style-no-value">Mã <?php echo $text; ?> SKU</th>
-				                        <td class="style-no-value">MS_msp12</td>
-				                      </tr>
-				                      <tr>
-				                        <th class="style-no-value">Kích thước</th>
-				                        <td class="style-no-value">S, M, L, XL, XXL</td>
-				                      </tr>
-				                      <tr>
-				                        <th class="style-no-value">Trọng lượng</th>
-				                        <td class="style-no-value">500 gram</td>
-				                      </tr>
-				                      <tr>
-				                        <th class="style-no-value">Model</th>
-				                        <td class="style-no-value">2018</td>
-				                      </tr>
-				                      <tr>
-				                        <th class="style-no-value">Phụ kiện đi kèm</th>
-				                        <td class="style-no-value">cài áo</td>
-				                      </tr>                      
-				                    </table>
-				                </div>
-								<!-- end đặc điểm kỹ thuật -->
-								
-								<!-- mô tả chi tiết -->
-				                <div class="item">
-				                    <div class="button-chinh-sua modal-pro-detail">
-				                      <img src="/templates/home/styles/images/svg/pen.svg" class="mr00" alt="">
-				                    </div>
-				                    <h4>Mô tả chi tiết</h4>
-									<div class="add-product-detail">
-										<ul class="mo-ta-chi-tiet">
-					                      <li class="style-no-value">
-					                      	<span class="dot">&#9679;</span>Lợi ích
-					                      </li>
-
-					                      <li class="style-no-value">
-					                      	<span class="dot">&#9679;</span>Bảo hành - bảo quản
-					                      </li>
-
-					                      <li class="style-no-value">
-					                      	<span class="dot">&#9679;</span>Khác biệt
-					                      </li>
-
-					                      <li class="style-no-value">
-					                      	<span class="dot">&#9679;</span>Chứng nhận
-					                      </li>
-
-					                      <li class="style-no-value">
-					                      	<span class="dot">&#9679;</span>Kết quả <?php echo $text; ?>
-					                      </li>
-
-					                      <li class="style-no-value">
-					                      	<span class="dot">&#9679;</span>Hướng dẫn sử dụng
-					                      </li>
-					                    </ul>
-									</div>
-				                    
-				                </div>
-				                <!-- end mô tả chi tiết -->
-				            </div>
 				                
-			            </div>
-
-		              	<!-- <?php echo $text; ?> mua kèm -->
-			            <div class="san-pham-mua-kem ">
-			                <div class="button-chinh-sua modal-pro-attach">
-			                  <img src="/templates/home/styles/images/svg/pen.svg" class="mr00" alt="">
-			                </div>
-			                <h3><?php echo $text; ?> thường mua kèm</h3>
-			                
-			                <div class="default-style style-no-value mt20">
-			                  	<div class="san-pham-mua-kem-slider">
-			                	</div>  
-			                </div>
-			                
 			            </div>
 			        </div>
 	    		</div>
-	            <!-- end <?php echo $text; ?> mua kèm -->
-          	</div>
+
+            <div class="thong-tin-cua-hang" style="position: relative; margin: auto; margin-top: 20px; width: 95%;">
+
+                <div class="title" style="text-transform: uppercase;">
+                  <h3>Mô tả chi tiết</h3>
+                </div>
+
+                <div class="info" style="padding: 20px;">
+					
+				<!-- mô tả chi tiết -->
+                <div class="item">
+                    <!-- <div class="button-chinh-sua modal-pro-detail">
+                      <img src="/templates/home/styles/images/svg/pen.svg" class="mr00" alt="">
+                    </div> -->
+                    <h4></h4>
+					<div class="add-product-detail">
+						<div class="form-group">
+		                  <!-- <div class="col-sm-12 col-xs-12">
+		                      <font color="#FF0000"><b>*</b></font> Chi tiết <?php echo $text; ?>:
+		                  </div> -->
+		                  <?php $this->load->view('home/common/tinymce'); ?>
+		                  <div class="col-sm-12 col-xs-12">
+		                    <textarea name="pro_detail" id="pro_detail" cols="30" rows="10" class="editor w100pc"></textarea>
+		                    <!-- <p class="error_input error_pro_detail">Vui lòng nhập chi tiết <?php echo $text; ?>.</p> -->
+		                  </div>
+		              </div>
+					</div>
+                    
+                </div>
+                <!-- end mô tả chi tiết -->
+            </div>
         </div>
+        </form>
+  		</div>
 	</section>
       
 </main>
 
-<?php $this->load->view('home/product/popup/popup-add-product', array()); ?>
-<?php $this->load->view('home/product/popup/popup-add-gallegy', array()); ?>
-<?php $this->load->view('home/common/load_wrapp', array()); ?>
-<script type="text/javascript">
-    $(function() {
-    	$('.gallery_01').slick({
-    		autoplay: true,
-    		arrows: false,
-    		dots: false,
-    		slidesToShow: 4,
-    		speed: 1000,
-    		infinite: false,
-    		vertical:true,
-    		verticalSwiping:true,
-    		responsive: [{
-    			breakpoint: 768,
-    			settings: {
-    				speed: 300,
-    				slidesToShow: 1,
-    				slidesToScroll: 1,
-    				vertical: false,
-    				verticalSwiping:false,
-    				dots: true,
-    				infinite: true,
-    			}
-    		}]
-    	});
-    });
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<?php $this->load->view('home/product/js_product'); ?>

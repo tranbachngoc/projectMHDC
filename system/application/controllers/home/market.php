@@ -250,33 +250,33 @@ class Market extends MY_Controller
         if ($this->input->is_ajax_request()) {
             $html = '';
             foreach ($data['items_new'] as $key => $item) {
-                $dataHH = $this->dataGetHH($item);
-                $item->hoahong = $this->checkHH($dataHH);
-                $item->Shopname = $this->get_InfoShop($item->pro_user, 'sho_name')->sho_name;
+                // $dataHH = $this->dataGetHH($item);
+                // $item->hoahong = $this->checkHH($dataHH);
+                // $item->Shopname = $this->get_InfoShop($item->pro_user, 'sho_name')->sho_name;
                 $html .= $this->load->view('e-azibai/common/common-html-item', ['item' => $item, 'has_af_key' => $this->has_af_key], true);
             }
             echo $html;
             die;
         }
 
-        foreach($data['items_new'] as $k => $item)
-        {
-            $dataHH = $this->dataGetHH($item);
-            $item->hoahong = $this->checkHH($dataHH);
-            $item->Shopname = $this->get_InfoShop($item->pro_user, 'sho_name')->sho_name;
-        }
+        // foreach($data['items_new'] as $k => $item)
+        // {
+        //     $dataHH = $this->dataGetHH($item);
+        //     $item->hoahong = $this->checkHH($dataHH);
+        //     $item->Shopname = $this->get_InfoShop($item->pro_user, 'sho_name')->sho_name;
+        // }
 
 
         // sp sale
         $where_items_fsale = "$where AND pro_saleoff = 1 AND (UNIX_TIMESTAMP() BETWEEN begin_date_sale AND end_date_sale)";
         $data['items_sale'] = $this->db->query("SELECT $select FROM $from WHERE $where_items_fsale ORDER BY $order $by LIMIT $limit OFFSET $start")->result();
 
-        foreach($data['items_sale'] as $k => $item)
-        {
-            $dataHH = $this->dataGetHH($item);
-            $item->hoahong = $this->checkHH($dataHH);
-            $item->Shopname = $this->get_InfoShop($item->pro_user, 'sho_name')->sho_name;
-        }
+        // foreach($data['items_sale'] as $k => $item)
+        // {
+        //     $dataHH = $this->dataGetHH($item);
+        //     $item->hoahong = $this->checkHH($dataHH);
+        //     $item->Shopname = $this->get_InfoShop($item->pro_user, 'sho_name')->sho_name;
+        // }
 
         // sp hay mua
         $temp = $this->showcart_model->fetch_join("shc_product, count(shc_product) as total", "INNER", "tbtt_product", "tbtt_product.pro_id = shc_product", "", "", "", "tbtt_product.pro_instock > 0", "total", "DESC", 0, 20, "", "shc_product");
@@ -288,12 +288,12 @@ class Market extends MY_Controller
         $where_items_order = "$where AND pro_id IN ($list_proid_best_sale)";
         $data['items_order'] = $this->db->query("SELECT $select FROM $from WHERE $where_items_order ORDER BY $order $by LIMIT $limit OFFSET $start")->result();
 
-        foreach($data['items_order'] as $k => $item)
-        {
-            $dataHH = $this->dataGetHH($item);
-            $item->hoahong = $this->checkHH($dataHH);
-            $item->Shopname = $this->get_InfoShop($item->pro_user, 'sho_name')->sho_name;
-        }
+        // foreach($data['items_order'] as $k => $item)
+        // {
+        //     $dataHH = $this->dataGetHH($item);
+        //     $item->hoahong = $this->checkHH($dataHH);
+        //     $item->Shopname = $this->get_InfoShop($item->pro_user, 'sho_name')->sho_name;
+        // }
 
         $selected_sale_arr = '';
         if ($this->session->userdata('sessionUser')) {
@@ -497,12 +497,12 @@ class Market extends MY_Controller
 
         $data['items'] = $this->db->query("SELECT $select FROM $from WHERE $where ORDER BY $order $by LIMIT $limit OFFSET $start")->result();
 
-        foreach($data['items'] as $k => $item)
-        {
-            $dataHH = $this->dataGetHH($item);
-            $item->hoahong = $this->checkHH($dataHH);
-            $item->Shopname = $this->get_InfoShop($item->pro_user, 'sho_name')->sho_name;
-        }
+        // foreach($data['items'] as $k => $item)
+        // {
+        //     $dataHH = $this->dataGetHH($item);
+        //     $item->hoahong = $this->checkHH($dataHH);
+        //     $item->Shopname = $this->get_InfoShop($item->pro_user, 'sho_name')->sho_name;
+        // }
 
         // dd($data['filter']);die;
         $this->load->view('e-azibai/category/main-category', $data);

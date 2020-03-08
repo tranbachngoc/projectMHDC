@@ -707,6 +707,15 @@ switch ($check_domain) {
         //Sản phẩm
         $route['(:num)/(:num)/(:any)'] = 'home/product/detail_product/$2'; // chi tiet sp
         $route['product/add/(:num)'] = 'home/product/addProduct/$1'; // add sp
+        $route['product/ajaxAdd'] = 'home/product/ajaxAddProduct'; // ajax Add
+
+        $route['product/edit/(:num)/(:any)'] = 'home/product/editProduct/$1'; // edit sp
+        $route['product/ajaxEdit'] = 'home/product/ajaxEditProduct'; // ajax Add
+        
+        $route['product/ajax'] = 'home/product/ajax'; //load cat
+
+        //get district
+        $route['ajaxDistrict'] = 'home/product/ajaxDistrict'; //load cat
 
         // admin-page
         $route['admin']           = 'admin/login';
@@ -714,6 +723,10 @@ switch ($check_domain) {
 
         $route['admin/notifications']  = 'admin/notifications/index';
         $route['admin/notifications/(:num)']  = 'admin/notifications/index/$1';
+
+        $route['account/edit'] = 'home/account/edit';
+        $route['account/product.*'] = 'home/account/product';
+        // $route['account/product/product'] = 'home/account/edit';
     	break;
 }
 //Test connect api ghtk

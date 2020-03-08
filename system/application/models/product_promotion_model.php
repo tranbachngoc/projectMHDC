@@ -15,6 +15,20 @@ class Product_promotion_model extends CI_Model
         $this->load->database();
     }
 
+    function get($select = "*", $where = "")
+    {
+        $this->db->cache_off();
+        $this->db->select($select, false);
+        if ($where && $where != "") {
+            $this->db->where($where, NULL, false);
+        }
+        #Query
+        $query = $this->db->get("tbtt_product_promotion");
+        $result = $query->row();
+        $query->free_result();
+        return $result;
+    }
+
     function add($data)
     {
         return $this->db->insert_batch("tbtt_product_promotion", $data);
@@ -23,6 +37,15 @@ class Product_promotion_model extends CI_Model
     function addPromo($data)
     {
         return $this->db->insert("tbtt_product_promotion", $data);
+    }
+    
+    function update($data, $where = "")
+    {
+        if($where && $where != "")
+        {
+            $this->db->where($where);
+        }
+        return $this->db->update("tbtt_product_promotion", $data);
     }
 
     function deleteRow($data)
